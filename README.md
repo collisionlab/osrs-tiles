@@ -183,7 +183,12 @@ the hooks:
   become lava, so the Wilderness reads as dangerous at a glance.
   The class boundaries come from hue/saturation/brightness histograms of
   RuneLite renders of Lumbridge, Varlamore, the Wilderness, Morytania and
-  Trollheim. Snapping the blend gives smooth regions
+  Trollheim. One case colour cannot settle: the Kharidian Desert and
+  Varlamore's olive grass blend to the same colour (about hue 0.13,
+  saturation 0.8, value 0.6). Their ground definitions differ, though: sand
+  definitions are bright (≥ 0.55), the grass is not. So a scrub or dirt tile
+  becomes sand when at least three quarters of the ground definitions in
+  its 5×5 window are sandy (`Terrain.underlayDefinition`). Snapping the blend gives smooth regions
   with tile-stepped edges. Classifying each tile's own underlay
   definition was tried first and failed: definition colours don't match
   what RuneLite displays (Al Kharid's desert came out green), and the raw
