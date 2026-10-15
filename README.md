@@ -192,7 +192,14 @@ the hooks:
   `Terrain.overlay` to see neighbouring tiles up to 4 tiles away. The bands
   are a pale foam line (≤ 1.4 tiles), two shallow bands, then deep teal with
   sparse two-tile wave dashes. Rivers come out as foam banks around a
-  shallow channel.
+  shallow channel. A tile counts as water by its displayed colour or by
+  definition (a blue base colour on a textured or two-colour overlay). The
+  definition test catches Sailing's regional seas, whose textures average
+  outside the blue window. Sailing also textures those seas with thousands
+  of nameless decoration objects (map-scene sprites ≥ 201, which sit almost
+  only on water across the whole surface). The tactical style drops them via
+  `keep`, so every sea gets the same bands and the open-ocean rectangles in
+  the whole-world render are gone.
 - **Surfaces:** roads and paths as light stone or tan.
 - **Walls and doors:** walls in the planner's `--ink` colour, doors in its
   `--orange`.
@@ -256,9 +263,7 @@ python3 -m http.server -d build/map-style/world 8000
 The viewer hard-codes the render's size and origin (`FULL_W`, `FULL_H`,
 `WORLD_X0`, `WORLD_Y1`). Change them if you render a different area.
 
-At world scale, a few open-ocean map squares in Sailing's seas come out in
-a slightly different water shade, giving visible rectangles. The Wilderness
-and Morytania read as flat grey "rock".
+At world scale, the Wilderness and Morytania read as flat grey "rock".
 
 ## Recommended next step: terrain and relief
 

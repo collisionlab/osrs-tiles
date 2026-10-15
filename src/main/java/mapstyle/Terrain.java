@@ -2,7 +2,9 @@ package mapstyle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.IntFunction;
 import java.util.function.IntUnaryOperator;
+import net.runelite.cache.definitions.OverlayDefinition;
 import net.runelite.cache.region.Region;
 import net.runelite.cache.region.RegionLoader;
 
@@ -18,13 +20,30 @@ public final class Terrain
 
 	private final RegionLoader regions;
 	private final IntUnaryOperator overlayColour;
+	private final IntFunction<OverlayDefinition> overlays;
 	private final Map<Integer, Integer> overlayCache = new HashMap<>();
 
-	/** {@code overlayColour} maps an overlay definition id to RuneLite's colour for it. */
-	Terrain(RegionLoader regions, IntUnaryOperator overlayColour)
+	/**
+	 * {@code overlayColour} maps an overlay definition id to RuneLite's
+	 * colour for it; {@code overlays} maps it to the definition.
+	 */
+	Terrain(RegionLoader regions, IntUnaryOperator overlayColour, IntFunction<OverlayDefinition> overlays)
 	{
 		this.regions = regions;
 		this.overlayColour = overlayColour;
+		this.overlays = overlays;
+	}
+
+	/** The overlay definition at (x, y, z), or null without one or outside the loaded squares. */
+	public OverlayDefinition overlayDefinition(int x, int y, int z)
+	{
+		Region r = regions.findRegionForWorldCoordinates(x, y);
+		if (r == null)
+		{
+			return null;
+		}
+		int id = r.getOverlayId(z, x & (Region.X - 1), y & (Region.Y - 1));
+		return id == 0 ? null : overlays.apply(id - 1);
 	}
 
 	/**

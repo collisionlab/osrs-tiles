@@ -162,7 +162,7 @@ public class StyledMapImageDumper
 	{
 		this.store = store;
 		this.regionLoader = regionLoader;
-		this.terrain = new Terrain(regionLoader, id -> overlayRgb(findOverlay(id))); // map-style
+		this.terrain = new Terrain(regionLoader, id -> overlayRgb(findOverlay(id)), this::findOverlay); // map-style
 		this.areas = new AreaManager(store);
 		this.sprites = new SpriteManager(store);
 		this.fonts = new FontManager(store);

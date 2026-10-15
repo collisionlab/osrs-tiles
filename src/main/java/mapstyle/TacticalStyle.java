@@ -6,6 +6,7 @@ import net.runelite.cache.definitions.AreaDefinition;
 import net.runelite.cache.definitions.ObjectDefinition;
 import net.runelite.cache.definitions.OverlayDefinition;
 import net.runelite.cache.definitions.UnderlayDefinition;
+import net.runelite.cache.region.Location;
 
 /**
  * A flat, tile-crisp "tactics game" map, coloured by a {@link Palette}.
@@ -158,6 +159,8 @@ final class TacticalStyle implements MapStyle
 
 	/** How far (tiles) to look for land; beyond it a tile is open water. */
 	private static final int SHORE_REACH = 4;
+	/** Lowest map-scene sprite of Sailing's sea decorations. */
+	private static final int SEA_DECOR_SCENE = 201;
 	/** Height units per terrace step (128 = one tile). */
 	private static final int TERRACE = 192;
 
@@ -181,7 +184,7 @@ final class TacticalStyle implements MapStyle
 		{
 			return 0;
 		}
-		if (Styles.isWater(rgb))
+		if (isWater(overlay, rgb))
 		{
 			return water(x, y, z, terrain);
 		}
@@ -192,6 +195,22 @@ final class TacticalStyle implements MapStyle
 	public int wall(int rgb, ObjectDefinition object)
 	{
 		return object.getWallOrDoor() != 0 ? p.door : p.wall;
+	}
+
+	/**
+	 * Drops Sailing's sea decorations: nameless scenery with map-scene
+	 * sprites from {@link #SEA_DECOR_SCENE} up. Across the whole surface these
+	 * sit almost only on water tiles (2 of ~189,000 on bare ground), where they
+	 * texture the regional seas and read as noise in flat tactical water.
+	 * Nameless land scenery (plants, rocks) uses lower sprites and stays.
+	 * RuneLite's default object name is the string "null".
+	 */
+	@Override
+	public boolean keep(Location location, ObjectDefinition object)
+	{
+		return !Styles.isScenery(location, object)
+			|| object.getMapSceneID() < SEA_DECOR_SCENE
+			|| !"null".equals(object.getName());
 	}
 
 	@Override
@@ -214,7 +233,7 @@ final class TacticalStyle implements MapStyle
 			for (int dy = -SHORE_REACH; dy <= SHORE_REACH; dy++)
 			{
 				int d2 = dx * dx + dy * dy;
-				if (d2 < nearest && isLand(terrain.overlay(x + dx, y + dy, z)))
+				if (d2 < nearest && isLand(terrain, x + dx, y + dy, z))
 				{
 					nearest = d2;
 				}
@@ -238,9 +257,31 @@ final class TacticalStyle implements MapStyle
 	}
 
 	/** Land is any loaded tile without a water overlay; unloaded tiles count as sea. */
-	private static boolean isLand(int overlayRgb)
+	private static boolean isLand(Terrain terrain, int x, int y, int z)
 	{
-		return overlayRgb >= 0 && (overlayRgb == 0 || !Styles.isWater(overlayRgb));
+		int rgb = terrain.overlay(x, y, z);
+		return rgb == 0 || rgb > 0 && !isWater(terrain.overlayDefinition(x, y, z), rgb);
+	}
+
+	/**
+	 * Water by RuneLite's displayed colour, or by definition: a blue base
+	 * colour on a textured or two-colour overlay. The definition test catches
+	 * Sailing's regional seas, whose textures average to colours outside the
+	 * blue window (teal textures 180-184, purple-blue 145-149), so every sea
+	 * gets the same water bands.
+	 */
+	static boolean isWater(OverlayDefinition overlay, int rgb)
+	{
+		if (Styles.isWater(rgb))
+		{
+			return true;
+		}
+		if (overlay == null || overlay.getTexture() < 0 && overlay.getSecondaryRgbColor() == -1)
+		{
+			return false;
+		}
+		float[] hsb = hsb(overlay.getRgbColor());
+		return hsb[0] > 0.45f && hsb[0] < 0.75f && hsb[1] > 0.2f;
 	}
 
 	/**
