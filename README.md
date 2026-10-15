@@ -219,7 +219,10 @@ the hooks:
   south-west Sailing sea, indigo seas off Morytania and in the south-east,
   and a murky grey fetid sea. The frozen sea in the north (textures
   160-164, identified by location) is too close to ordinary ocean to stand
-  out, so it is measured against a fixed pale ice colour instead.
+  out, so it is measured against a fixed pale ice colour instead, applied at
+  30% strength (`FROZEN_TINT_STRENGTH`; at full strength it reads as white).
+  The strength is blended by the window's share of frozen tiles, so the
+  frozen sea's edge does not step.
 - **Surfaces:** roads and paths as light stone or tan.
 - **Walls and doors:** walls in the planner's `--ink` colour, doors in its
   `--orange`.

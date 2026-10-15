@@ -290,6 +290,7 @@ final class TacticalStyle implements MapStyle
 		float sat = 0;
 		float bri = 0;
 		int seaTiles = 0;
+		int frozenTiles = 0;
 		for (int dx = -SHORE_REACH; dx <= SHORE_REACH; dx++)
 		{
 			for (int dy = -SHORE_REACH; dy <= SHORE_REACH; dy++)
@@ -303,6 +304,10 @@ final class TacticalStyle implements MapStyle
 				float[] tint = sea == null ? null : seaColour(sea);
 				if (tint != null)
 				{
+					if (isFrozen(sea))
+					{
+						frozenTiles++;
+					}
 					hue += tint[0];
 					sat += tint[1];
 					bri += tint[2];
@@ -329,7 +334,13 @@ final class TacticalStyle implements MapStyle
 			int h = (x >> 1) * 73856093 ^ y * 19349663;
 			band = Math.floorMod(h, 29) == 0 ? p.wave : p.deep;
 		}
-		return seaTiles == 0 ? band : seaTint(band, hue / seaTiles, sat / seaTiles, bri / seaTiles);
+		if (seaTiles == 0)
+		{
+			return band;
+		}
+		float frozenShare = (float) frozenTiles / seaTiles;
+		float strength = 1 - frozenShare * (1 - FROZEN_TINT_STRENGTH);
+		return seaTint(band, hue / seaTiles, sat / seaTiles, bri / seaTiles, strength);
 	}
 
 	// Ordinary ocean (texture 133, #4a5d8a): the reference every sea is tinted against.
@@ -345,6 +356,8 @@ final class TacticalStyle implements MapStyle
 	private static final int FROZEN_FIRST_TEXTURE = 160;
 	private static final int FROZEN_LAST_TEXTURE = 164;
 	private static final int ICE = 0x9DACCF;
+	/** Share of the frozen sea's difference from ordinary ocean that is applied; at full strength it is too white. */
+	private static final float FROZEN_TINT_STRENGTH = 0.3f;
 
 	/**
 	 * HSB of a water definition's own colour (the secondary colour when it
@@ -359,9 +372,14 @@ final class TacticalStyle implements MapStyle
 			{
 				return null;
 			}
-			int texture = overlay.getTexture();
-			return hsb(texture >= FROZEN_FIRST_TEXTURE && texture <= FROZEN_LAST_TEXTURE ? ICE : rgb);
+			return hsb(isFrozen(overlay) ? ICE : rgb);
 		});
+	}
+
+	private static boolean isFrozen(OverlayDefinition overlay)
+	{
+		int texture = overlay.getTexture();
+		return texture >= FROZEN_FIRST_TEXTURE && texture <= FROZEN_LAST_TEXTURE;
 	}
 
 	/**
@@ -373,7 +391,7 @@ final class TacticalStyle implements MapStyle
 	 * keeps the frozen, fetid, dark and Sailing seas distinct in every
 	 * palette without naming them.
 	 */
-	private static int seaTint(int band, float hue, float sat, float bri)
+	private static int seaTint(int band, float hue, float sat, float bri, float strength)
 	{
 		float dh = step(hue - OCEAN[0], 0.035f, 0.02f) * 0.8f;
 		float sr = step(sat / OCEAN[1] - 1, 0.25f, 0.1f) + 1;
@@ -382,6 +400,9 @@ final class TacticalStyle implements MapStyle
 		{
 			return band;
 		}
+		dh *= strength;
+		sr = 1 + (sr - 1) * strength;
+		br = 1 + (br - 1) * strength;
 		float[] b = hsb(band);
 		float h = b[0] + dh;
 		// Brighter seas read as paler (the frozen sea), darker ones as deeper.
