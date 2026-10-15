@@ -16,7 +16,7 @@ T=../../shortest-path-tooling        # or wherever ./cache and keys.json live
 
 ./gradlew -p map-style run --args="--cache $T/cache --xteas $T/keys.json \
     --regions 12850,12851,13106,13107 --plane 0 \
-    --styles runelite,standard,declutter,muted,relief --height \
+    --styles runelite,standard,declutter,muted,relief,tactical --height \
     --out build/map-style/lumbridge"
 ```
 
@@ -27,7 +27,7 @@ T=../../shortest-path-tooling        # or wherever ./cache and keys.json live
 | `--area X0,Y0,X1,Y1` | inclusive world-tile rectangle, **or** |
 | `--regions ID,…` | map squares (`(x>>6)<<8 \| (y>>6)`); renders their union |
 | `--plane Z` | 0–3 |
-| `--styles S,…` | `runelite` (default), `standard`, `declutter`, `muted`, `relief` |
+| `--styles S,…` | `runelite` (default), `standard`, `declutter`, `muted`, `relief`, `tactical` |
 | `--height` | also write `height.png` |
 | `--labels` | draw area labels (off by default, as in Explv's tiles) |
 | `--out DIR` | output directory, created if missing |
@@ -69,7 +69,7 @@ RenderRegions (CLI)
   ├─ MapStyle.keep → Region.getLocations().removeIf   data-level object filter
   ├─ renderer:
   │    MapImageDumper (unforked)        styles runelite, declutter
-  │    StyledMapImageDumper (fork)      styles standard, muted, relief
+  │    StyledMapImageDumper (fork)      styles standard, muted, relief, tactical
   │      .drawMap(plane)                over the loaded squares' bounds
   └─ crop to the requested area → PNG + manifest
 ```
@@ -163,8 +163,36 @@ hook. `muted` exercises all three colour hooks (underlay, overlay,
 wall/door). It is a proof of control, not a proposed style.
 
 `compare.png` panels, left to right: `runelite`, `standard`, `declutter`,
-`muted`, `relief`, `height` (white = highest; Lumbridge spans 520 height
+`muted`, `relief`, `tactical`, `height` (white = highest; Lumbridge spans 520 height
 units ≈ 4 tiles).
+
+## The tactical style
+
+`tactical` (`TacticalStyle.java`) is the first style aimed at the web
+planner's look: its dark olive UI, pixel font and `image-rendering:
+pixelated` map, in the spirit of Advance Wars. It works entirely through
+the hooks:
+
+- **Ground:** RuneLite's *blended* ground colour is snapped to flat
+  terrain classes (three grasses, two olive scrubs, sand, two dirts, rock).
+  The class boundaries come from a hue/saturation/brightness histogram of the
+  Lumbridge and Varlamore renders. Snapping the blend gives smooth regions
+  with tile-stepped edges. Classifying each tile's own underlay
+  definition was tried first and failed: definition colours don't match
+  what RuneLite displays (Al Kharid's desert came out green), and the raw
+  data alternates ground types tile by tile (Varlamore turned into a
+  checkerboard).
+- **Elevation:** 192-unit (1.5-tile) terraces, with a dark cliff line on
+  tiles whose north or west neighbour is a step higher, plus a three-level
+  quantised hillshade.
+- **Surfaces:** flat teal water, and roads and paths as light stone or tan.
+- **Walls and doors:** walls in the planner's `--ink` colour, doors in its
+  `--orange`.
+
+Not done yet: RuneLite's tree and rock sprites still use RuneScape art (a
+real tactics look wants our own forest and mountain glyphs), coastlines
+have no outline (needs a "neighbour is water" lookup next to `Terrain`), and
+the palette has only been checked by eye against the planner.
 
 ## Recommended next step: terrain and relief
 

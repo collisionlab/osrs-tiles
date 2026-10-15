@@ -73,7 +73,9 @@ enum Styles
 		{
 			return rgb == 0 ? 0 : shade(rgb, hillshade(terrain, x, y, z));
 		}
-	});
+	}),
+	/** Flat tile-crisp terrain classes and terraces in the web planner's olive palette. */
+	TACTICAL(true, new TacticalStyle());
 
 	// Hillshade parameters: sun azimuth/altitude and vertical exaggeration.
 	private static final double SUN_AZIMUTH = Math.toRadians(315);
