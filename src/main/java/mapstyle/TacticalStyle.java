@@ -33,6 +33,15 @@ final class TacticalStyle implements MapStyle
 		int dirt;
 		int dirtDark;
 		int rock;
+		/** Dark, nearly colourless ground: the Wilderness. */
+		int ash;
+		/** Very bright, nearly colourless ground. */
+		int snow;
+		/** Teal-green ground: Morytania's swamps. */
+		int swamp;
+		int swampDark;
+		/** Bright orange-yellow overlays. */
+		int lava;
 		int road;
 		int path;
 		int foam;
@@ -77,6 +86,11 @@ final class TacticalStyle implements MapStyle
 		p.dirt = 0x8A7044;
 		p.dirtDark = 0x5E4B2E;
 		p.rock = 0x7D7B68;
+		p.ash = 0x4A4743;
+		p.snow = 0xE6E8DC;
+		p.swamp = 0x5E7A5A;
+		p.swampDark = 0x4A6249;
+		p.lava = 0xE8642C;
 		p.road = 0xB5B29A;
 		p.path = 0xB89A62;
 		p.foam = 0x86C4BB;
@@ -97,6 +111,11 @@ final class TacticalStyle implements MapStyle
 		p.dirt = 0x564630;
 		p.dirtDark = 0x3E3324;
 		p.rock = 0x4E4D43;
+		p.ash = 0x262624;
+		p.snow = 0x9AA095;
+		p.swamp = 0x34483A;
+		p.swampDark = 0x2A3A2F;
+		p.lava = 0xFF7A2F;
 		p.road = 0x75735F;
 		p.path = 0x6E5E3E;
 		p.foam = CYAN;
@@ -120,6 +139,11 @@ final class TacticalStyle implements MapStyle
 		p.dirt = 0xCDB98E;
 		p.dirtDark = 0xB49F78;
 		p.rock = 0xBDB8A5;
+		p.ash = 0xA8A496;
+		p.snow = 0xFAFAF2;
+		p.swamp = 0xB5C4A8;
+		p.swampDark = 0xA5B598;
+		p.lava = 0xD9663A;
 		p.road = 0xF4F0E0;
 		p.path = 0xE2CFA0;
 		p.foam = 0x5A86A6;
@@ -143,6 +167,11 @@ final class TacticalStyle implements MapStyle
 		p.dirt = 0xB08850;
 		p.dirtDark = 0x806038;
 		p.rock = 0xA0A0A0;
+		p.ash = 0x585058;
+		p.snow = 0xF8F8F8;
+		p.swamp = 0x4F9A70;
+		p.swampDark = 0x3B7A58;
+		p.lava = 0xF05020;
 		p.road = 0xD0D0C8;
 		p.path = 0xD8B878;
 		p.foam = 0xE8F8FF;
@@ -288,7 +317,8 @@ final class TacticalStyle implements MapStyle
 	 * Terrain class of RuneLite's blended ground colour. Classifying the
 	 * blend rather than the tile's own definition turns per-tile noise in the
 	 * map data into smooth class regions with crisp tile-aligned edges.
-	 * Thresholds come from a histogram of the Lumbridge and Varlamore renders.
+	 * Thresholds come from histograms of RuneLite renders of Lumbridge,
+	 * Varlamore, the Wilderness, Morytania and Trollheim.
 	 */
 	int ground(int rgb)
 	{
@@ -296,13 +326,21 @@ final class TacticalStyle implements MapStyle
 		float hue = hsb[0];
 		float sat = hsb[1];
 		float bri = hsb[2];
+		if (bri > 0.75f && sat < 0.12f)
+		{
+			return p.snow;
+		}
 		if (bri >= 0.7f && sat < 0.7f)
 		{
 			return p.sand;
 		}
 		if (sat < 0.3f)
 		{
-			return p.rock;
+			return bri < 0.3f ? p.ash : p.rock;
+		}
+		if (hue >= 0.32f && hue < 0.55f)
+		{
+			return bri > 0.45f ? p.swamp : p.swampDark;
 		}
 		if (hue < 0.115f)
 		{
@@ -315,10 +353,14 @@ final class TacticalStyle implements MapStyle
 		return bri > 0.55f ? p.grassBright : bri > 0.35f ? p.grass : p.grassDark;
 	}
 
-	/** Class of a non-water overlay: paved/stone, light path or dark ground. */
+	/** Class of a non-water overlay: lava, paved/stone, light path or dark ground. */
 	int surface(int rgb)
 	{
 		float[] hsb = hsb(rgb);
+		if (hsb[0] < 0.17f && hsb[1] > 0.75f && hsb[2] > 0.85f)
+		{
+			return p.lava;
+		}
 		if (hsb[1] < 0.25f)
 		{
 			return p.road;

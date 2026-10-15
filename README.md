@@ -177,9 +177,13 @@ pixelated` map, in the spirit of Advance Wars. It works entirely through
 the hooks:
 
 - **Ground:** RuneLite's *blended* ground colour is snapped to flat
-  terrain classes (three grasses, two olive scrubs, sand, two dirts, rock).
-  The class boundaries come from a hue/saturation/brightness histogram of the
-  Lumbridge and Varlamore renders. Snapping the blend gives smooth regions
+  terrain classes: three grasses, two olive scrubs, sand, snow, two dirts,
+  rock, ash (dark, nearly colourless ground, i.e. the Wilderness) and two
+  swamps (teal-green ground, i.e. Morytania). Bright orange-yellow overlays
+  become lava, so the Wilderness reads as dangerous at a glance.
+  The class boundaries come from hue/saturation/brightness histograms of
+  RuneLite renders of Lumbridge, Varlamore, the Wilderness, Morytania and
+  Trollheim. Snapping the blend gives smooth regions
   with tile-stepped edges. Classifying each tile's own underlay
   definition was tried first and failed: definition colours don't match
   what RuneLite displays (Al Kharid's desert came out green), and the raw
@@ -262,8 +266,6 @@ python3 -m http.server -d build/map-style/world 8000
 
 The viewer hard-codes the render's size and origin (`FULL_W`, `FULL_H`,
 `WORLD_X0`, `WORLD_Y1`). Change them if you render a different area.
-
-At world scale, the Wilderness and Morytania read as flat grey "rock".
 
 ## Recommended next step: terrain and relief
 
