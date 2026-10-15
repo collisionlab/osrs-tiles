@@ -1,0 +1,92 @@
+{
+  "cache": "<tooling>/cache",
+  "cacheIdx255Sha256": "e02780d12c6a6ba6f17be79dad42e61732b6000795e6d955c527a12473d0caa8",
+  "xteas": "<tooling>/keys.json",
+  "xteasSha256": "5984eac0c5c6d947241e29dd5671b81a1546cedf77e08d38438ac47029969afa",
+  "runeliteCache": "1.13.2",
+  "area": [
+    1472,
+    2944,
+    1791,
+    3199
+  ],
+  "plane": 0,
+  "renderedRegions": [
+    5677,
+    5678,
+    5679,
+    5680,
+    5681,
+    5682,
+    5933,
+    5934,
+    5935,
+    5936,
+    5937,
+    5938,
+    6189,
+    6190,
+    6191,
+    6192,
+    6193,
+    6194,
+    6445,
+    6446,
+    6447,
+    6448,
+    6449,
+    6450,
+    6701,
+    6702,
+    6703,
+    6704,
+    6705,
+    6706,
+    6957,
+    6958,
+    6959,
+    6960,
+    6961,
+    6962,
+    7213,
+    7214,
+    7215,
+    7216,
+    7217,
+    7218
+  ],
+  "outputs": {
+    "runelite.png": {
+      "renderer": "MapImageDumper",
+      "sha256": "aba17913585b3073b7d34b7d1dc96cd332cda4bfe6a3584a0cece1f5d4bf59bf"
+    },
+    "standard.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "aba17913585b3073b7d34b7d1dc96cd332cda4bfe6a3584a0cece1f5d4bf59bf"
+    },
+    "declutter.png": {
+      "renderer": "MapImageDumper",
+      "sha256": "bd192c4303ff21e6dbb77169ea451823206aa522429a7cd4e915ffb1410c85d8"
+    },
+    "muted.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "0c7a60ad9f892079d09ff62e9523b92344c3ac4d0a3af86fb6b78d4e5f823693"
+    },
+    "relief.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "51bdee5f88e498960384a52d6b34b45c11091f9f004237b5b3838c45978afe9b"
+    },
+    "height.png": {
+      "renderer": "height",
+      "sha256": "bb95be28f3394ac931057beda40ac81a52b155cf019ef99c0c81492d1bb52ab4",
+      "heightRange": [
+        -1736,
+        0
+      ]
+    },
+    "compare.png": {
+      "renderer": "compare",
+      "sha256": "711253c4f4cee62dcfeeac927fe6e8a73c861eb0a0f44f2a561c5cb4c8e511bc"
+    }
+  }
+}

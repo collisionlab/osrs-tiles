@@ -45,7 +45,12 @@ default hooks renders exactly what RuneLite renders.
 
 `examples/lumbridge/` holds the output of the command above (cache
 `idx255` sha256 `e02780d1…`, which is most likely openrs2 cache 2727,
-2026-09-30, build 241).
+2026-09-30, build 241). `examples/varlamore/` is the same set of styles over
+a larger, hillier area: Civitas illa Fortis, the Hunter Guild and the Sunset
+Coast (`--area 1472,2944,1791,3199`, 320 × 256 tiles, heights −1736…0).
+Relief reads much more clearly there than at Lumbridge, and Varlamore shows
+the relief style's limits: faint per-tile height noise in the southern
+grassland, and shallow coastal water darkened by the cliff slope beside it.
 
 ### The iteration loop
 
