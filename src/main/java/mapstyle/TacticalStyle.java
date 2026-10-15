@@ -2,6 +2,8 @@ package mapstyle;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 import net.runelite.cache.definitions.AreaDefinition;
 import net.runelite.cache.definitions.ObjectDefinition;
 import net.runelite.cache.definitions.OverlayDefinition;
@@ -278,11 +280,16 @@ final class TacticalStyle implements MapStyle
 	/**
 	 * Water banded by squared distance to the nearest land tile: a foam
 	 * line on the first ring, shallows, then open water with sparse
-	 * two-tile wave dashes.
+	 * two-tile wave dashes. The bands are tinted per sea (see
+	 * {@link #seaTint}) from the water definitions in the same window.
 	 */
 	private int water(int x, int y, int z, Terrain terrain)
 	{
 		int nearest = Integer.MAX_VALUE;
+		float hue = 0;
+		float sat = 0;
+		float bri = 0;
+		int seaTiles = 0;
 		for (int dx = -SHORE_REACH; dx <= SHORE_REACH; dx++)
 		{
 			for (int dy = -SHORE_REACH; dy <= SHORE_REACH; dy++)
@@ -292,23 +299,106 @@ final class TacticalStyle implements MapStyle
 				{
 					nearest = d2;
 				}
+				OverlayDefinition sea = terrain.overlayDefinition(x + dx, y + dy, z);
+				float[] tint = sea == null ? null : seaColour(sea);
+				if (tint != null)
+				{
+					hue += tint[0];
+					sat += tint[1];
+					bri += tint[2];
+					seaTiles++;
+				}
 			}
 		}
+		int band;
 		if (nearest <= 2)
 		{
-			return p.foam;
+			band = p.foam;
 		}
-		if (nearest <= 5)
+		else if (nearest <= 5)
 		{
-			return p.shallow;
+			band = p.shallow;
 		}
-		if (nearest <= 10)
+		else if (nearest <= 10)
 		{
-			return p.mid;
+			band = p.mid;
 		}
-		// Dashes two tiles long; the hash keeps them sparse and stable.
-		int h = (x >> 1) * 73856093 ^ y * 19349663;
-		return Math.floorMod(h, 29) == 0 ? p.wave : p.deep;
+		else
+		{
+			// Dashes two tiles long; the hash keeps them sparse and stable.
+			int h = (x >> 1) * 73856093 ^ y * 19349663;
+			band = Math.floorMod(h, 29) == 0 ? p.wave : p.deep;
+		}
+		return seaTiles == 0 ? band : seaTint(band, hue / seaTiles, sat / seaTiles, bri / seaTiles);
+	}
+
+	// Ordinary ocean (texture 133, #4a5d8a): the reference every sea is tinted against.
+	private static final float[] OCEAN = hsb(0x4A5D8A);
+	private final Map<Integer, float[]> seaColours = new HashMap<>();
+
+	/**
+	 * The frozen sea north of the Fremennik Province (textures 160-164,
+	 * identified by where they are used). Its own colour is too close to
+	 * ordinary ocean to stand out, so it is tinted against this pale ice
+	 * colour instead.
+	 */
+	private static final int FROZEN_FIRST_TEXTURE = 160;
+	private static final int FROZEN_LAST_TEXTURE = 164;
+	private static final int ICE = 0x9DACCF;
+
+	/**
+	 * HSB of a water definition's own colour (the secondary colour when it
+	 * has one; texture 1 water has a black primary), or null for non-water.
+	 */
+	private float[] seaColour(OverlayDefinition overlay)
+	{
+		return seaColours.computeIfAbsent(overlay.getId(), id ->
+		{
+			int rgb = overlay.getSecondaryRgbColor() != -1 ? overlay.getSecondaryRgbColor() : overlay.getRgbColor();
+			if (!isWater(overlay, rgb))
+			{
+				return null;
+			}
+			int texture = overlay.getTexture();
+			return hsb(texture >= FROZEN_FIRST_TEXTURE && texture <= FROZEN_LAST_TEXTURE ? ICE : rgb);
+		});
+	}
+
+	/**
+	 * Shifts a water band by how far the local sea's colour is from ordinary
+	 * ocean: hue by the difference, saturation and brightness by the ratio
+	 * (brighter seas also lose saturation, so they read as icy, not vivid).
+	 * Small differences are ignored, so ordinary ocean keeps the palette's
+	 * exact bands, and the rest is stepped so each sea is a flat region. This
+	 * keeps the frozen, fetid, dark and Sailing seas distinct in every
+	 * palette without naming them.
+	 */
+	private static int seaTint(int band, float hue, float sat, float bri)
+	{
+		float dh = step(hue - OCEAN[0], 0.035f, 0.02f) * 0.8f;
+		float sr = step(sat / OCEAN[1] - 1, 0.25f, 0.1f) + 1;
+		float br = step(bri / OCEAN[2] - 1, 0.25f, 0.1f) + 1;
+		if (dh == 0 && sr == 1 && br == 1)
+		{
+			return band;
+		}
+		float[] b = hsb(band);
+		float h = b[0] + dh;
+		// Brighter seas read as paler (the frozen sea), darker ones as deeper.
+		float s = clamp(b[1] * (float) (Math.pow(sr, 0.7) / Math.pow(br, 1.5)), 0, 1);
+		float v = clamp(b[2] * (float) Math.pow(br, 0.6), 0.08f, 1);
+		return Color.HSBtoRGB(h - (float) Math.floor(h), s, v) & 0xFFFFFF;
+	}
+
+	/** 0 inside the dead zone, else rounded to multiples of {@code step}. */
+	private static float step(float value, float deadZone, float step)
+	{
+		return Math.abs(value) < deadZone ? 0 : Math.round(value / step) * step;
+	}
+
+	private static float clamp(float v, float lo, float hi)
+	{
+		return Math.max(lo, Math.min(hi, v));
 	}
 
 	/** Land is any loaded tile without a water overlay; unloaded tiles count as sea. */

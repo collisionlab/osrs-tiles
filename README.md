@@ -208,6 +208,18 @@ the hooks:
   only on water across the whole surface). The tactical style drops them via
   `keep`, so every sea gets the same bands and the open-ocean rectangles in
   the whole-world render are gone.
+- **Seas:** the cache has about 40 water texture families, roughly one per
+  sea. Each water tile measures its sea's definition colour (averaged over
+  the 9×9 shoreline window) against ordinary ocean (texture 133, `#4a5d8a`)
+  and shifts the palette's bands by the difference: hue by the offset,
+  saturation and brightness by the ratio, with brighter seas also losing
+  saturation. A dead zone keeps ordinary ocean exactly on the palette, and
+  the shifts are stepped so each sea is a flat region. This yields a dark
+  deep-ocean frame at the world's edge (texture 208), a green-teal
+  south-west Sailing sea, indigo seas off Morytania and in the south-east,
+  and a murky grey fetid sea. The frozen sea in the north (textures
+  160-164, identified by location) is too close to ordinary ocean to stand
+  out, so it is measured against a fixed pale ice colour instead.
 - **Surfaces:** roads and paths as light stone or tan.
 - **Walls and doors:** walls in the planner's `--ink` colour, doors in its
   `--orange`.
