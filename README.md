@@ -153,10 +153,11 @@ What RuneLite's renderer exposes without changes:
 
 So data selection can stay on stock RuneLite, but **any change to how
 something is drawn needs the fork**. That is the extension point: one fork of
-`MapImageDumper` with a `MapStyle` hook at each colour decision. Each hook
+`MapImageDumper` with a `MapStyle` hook at each colour decision, plus one
+for map icons. Each colour hook
 gets the colour RuneLite would draw plus the decoded data behind it
 (definition, world x/y/plane, and a `Terrain` height lookup over every
-loaded square). The fork is small: 39 lines added, 71 removed, and the
+loaded square). The fork is small: 51 lines added, 71 removed, and the
 removals are the old `main()`. Its default behaviour
 is verified identical, so every visual difference is attributable to a
 hook. `muted` exercises all three colour hooks (underlay, overlay,
@@ -188,11 +189,26 @@ the hooks:
 - **Surfaces:** flat teal water, and roads and paths as light stone or tan.
 - **Walls and doors:** walls in the planner's `--ink` colour, doors in its
   `--orange`.
+- **Icons** (`TacticalIcons.java`, through the `icon` hook): only icons that
+  matter for route planning are kept, redrawn as 11-px pixel badges in the
+  style of the planner's square bank marker (ink fill, accent border, 7×7
+  glyph). Cyan marks places the planner routes to (bank, altar, anvil,
+  matching the plugin's destination TSVs); orange marks ways through the
+  world (transportation, agility shortcut, docking point, dungeon entrance,
+  dungeon/map link). Shops, tutors, training spots, water sources, quest
+  starts and minigames are hidden. Area definitions carry no names, so icons
+  are keyed by sprite id, identified against the OSRS Wiki world-map key and
+  checked by position (e.g. the map link on the Lumbridge cellar trapdoor,
+  the docking point at the Varlamore docks). The apothecary sprite is not
+  mapped yet: neither example area has one.
 
-Not done yet: RuneLite's tree and rock sprites still use RuneScape art (a
-real tactics look wants our own forest and mountain glyphs), coastlines
-have no outline (needs a "neighbour is water" lookup next to `Terrain`), and
-the palette has only been checked by eye against the planner.
+Not done yet: RuneLite's object sprites still use RuneScape art: trees and
+rocks (a real tactics look wants our own forest and mountain glyphs) and
+in-building ladders and stairs, which matter for routing and need an
+object-sprite hook. Quest starts may deserve a quieter third badge kind.
+Coastlines have no outline (needs a "neighbour is water" lookup next to
+`Terrain`), and the palette has only been checked by eye against the
+planner.
 
 ## Recommended next step: terrain and relief
 

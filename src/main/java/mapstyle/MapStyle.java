@@ -1,5 +1,7 @@
 package mapstyle;
 
+import java.awt.image.BufferedImage;
+import net.runelite.cache.definitions.AreaDefinition;
 import net.runelite.cache.definitions.ObjectDefinition;
 import net.runelite.cache.definitions.OverlayDefinition;
 import net.runelite.cache.definitions.UnderlayDefinition;
@@ -40,6 +42,16 @@ public interface MapStyle
 	default int wall(int rgb, ObjectDefinition object)
 	{
 		return rgb;
+	}
+
+	/**
+	 * Map icon (bank, transport, shop, …) centred on pixel (cx, cy). Return
+	 * true when the style has handled it, by drawing its own icon or by
+	 * hiding it; false draws RuneLite's sprite.
+	 */
+	default boolean icon(BufferedImage image, AreaDefinition area, int cx, int cy)
+	{
+		return false;
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package mapstyle;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import net.runelite.cache.definitions.AreaDefinition;
 import net.runelite.cache.definitions.ObjectDefinition;
 import net.runelite.cache.definitions.OverlayDefinition;
 import net.runelite.cache.definitions.UnderlayDefinition;
@@ -64,6 +66,13 @@ final class TacticalStyle implements MapStyle
 	public int wall(int rgb, ObjectDefinition object)
 	{
 		return object.getWallOrDoor() != 0 ? ORANGE : INK;
+	}
+
+	@Override
+	public boolean icon(BufferedImage image, AreaDefinition area, int cx, int cy)
+	{
+		TacticalIcons.draw(image, area, cx, cy);
+		return true;
 	}
 
 	/**

@@ -26,8 +26,9 @@
  * Forked from net.runelite.cache.MapImageDumper at runelite-parent-1.13.2
  * (cache/src/main/java/net/runelite/cache/MapImageDumper.java). Changes:
  * renamed, moved package, dropped main(), and routed terrain, overlay and
- * wall colours through a MapStyle (every hook is marked "map-style"). With
- * MapStyle.RUNELITE the output is pixel-identical to the upstream class.
+ * wall colours and map icons through a MapStyle (every hook is marked
+ * "map-style"). With MapStyle.RUNELITE the output is pixel-identical to the
+ * upstream class.
  */
 package mapstyle;
 
@@ -1700,6 +1701,12 @@ public class StyledMapImageDumper
 				AreaDefinition area = areas.getArea(od.getMapAreaId());
 				assert area != null;
 
+				// map-style
+				if (style.icon(img, area, drawX * MAP_SCALE, drawY * MAP_SCALE))
+				{
+					continue;
+				}
+
 				SpriteDefinition sprite = sprites.findSprite(area.spriteId, 0);
 				assert sprite != null;
 
@@ -1728,6 +1735,11 @@ public class StyledMapImageDumper
 			int localY = worldPosition.getY() - region.getBaseY();
 			int drawX = drawBaseX + localX;
 			int drawY = drawBaseY + (Region.Y - 1 - localY);
+			// map-style
+			if (style.icon(img, area, drawX * MAP_SCALE, drawY * MAP_SCALE))
+			{
+				continue;
+			}
 			SpriteDefinition sprite = sprites.findSprite(area.spriteId, 0);
 			blitIcon(img,
 				(drawX * MAP_SCALE) - (sprite.getMaxWidth() / 2),
