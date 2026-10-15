@@ -75,7 +75,13 @@ enum Styles
 		}
 	}),
 	/** Flat tile-crisp terrain classes and terraces in the web planner's olive palette. */
-	TACTICAL(true, new TacticalStyle());
+	TACTICAL(true, new TacticalStyle(TacticalStyle.OLIVE)),
+	/** Tactical in the planner's dark theme. */
+	TACTICAL_DUSK(true, new TacticalStyle(TacticalStyle.DUSK)),
+	/** Tactical as a printed field map with contour lines. */
+	TACTICAL_FIELD(true, new TacticalStyle(TacticalStyle.FIELD)),
+	/** Tactical in saturated Advance Wars colours. */
+	TACTICAL_CLASSIC(true, new TacticalStyle(TacticalStyle.CLASSIC));
 
 	// Hillshade parameters: sun azimuth/altitude and vertical exaggeration.
 	private static final double SUN_AZIMUTH = Math.toRadians(315);
@@ -93,14 +99,14 @@ enum Styles
 
 	String id()
 	{
-		return name().toLowerCase();
+		return name().toLowerCase().replace('_', '-');
 	}
 
 	static Styles parse(String name)
 	{
 		try
 		{
-			return valueOf(name.trim().toUpperCase());
+			return valueOf(name.trim().toUpperCase().replace('-', '_'));
 		}
 		catch (IllegalArgumentException e)
 		{

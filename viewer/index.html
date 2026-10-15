@@ -1,0 +1,84 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gielinor Tactical</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap">
+<style>
+/* Viewer for a Pyramid of a whole-surface render (see ../README.md). FULL_W/H and WORLD_X0/Y1 below must match the render.
+   Layout: one full-height map with a small ink label bar, as in the route planner. Single dark look by choice. */
+:root {
+  --ink: #141914;
+  --panel: #1c231c;
+  --line: #48533e;
+  --muted: #a4af95;
+  --text: #e0e5cd;
+  --orange: #ffae47;
+  --cyan: #77e2d4;
+  --sea: #3d7a85;
+  --pixel: "Silkscreen", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--ink); color: var(--text); margin: 0; display: flex; flex-direction: column; }
+.bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px;
+  padding-block: 10px; padding-inline: 16px;
+  background: var(--panel); border-bottom: 1px solid var(--line); font: 11px/1.4 var(--pixel);
+}
+.bar h1 { margin: 0; font: 14px/1.2 var(--pixel); color: var(--text); }
+.bar .meta { color: var(--muted); }
+.bar .coord { margin-left: auto; color: var(--cyan); font-variant-numeric: tabular-nums; min-width: 15ch; text-align: right; }
+.bar .key { display: inline-flex; gap: 12px; color: var(--muted); }
+.bar .key b { font-weight: 400; }
+.bar .key .c { color: var(--cyan); } .bar .key .o { color: var(--orange); }
+#map { flex: 1; min-height: 0; background: var(--sea); }
+.leaflet-container { background: var(--sea); font: 11px var(--pixel); }
+.leaflet-tile { image-rendering: pixelated; }
+.leaflet-bar a, .leaflet-bar a:hover { background: var(--ink); color: var(--text); border-bottom-color: var(--line); }
+.leaflet-bar { border: 1px solid var(--line) !important; border-radius: 0; box-shadow: none !important; }
+.leaflet-bar a:first-child, .leaflet-bar a:last-child { border-radius: 0; }
+.leaflet-control-attribution { background: color-mix(in srgb, var(--ink) 80%, transparent) !important; color: var(--muted) !important; }
+.leaflet-control-attribution a { color: var(--muted); }
+</style>
+
+<div class="bar">
+  <h1>Gielinor · Tactical</h1>
+  <span class="meta">Surface, plane 0 · tiles 960–4031 × 2048–4223</span>
+  <span class="key"><b class="c">■ destinations</b><b class="o">■ transport</b></span>
+  <span class="coord" id="coord" aria-live="off">hover the map</span>
+</div>
+<div id="map" role="application" aria-label="Pan and zoom map of Gielinor"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+// Pyramid: zoom 4 is full resolution (4 px per tile), each level below halves it.
+const FULL_W = 12288, FULL_H = 8704, MAX_NATIVE = 4, PX_PER_TILE = 4;
+const WORLD_X0 = 960, WORLD_Y1 = 4223;
+const scale = 2 ** MAX_NATIVE;
+const bounds = L.latLngBounds([-FULL_H / scale, 0], [0, FULL_W / scale]);
+
+const map = L.map("map", {
+  crs: L.CRS.Simple, minZoom: 0, maxZoom: 7, zoomSnap: 0.5,
+  maxBounds: bounds.pad(0.25), attributionControl: true,
+});
+L.tileLayer("tiles/{z}/{x}/{y}.png", {
+  tileSize: 1024, minNativeZoom: 0, maxNativeZoom: MAX_NATIVE, noWrap: true, bounds,
+  attribution: "map-style tactical · rendered from the OSRS cache",
+}).addTo(map);
+
+// Open on Lumbridge and Varrock.
+map.setView(toLatLng(3220, 3330), 3);
+
+function toLatLng(x, y) {
+  return L.latLng(-((WORLD_Y1 - y + 0.5) * PX_PER_TILE) / scale, ((x - WORLD_X0 + 0.5) * PX_PER_TILE) / scale);
+}
+const coord = document.getElementById("coord");
+map.on("mousemove", e => {
+  const x = WORLD_X0 + Math.floor(e.latlng.lng * scale / PX_PER_TILE);
+  const y = WORLD_Y1 - Math.floor(-e.latlng.lat * scale / PX_PER_TILE);
+  coord.textContent = `${x}, ${y}, 0`;
+});
+map.on("mouseout", () => { coord.textContent = "hover the map"; });
+</script>

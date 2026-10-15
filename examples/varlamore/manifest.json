@@ -80,6 +80,18 @@
       "renderer": "StyledMapImageDumper",
       "sha256": "1cacdb0463a057610b0597e7228a38706035076c89bedafc94611fa0dbe7a5f2"
     },
+    "tactical-dusk.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "c62c22bcb1e8493b4392df7bcbc3348b8878b8d532e823ca59b4b9b9fe67ce8f"
+    },
+    "tactical-field.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "ac112303477d9f5a9b0f9435ad90bcd809efe8c86238ae5298833266ae68e162"
+    },
+    "tactical-classic.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "0db6a66a07ef1361467c5f14f43b0b7fe02844045bc2105baa4650626dd60a4d"
+    },
     "height.png": {
       "renderer": "height",
       "sha256": "bb95be28f3394ac931057beda40ac81a52b155cf019ef99c0c81492d1bb52ab4",
@@ -90,7 +102,7 @@
     },
     "compare.png": {
       "renderer": "compare",
-      "sha256": "703106781d42cc3eefdebe402fb322dc87872b06d125d693a6f87eca450eb059"
+      "sha256": "ec7bc9d2b406544bebf67689ba3a4cd13c2276541d2e6ebcbe594d2f819a3c79"
     }
   }
 }

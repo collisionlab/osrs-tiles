@@ -27,7 +27,7 @@ T=../../shortest-path-tooling        # or wherever ./cache and keys.json live
 | `--area X0,Y0,X1,Y1` | inclusive world-tile rectangle, **or** |
 | `--regions ID,…` | map squares (`(x>>6)<<8 \| (y>>6)`); renders their union |
 | `--plane Z` | 0–3 |
-| `--styles S,…` | `runelite` (default), `standard`, `declutter`, `muted`, `relief`, `tactical` |
+| `--styles S,…` | `runelite` (default), `standard`, `declutter`, `muted`, `relief`, `tactical`, `tactical-dusk`, `tactical-field`, `tactical-classic` |
 | `--height` | also write `height.png` |
 | `--labels` | draw area labels (off by default, as in Explv's tiles) |
 | `--out DIR` | output directory, created if missing |
@@ -209,12 +209,56 @@ the hooks:
   the docking point at the Varlamore docks). The apothecary sprite is not
   mapped yet: neither example area has one.
 
+### Variants
+
+Each tactical variant is a `TacticalStyle.Palette`: plain data (terrain,
+road, water and wall colours, plus the relief settings), so a new variant
+needs no new drawing code.
+
+| Style | Look |
+|-------|------|
+| `tactical` | the planner's olive daylight look |
+| `tactical-dusk` | the planner's dark theme: low-light olives, an ink-dark sea with a cyan foam line, muted walls |
+| `tactical-field` | a printed field map: khaki and sage paper, brown contour lines on every terrace edge instead of cliff shadows, pale water with a blue shoreline, no waves or hillshade |
+| `tactical-classic` | saturated Advance Wars colours: bright plains, blue sea, white surf, heavy cliff shadows |
+
+Field's contours wobble in flat grassland, where height noise keeps
+crossing terrace boundaries. Smoothing heights before contouring would fix
+it.
+
 Not done yet: RuneLite's object sprites still use RuneScape art: trees and
 rocks (a real tactics look wants our own forest and mountain glyphs) and
 in-building ladders and stairs, which matter for routing and need an
 object-sprite hook. Quest starts may deserve a quieter third badge kind.
 Rocky coasts have foam but no land-side edge, and the palette has only
 been checked by eye against the planner.
+
+## The whole world
+
+The surface is one solid block of 48 × 34 map squares (tiles 960–4031 ×
+2048–4223, Sailing's seas included). It renders in about 20 s with a 10 GB
+heap, giving a 12288 × 8704 PNG (about 15 MB). `Pyramid` cuts that into a
+Leaflet tile pyramid (1024-px tiles, zoom 0–4, 152 tiles, about 22 MB), and
+`viewer/index.html` shows it with pixelated scaling and a world-tile
+coordinate readout:
+
+```bash
+./gradlew -p map-style installDist
+MAP_STYLE_OPTS=-Xmx10g map-style/build/install/map-style/bin/map-style \
+    --cache $T/cache --xteas $T/keys.json --area 960,2048,4031,4223 \
+    --plane 0 --styles tactical --out build/map-style/world
+java -cp 'map-style/build/install/map-style/lib/*' mapstyle.Pyramid \
+    build/map-style/world/tactical.png build/map-style/world/tiles
+cp map-style/viewer/index.html build/map-style/world/
+python3 -m http.server -d build/map-style/world 8000
+```
+
+The viewer hard-codes the render's size and origin (`FULL_W`, `FULL_H`,
+`WORLD_X0`, `WORLD_Y1`). Change them if you render a different area.
+
+At world scale, a few open-ocean map squares in Sailing's seas come out in
+a slightly different water shade, giving visible rectangles. The Wilderness
+and Morytania read as flat grey "rock".
 
 ## Recommended next step: terrain and relief
 

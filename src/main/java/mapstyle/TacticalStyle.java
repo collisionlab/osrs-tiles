@@ -8,47 +8,165 @@ import net.runelite.cache.definitions.OverlayDefinition;
 import net.runelite.cache.definitions.UnderlayDefinition;
 
 /**
- * A flat, tile-crisp "tactics game" map in the web planner's olive palette.
+ * A flat, tile-crisp "tactics game" map, coloured by a {@link Palette}.
  *
  * <p>Ground is RuneLite's blended colour snapped to a few flat terrain
  * classes, so colour changes happen at tile edges instead of gradients.
- * Elevation is drawn as terraces: every {@link #TERRACE} height units is
- * one step, and tiles at the foot of a step (the step is to their
- * north or west) get a dark cliff line. A three-level hillshade adds the
- * slope within a terrace. Water is banded by distance to land, with a foam
- * line along every shore.
+ * Elevation is drawn as terraces of {@link #TERRACE} height units: either
+ * as a cliff shadow on tiles at the foot of a step (the step is to their
+ * north or west), or as contour lines on every terrace edge. A three-level
+ * hillshade adds the slope within a terrace. Water is banded by distance to
+ * land, with a foam line along every shore.
  */
 final class TacticalStyle implements MapStyle
 {
-	// Web planner tokens (web/src/styles.css): --ink and --orange.
+	/** Every colour and relief setting of one variant. */
+	static final class Palette
+	{
+		int grassBright;
+		int grass;
+		int grassDark;
+		int scrub;
+		int scrubDark;
+		int sand;
+		int dirt;
+		int dirtDark;
+		int rock;
+		int road;
+		int path;
+		int foam;
+		int shallow;
+		int mid;
+		int deep;
+		/** Wave-dash colour in open water; equal to {@link #deep} for none. */
+		int wave;
+		int wall;
+		int door;
+		/** Contour-line colour on every terrace edge, or -1 for a cliff shadow instead. */
+		int contour = -1;
+		double cliffShadow = 0.70;
+		double lit = 1.12;
+		double shaded = 0.86;
+	}
+
+	// Web planner tokens (web/src/styles.css).
 	private static final int INK = 0x141914;
+	private static final int MUTED = 0xA4AF95;
+	private static final int CYAN = 0x77E2D4;
 	private static final int ORANGE = 0xFFAE47;
 
-	private static final int GRASS_BRIGHT = 0x9DB04F;
-	private static final int GRASS = 0x7F9440;
-	private static final int GRASS_DARK = 0x5F7232;
-	private static final int SCRUB = 0x9A9443;
-	private static final int SCRUB_DARK = 0x7A7636;
-	private static final int SAND = 0xD3C58A;
-	private static final int DIRT = 0x8A7044;
-	private static final int DIRT_DARK = 0x5E4B2E;
-	private static final int ROCK = 0x7D7B68;
-	// Water by distance to land: foam line, two shallow bands, open water.
-	private static final int FOAM = 0x86C4BB;
-	private static final int SHALLOW = 0x5D9EA0;
-	private static final int MID = 0x4B8D93;
-	private static final int DEEP = 0x3D7A85;
-	private static final int WAVE = 0x5A97A0;
+	/** The planner's olive daylight look. */
+	static final Palette OLIVE = new Palette();
+	/** The planner's dark theme: low-light olives, an ink sea with a cyan shoreline. */
+	static final Palette DUSK = new Palette();
+	/** A printed field map: khaki paper, brown contours, pale water, no waves. */
+	static final Palette FIELD = new Palette();
+	/** Saturated Advance Wars colours: bright plains, blue sea, white surf. */
+	static final Palette CLASSIC = new Palette();
+
+	static
+	{
+		Palette p = OLIVE;
+		p.grassBright = 0x9DB04F;
+		p.grass = 0x7F9440;
+		p.grassDark = 0x5F7232;
+		p.scrub = 0x9A9443;
+		p.scrubDark = 0x7A7636;
+		p.sand = 0xD3C58A;
+		p.dirt = 0x8A7044;
+		p.dirtDark = 0x5E4B2E;
+		p.rock = 0x7D7B68;
+		p.road = 0xB5B29A;
+		p.path = 0xB89A62;
+		p.foam = 0x86C4BB;
+		p.shallow = 0x5D9EA0;
+		p.mid = 0x4B8D93;
+		p.deep = 0x3D7A85;
+		p.wave = 0x5A97A0;
+		p.wall = INK;
+		p.door = ORANGE;
+
+		p = DUSK;
+		p.grassBright = 0x55642F;
+		p.grass = 0x485628;
+		p.grassDark = 0x3A4622;
+		p.scrub = 0x59562B;
+		p.scrubDark = 0x4A4825;
+		p.sand = 0x7F7754;
+		p.dirt = 0x564630;
+		p.dirtDark = 0x3E3324;
+		p.rock = 0x4E4D43;
+		p.road = 0x75735F;
+		p.path = 0x6E5E3E;
+		p.foam = CYAN;
+		p.shallow = 0x2D5B57;
+		p.mid = 0x224643;
+		p.deep = 0x1A3533;
+		p.wave = 0x2B4F4B;
+		p.wall = MUTED;
+		p.door = ORANGE;
+		p.cliffShadow = 0.62;
+		p.lit = 1.18;
+		p.shaded = 0.82;
+
+		p = FIELD;
+		p.grassBright = 0xD4D7A8;
+		p.grass = 0xC5CB98;
+		p.grassDark = 0xAFB985;
+		p.scrub = 0xD8D2A2;
+		p.scrubDark = 0xC7C190;
+		p.sand = 0xEDE4C2;
+		p.dirt = 0xCDB98E;
+		p.dirtDark = 0xB49F78;
+		p.rock = 0xBDB8A5;
+		p.road = 0xF4F0E0;
+		p.path = 0xE2CFA0;
+		p.foam = 0x5A86A6;
+		p.shallow = 0xB8D2DC;
+		p.mid = 0xB8D2DC;
+		p.deep = 0xB8D2DC;
+		p.wave = 0xB8D2DC;
+		p.wall = 0x4A3B2C;
+		p.door = 0xB4442E;
+		p.contour = 0x9A7A55;
+		p.lit = 1.0;
+		p.shaded = 1.0;
+
+		p = CLASSIC;
+		p.grassBright = 0x98D858;
+		p.grass = 0x78C048;
+		p.grassDark = 0x3F8F3A;
+		p.scrub = 0xC8C050;
+		p.scrubDark = 0xA8A040;
+		p.sand = 0xF0D888;
+		p.dirt = 0xB08850;
+		p.dirtDark = 0x806038;
+		p.rock = 0xA0A0A0;
+		p.road = 0xD0D0C8;
+		p.path = 0xD8B878;
+		p.foam = 0xE8F8FF;
+		p.shallow = 0x58A0F0;
+		p.mid = 0x3878E0;
+		p.deep = 0x2860D0;
+		p.wave = 0x78B8F8;
+		p.wall = 0x202020;
+		p.door = 0xE04030;
+		p.cliffShadow = 0.6;
+		p.lit = 1.1;
+		p.shaded = 0.85;
+	}
+
 	/** How far (tiles) to look for land; beyond it a tile is open water. */
 	private static final int SHORE_REACH = 4;
-	private static final int ROAD = 0xB5B29A;
-	private static final int PATH = 0xB89A62;
-
 	/** Height units per terrace step (128 = one tile). */
 	private static final int TERRACE = 192;
-	private static final double CLIFF_SHADOW = 0.70;
-	private static final double LIT = 1.12;
-	private static final double SHADED = 0.86;
+
+	private final Palette p;
+
+	TacticalStyle(Palette palette)
+	{
+		this.p = palette;
+	}
 
 	@Override
 	public int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, Terrain terrain)
@@ -73,7 +191,7 @@ final class TacticalStyle implements MapStyle
 	@Override
 	public int wall(int rgb, ObjectDefinition object)
 	{
-		return object.getWallOrDoor() != 0 ? ORANGE : INK;
+		return object.getWallOrDoor() != 0 ? p.door : p.wall;
 	}
 
 	@Override
@@ -88,7 +206,7 @@ final class TacticalStyle implements MapStyle
 	 * line on the first ring, shallows, then open water with sparse
 	 * two-tile wave dashes.
 	 */
-	private static int water(int x, int y, int z, Terrain terrain)
+	private int water(int x, int y, int z, Terrain terrain)
 	{
 		int nearest = Integer.MAX_VALUE;
 		for (int dx = -SHORE_REACH; dx <= SHORE_REACH; dx++)
@@ -104,19 +222,19 @@ final class TacticalStyle implements MapStyle
 		}
 		if (nearest <= 2)
 		{
-			return FOAM;
+			return p.foam;
 		}
 		if (nearest <= 5)
 		{
-			return SHALLOW;
+			return p.shallow;
 		}
 		if (nearest <= 10)
 		{
-			return MID;
+			return p.mid;
 		}
 		// Dashes two tiles long; the hash keeps them sparse and stable.
 		int h = (x >> 1) * 73856093 ^ y * 19349663;
-		return Math.floorMod(h, 29) == 0 ? WAVE : DEEP;
+		return Math.floorMod(h, 29) == 0 ? p.wave : p.deep;
 	}
 
 	/** Land is any loaded tile without a water overlay; unloaded tiles count as sea. */
@@ -131,7 +249,7 @@ final class TacticalStyle implements MapStyle
 	 * map data into smooth class regions with crisp tile-aligned edges.
 	 * Thresholds come from a histogram of the Lumbridge and Varlamore renders.
 	 */
-	static int ground(int rgb)
+	int ground(int rgb)
 	{
 		float[] hsb = hsb(rgb);
 		float hue = hsb[0];
@@ -139,54 +257,65 @@ final class TacticalStyle implements MapStyle
 		float bri = hsb[2];
 		if (bri >= 0.7f && sat < 0.7f)
 		{
-			return SAND;
+			return p.sand;
 		}
 		if (sat < 0.3f)
 		{
-			return ROCK;
+			return p.rock;
 		}
 		if (hue < 0.115f)
 		{
-			return bri > 0.45f ? DIRT : DIRT_DARK;
+			return bri > 0.45f ? p.dirt : p.dirtDark;
 		}
 		if (hue < 0.165f)
 		{
-			return bri > 0.5f ? SCRUB : SCRUB_DARK;
+			return bri > 0.5f ? p.scrub : p.scrubDark;
 		}
-		return bri > 0.55f ? GRASS_BRIGHT : bri > 0.35f ? GRASS : GRASS_DARK;
+		return bri > 0.55f ? p.grassBright : bri > 0.35f ? p.grass : p.grassDark;
 	}
 
 	/** Class of a non-water overlay: paved/stone, light path or dark ground. */
-	static int surface(int rgb)
+	int surface(int rgb)
 	{
 		float[] hsb = hsb(rgb);
 		if (hsb[1] < 0.25f)
 		{
-			return ROAD;
+			return p.road;
 		}
 		if (hsb[2] > 0.5f)
 		{
-			return PATH;
+			return p.path;
 		}
-		return hsb[2] > 0.3f ? DIRT : DIRT_DARK;
+		return hsb[2] > 0.3f ? p.dirt : p.dirtDark;
 	}
 
-	private static int relief(int rgb, int x, int y, int z, Terrain terrain)
+	private int relief(int rgb, int x, int y, int z, Terrain terrain)
 	{
 		int here = terrain.height(x, y, z);
 		int step = terrace(here);
-		if (terrace(terrain.height(x, y + 1, z, here)) > step || terrace(terrain.height(x - 1, y, z, here)) > step)
+		boolean higherNorthOrWest = terrace(terrain.height(x, y + 1, z, here)) > step
+			|| terrace(terrain.height(x - 1, y, z, here)) > step;
+		if (p.contour >= 0)
 		{
-			return Styles.shade(rgb, CLIFF_SHADOW);
+			if (higherNorthOrWest
+				|| terrace(terrain.height(x, y - 1, z, here)) > step
+				|| terrace(terrain.height(x + 1, y, z, here)) > step)
+			{
+				return p.contour;
+			}
+		}
+		else if (higherNorthOrWest)
+		{
+			return Styles.shade(rgb, p.cliffShadow);
 		}
 		double lit = Styles.hillshade(terrain, x, y, z);
 		if (lit > 1.15)
 		{
-			return Styles.shade(rgb, LIT);
+			return Styles.shade(rgb, p.lit);
 		}
 		if (lit < 0.85)
 		{
-			return Styles.shade(rgb, SHADED);
+			return Styles.shade(rgb, p.shaded);
 		}
 		return rgb;
 	}
