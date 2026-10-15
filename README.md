@@ -16,7 +16,7 @@ T=../../shortest-path-tooling        # or wherever ./cache and keys.json live
 
 ./gradlew -p map-style run --args="--cache $T/cache --xteas $T/keys.json \
     --regions 12850,12851,13106,13107 --plane 0 \
-    --styles runelite,standard,declutter,muted --height \
+    --styles runelite,standard,declutter,muted,relief --height \
     --out build/map-style/lumbridge"
 ```
 
@@ -27,7 +27,7 @@ T=../../shortest-path-tooling        # or wherever ./cache and keys.json live
 | `--area X0,Y0,X1,Y1` | inclusive world-tile rectangle, **or** |
 | `--regions ID,…` | map squares (`(x>>6)<<8 \| (y>>6)`); renders their union |
 | `--plane Z` | 0–3 |
-| `--styles S,…` | `runelite` (default), `standard`, `declutter`, `muted` |
+| `--styles S,…` | `runelite` (default), `standard`, `declutter`, `muted`, `relief` |
 | `--height` | also write `height.png` |
 | `--labels` | draw area labels (off by default, as in Explv's tiles) |
 | `--out DIR` | output directory, created if missing |
@@ -64,7 +64,7 @@ RenderRegions (CLI)
   ├─ MapStyle.keep → Region.getLocations().removeIf   data-level object filter
   ├─ renderer:
   │    MapImageDumper (unforked)        styles runelite, declutter
-  │    StyledMapImageDumper (fork)      styles standard, muted
+  │    StyledMapImageDumper (fork)      styles standard, muted, relief
   │      .drawMap(plane)                over the loaded squares' bounds
   └─ crop to the requested area → PNG + manifest
 ```
@@ -150,26 +150,32 @@ So data selection can stay on stock RuneLite, but **any change to how
 something is drawn needs the fork**. That is the extension point: one fork of
 `MapImageDumper` with a `MapStyle` hook at each colour decision. Each hook
 gets the colour RuneLite would draw plus the decoded data behind it
-(definition, world x/y/plane, height). The fork is small: 34 lines added,
-71 removed, and the removals are the old `main()`. Its default behaviour
+(definition, world x/y/plane, and a `Terrain` height lookup over every
+loaded square). The fork is small: 39 lines added, 71 removed, and the
+removals are the old `main()`. Its default behaviour
 is verified identical, so every visual difference is attributable to a
 hook. `muted` exercises all three colour hooks (underlay, overlay,
 wall/door). It is a proof of control, not a proposed style.
 
 `compare.png` panels, left to right: `runelite`, `standard`, `declutter`,
-`muted`, `height` (white = highest; Lumbridge spans 520 height units ≈ 4 tiles).
+`muted`, `relief`, `height` (white = highest; Lumbridge spans 520 height
+units ≈ 4 tiles).
 
 ## Recommended next step: terrain and relief
 
 The data is there: `height.png` shows the river valley and the Lumbridge
 plateau clearly. The renderer does not use it yet. In order:
 
-1. **Height-aware hooks.** Give `MapStyle` a height *lookup*, e.g. a
-   `heightAt(x, y, z)` function backed by the loaded `RegionLoader`,
-   instead of a single height. Then a style can compute a slope and aspect
-   from neighbouring tiles and apply hillshading in the underlay/overlay hooks,
-   modulating each terrain type's colour by illumination, not filtering
-   pixels. That is about 20 lines and needs no renderer change.
+1. **Height-aware hooks. Done.** Hooks receive a `Terrain`
+   (`height(x, y, z)` over every loaded square). The `relief` style
+   hillshades RuneLite's ground and overlay colours by tile slope: a Horn
+   3×3 gradient, light from the NW at 45°, and 1.5× vertical exaggeration
+   (all constants in `Styles.java`). Shading is applied per tile in the
+   colour hooks, so it follows terrain type and leaves objects, walls and
+   icons alone. Known limits: at 4 px per tile the shading is blocky
+   (one value per tile), and the procedural height noise in flat ground
+   still shows faintly. Both point to step 2. Exaggeration 3 with a plain
+   central difference was tried first and turned the noise into speckle.
 2. **Sub-tile terrain.** RuneLite fills each tile with one flat colour. For
    smooth relief, rasterise the ground pass at the vertex level: heights are
    per tile corner, so interpolate colour and shade across the 4×4 pixels.

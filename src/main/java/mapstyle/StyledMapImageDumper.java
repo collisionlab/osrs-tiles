@@ -149,6 +149,9 @@ public class StyledMapImageDumper
 	@Setter
 	private MapStyle style = MapStyle.RUNELITE;
 
+	// map-style: height lookup across every loaded map square
+	private final Terrain terrain;
+
 	public StyledMapImageDumper(Store store, KeyProvider keyProvider)
 	{
 		this(store, new RegionLoader(store, keyProvider));
@@ -158,6 +161,7 @@ public class StyledMapImageDumper
 	{
 		this.store = store;
 		this.regionLoader = regionLoader;
+		this.terrain = new Terrain(regionLoader); // map-style
 		this.areas = new AreaManager(store);
 		this.sprites = new SpriteManager(store);
 		this.fonts = new FontManager(store);
@@ -478,7 +482,7 @@ public class StyledMapImageDumper
 									underlayRgb = JagexColor.getRGBFull(underlayHsl);
 									// map-style
 									underlayRgb = style.underlay(underlayRgb, findUnderlay(underlayId - 1),
-										baseX + xi, baseY + yi, z, r.getTileHeight(z, convert(xi), convert(yi)));
+										baseX + xi, baseY + yi, z, terrain);
 								}
 
 								int shape, rotation;
@@ -531,7 +535,7 @@ public class StyledMapImageDumper
 
 									// map-style
 									overlayRgb = style.overlay(overlayRgb, overlayDefinition,
-										baseX + xi, baseY + yi, z, r.getTileHeight(z, convert(xi), convert(yi)));
+										baseX + xi, baseY + yi, z, terrain);
 								}
 
 								if (!renderOverlays)

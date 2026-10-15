@@ -11,8 +11,8 @@ import net.runelite.cache.region.Location;
  * a style can restyle by terrain type, elevation or object rather than by
  * pixel. The defaults reproduce RuneLite's MapImageDumper exactly.
  *
- * <p>Heights are RuneLite's raw tile heights: 0 at sea level and more
- * negative the higher the ground (1 unit = 1/128 tile).
+ * <p>{@link Terrain} answers heights for any loaded tile, so hooks can
+ * work from slope and relief, not just the tile being drawn.
  */
 public interface MapStyle
 {
@@ -21,7 +21,7 @@ public interface MapStyle
 	};
 
 	/** Blended ground colour of a tile with an underlay. */
-	default int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, int height)
+	default int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, Terrain terrain)
 	{
 		return rgb;
 	}
@@ -31,7 +31,7 @@ public interface MapStyle
 	 * tile. 0 means "not drawn" (RuneLite's colour key for invisible
 	 * overlays).
 	 */
-	default int overlay(int rgb, OverlayDefinition overlay, int x, int y, int z, int height)
+	default int overlay(int rgb, OverlayDefinition overlay, int x, int y, int z, Terrain terrain)
 	{
 		return rgb;
 	}

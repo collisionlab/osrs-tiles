@@ -46,6 +46,10 @@
       "renderer": "StyledMapImageDumper",
       "sha256": "d4e34aeace26c4a46849bbd03661023a7e07eb6918c9ebbf4e74c4a8daa94bf8"
     },
+    "relief.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "ac5fe7679127303faf3965b0df481d15601082a051116501c881195601c12186"
+    },
     "height.png": {
       "renderer": "height",
       "sha256": "08cb2673c046b4f6255fd3a5bdd8c4c7f86bb1d5dc134422a5b9db5cc1dc54d7",
@@ -56,7 +60,7 @@
     },
     "compare.png": {
       "renderer": "compare",
-      "sha256": "e4f52ccb902ab51ddcc67985dda5a0d6e53c39450dbf57ca352cb57c40d60515"
+      "sha256": "9458b001ff701f70e15fcd12c5e8e796dee88036615718b25d879dd252be7e67"
     }
   }
 }
