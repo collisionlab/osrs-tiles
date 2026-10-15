@@ -1,0 +1,3 @@
+// Standalone build: the map-style experiment does not need the
+// shortest-path composite build, so it keeps its own settings.
+rootProject.name = 'map-style'

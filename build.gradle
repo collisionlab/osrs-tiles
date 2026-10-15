@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    maven {
+        url = 'https://repo.runelite.net'
+        content {
+            includeGroupByRegex("net\\.runelite.*")
+        }
+    }
+    mavenCentral()
+}
+
+// Pinned, unlike the tooling's latest.release: StyledMapImageDumper is a
+// fork of this exact version's MapImageDumper, and the standard style is
+// checked pixel-for-pixel against the unforked class.
+def runeLiteVersion = '1.13.2'
+
+dependencies {
+    implementation group: 'net.runelite', name: 'cache', version: runeLiteVersion
+    // The cache POM publishes these as runtime-only; the fork and CLI
+    // compile against them, at the versions the cache already uses.
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release.set(11)
+}
+
+application {
+    mainClass = 'mapstyle.RenderRegions'
+    applicationDefaultJvmArgs = [
+        '-Xmx4g',
+        '-Djava.awt.headless=true',
+        // openrs2 disk caches trip thousands of harmless per-archive
+        // revision-mismatch warnings; keep the CLI output readable.
+        '-Dorg.slf4j.simpleLogger.log.net.runelite.cache.fs.Archive=error',
+    ]
+}
+
+// `run` resolves relative paths against the caller's directory, not
+// map-style/, so `./gradlew -p map-style run --args='--out build/x'`
+// behaves like a normal CLI.
+tasks.named('run') {
+    workingDir = providers.environmentVariable('PWD').orElse(rootDir.path).get()
+}

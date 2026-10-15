@@ -1,0 +1,54 @@
+package mapstyle;
+
+import net.runelite.cache.definitions.ObjectDefinition;
+import net.runelite.cache.definitions.OverlayDefinition;
+import net.runelite.cache.definitions.UnderlayDefinition;
+import net.runelite.cache.region.Location;
+
+/**
+ * Cartographic decisions the renderer defers to. Every hook receives the
+ * colour RuneLite would have drawn plus the decoded cache data behind it, so
+ * a style can restyle by terrain type, elevation or object rather than by
+ * pixel. The defaults reproduce RuneLite's MapImageDumper exactly.
+ *
+ * <p>Heights are RuneLite's raw tile heights: 0 at sea level and more
+ * negative the higher the ground (1 unit = 1/128 tile).
+ */
+public interface MapStyle
+{
+	MapStyle RUNELITE = new MapStyle()
+	{
+	};
+
+	/** Blended ground colour of a tile with an underlay. */
+	default int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, int height)
+	{
+		return rgb;
+	}
+
+	/**
+	 * Overlay colour (paths, floors, water, …) of a shaped or full overlay
+	 * tile. 0 means "not drawn" (RuneLite's colour key for invisible
+	 * overlays).
+	 */
+	default int overlay(int rgb, OverlayDefinition overlay, int x, int y, int z, int height)
+	{
+		return rgb;
+	}
+
+	/** Wall/door line colour; RuneLite uses near-white walls and red doors. */
+	default int wall(int rgb, ObjectDefinition object)
+	{
+		return rgb;
+	}
+
+	/**
+	 * Whether a placed object is drawn at all. Applied to the decoded
+	 * region data before rendering, so it works with the unforked
+	 * RuneLite renderer too.
+	 */
+	default boolean keep(Location location, ObjectDefinition object)
+	{
+		return true;
+	}
+}
