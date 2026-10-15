@@ -17,7 +17,8 @@ import net.runelite.cache.region.Location;
  * as a cliff shadow on tiles at the foot of a step (the step is to their
  * north or west), or as contour lines on every terrace edge. A three-level
  * hillshade adds the slope within a terrace. Water is banded by distance to
- * land, with a foam line along every shore.
+ * land, with a foam line along every shore and a darker rim on the land
+ * side.
  */
 final class TacticalStyle implements MapStyle
 {
@@ -55,6 +56,8 @@ final class TacticalStyle implements MapStyle
 		/** Contour-line colour on every terrace edge, or -1 for a cliff shadow instead. */
 		int contour = -1;
 		double cliffShadow = 0.70;
+		/** Brightness of land tiles touching water: the land side of the coastline. */
+		double coastShade = 0.72;
 		double lit = 1.12;
 		double shaded = 0.86;
 	}
@@ -154,6 +157,7 @@ final class TacticalStyle implements MapStyle
 		p.wall = 0x4A3B2C;
 		p.door = 0xB4442E;
 		p.contour = 0x9A7A55;
+		p.coastShade = 0.85;
 		p.lit = 1.0;
 		p.shaded = 1.0;
 
@@ -203,7 +207,7 @@ final class TacticalStyle implements MapStyle
 	@Override
 	public int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, Terrain terrain)
 	{
-		return relief(ground(rgb), x, y, z, terrain);
+		return coast(relief(ground(rgb), x, y, z, terrain), x, y, z, terrain);
 	}
 
 	@Override
@@ -217,7 +221,29 @@ final class TacticalStyle implements MapStyle
 		{
 			return water(x, y, z, terrain);
 		}
-		return relief(surface(rgb), x, y, z, terrain);
+		return coast(relief(surface(rgb), x, y, z, terrain), x, y, z, terrain);
+	}
+
+	/**
+	 * Darkens land on the shoreline: a tile that is itself partly water (a
+	 * shaped overlay) or has water on any side. Gives every coast and river
+	 * bank a land-side edge to match the foam line on the water side.
+	 */
+	private int coast(int rgb, int x, int y, int z, Terrain terrain)
+	{
+		if (isWaterAt(terrain, x, y, z)
+			|| isWaterAt(terrain, x + 1, y, z) || isWaterAt(terrain, x - 1, y, z)
+			|| isWaterAt(terrain, x, y + 1, z) || isWaterAt(terrain, x, y - 1, z))
+		{
+			return Styles.shade(rgb, p.coastShade);
+		}
+		return rgb;
+	}
+
+	private static boolean isWaterAt(Terrain terrain, int x, int y, int z)
+	{
+		int rgb = terrain.overlay(x, y, z);
+		return rgb > 0 && isWater(terrain.overlayDefinition(x, y, z), rgb);
 	}
 
 	@Override

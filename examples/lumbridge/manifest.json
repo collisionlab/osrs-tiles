@@ -52,19 +52,19 @@
     },
     "tactical.png": {
       "renderer": "StyledMapImageDumper",
-      "sha256": "82c04fa52553a404e494466e6d40827ef1e39b73297c1bbfc1cfcf972e4128f4"
+      "sha256": "0e974fdddbcf69fe7ec152ec2f42e2ffbdc60fa46c60c4f1e4555a0872716b2f"
     },
     "tactical-dusk.png": {
       "renderer": "StyledMapImageDumper",
-      "sha256": "c2415e7ce3e999a0129495f480f6e5c8a2d7f26e2530daf83ebc0be334f4a58f"
+      "sha256": "3475b41dfb098ae0d6cfac8dbe5d03998c17161796039ffd05b4f7b294273610"
     },
     "tactical-field.png": {
       "renderer": "StyledMapImageDumper",
-      "sha256": "63de3a7c5db42af5572acd0b03af6f858975d8be58804ee7a2077f282dc2c764"
+      "sha256": "e936cd47d3a006a6cef74f22b4d8fff14f2563c94679c391aece3a3f41fd05ba"
     },
     "tactical-classic.png": {
       "renderer": "StyledMapImageDumper",
-      "sha256": "123546147bba729c004e60a0c037485b800706c5b6e9a8a206124e298af29469"
+      "sha256": "e58e211bc0fe15c1a1dd6057aae705d3234e874d01259293a4b4fe6877b56cc3"
     },
     "height.png": {
       "renderer": "height",
@@ -76,7 +76,7 @@
     },
     "compare.png": {
       "renderer": "compare",
-      "sha256": "d51378ece9df940c95e15a29237853cac166cda0d746ba538892be1dcf610201"
+      "sha256": "7b456ef1f63d49ca51c61d5877f910cb66228554d336a890cb33842218d7b712"
     }
   }
 }

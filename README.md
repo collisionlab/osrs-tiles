@@ -196,7 +196,9 @@ the hooks:
   `Terrain.overlay` to see neighbouring tiles up to 4 tiles away. The bands
   are a pale foam line (≤ 1.4 tiles), two shallow bands, then deep teal with
   sparse two-tile wave dashes. Rivers come out as foam banks around a
-  shallow channel. A tile counts as water by its displayed colour or by
+  shallow channel. On the land side, any tile that is partly water or has
+  water on one of its four sides is darkened (`coastShade`), so every
+  coast and river bank also has a land-side edge. A tile counts as water by its displayed colour or by
   definition (a blue base colour on a textured or two-colour overlay). The
   definition test catches Sailing's regional seas, whose textures average
   outside the blue window. Sailing also textures those seas with thousands
@@ -241,8 +243,7 @@ Not done yet: RuneLite's object sprites still use RuneScape art: trees and
 rocks (a real tactics look wants our own forest and mountain glyphs) and
 in-building ladders and stairs, which matter for routing and need an
 object-sprite hook. Quest starts may deserve a quieter third badge kind.
-Rocky coasts have foam but no land-side edge, and the palette has only
-been checked by eye against the planner.
+The palette has only been checked by eye against the planner.
 
 ## The whole world
 
