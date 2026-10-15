@@ -62,6 +62,17 @@ public final class Terrain
 		return id == 0 ? 0 : overlayCache.computeIfAbsent(id - 1, overlayColour::applyAsInt);
 	}
 
+	/**
+	 * Whether (x, y, z) is under a roof: tile setting bit 0x4, which the
+	 * client uses to hide roofs. It marks building interiors exactly; open
+	 * yards and roofless ruins are not flagged.
+	 */
+	public boolean roofed(int x, int y, int z)
+	{
+		Region r = regions.findRegionForWorldCoordinates(x, y);
+		return r != null && (r.getTileSetting(z, x & (Region.X - 1), y & (Region.Y - 1)) & 4) != 0;
+	}
+
 	/** Height at world tile (x, y, z), or {@code fallback} outside the loaded squares. */
 	public int height(int x, int y, int z, int fallback)
 	{

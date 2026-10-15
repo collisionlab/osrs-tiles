@@ -45,6 +45,11 @@ final class TacticalStyle implements MapStyle
 		int swampDark;
 		/** Bright orange-yellow overlays. */
 		int lava;
+		/** Roofed floors: stone (and anything grey) and wood (brown floors). */
+		int buildingStone;
+		int buildingWood;
+		/** Brightness of ground in a building's shadow (south and east of it). */
+		double buildingShadow = 0.74;
 		int road;
 		int path;
 		int foam;
@@ -96,6 +101,8 @@ final class TacticalStyle implements MapStyle
 		p.swamp = 0x5E7A5A;
 		p.swampDark = 0x4A6249;
 		p.lava = 0xE8642C;
+		p.buildingStone = 0xC9C2A8;
+		p.buildingWood = 0xA88A5E;
 		p.road = 0xB5B29A;
 		p.path = 0xB89A62;
 		p.foam = 0x86C4BB;
@@ -121,6 +128,8 @@ final class TacticalStyle implements MapStyle
 		p.swamp = 0x34483A;
 		p.swampDark = 0x2A3A2F;
 		p.lava = 0xFF7A2F;
+		p.buildingStone = 0x6F6B5C;
+		p.buildingWood = 0x5E4C35;
 		p.road = 0x75735F;
 		p.path = 0x6E5E3E;
 		p.foam = CYAN;
@@ -149,6 +158,8 @@ final class TacticalStyle implements MapStyle
 		p.swamp = 0xB5C4A8;
 		p.swampDark = 0xA5B598;
 		p.lava = 0xD9663A;
+		p.buildingStone = 0xF2EBD6;
+		p.buildingWood = 0xDCC49A;
 		p.road = 0xF4F0E0;
 		p.path = 0xE2CFA0;
 		p.foam = 0x5A86A6;
@@ -178,6 +189,8 @@ final class TacticalStyle implements MapStyle
 		p.swamp = 0x4F9A70;
 		p.swampDark = 0x3B7A58;
 		p.lava = 0xF05020;
+		p.buildingStone = 0xE8E0C8;
+		p.buildingWood = 0xC89858;
 		p.road = 0xD0D0C8;
 		p.path = 0xD8B878;
 		p.foam = 0xE8F8FF;
@@ -209,7 +222,11 @@ final class TacticalStyle implements MapStyle
 	@Override
 	public int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, Terrain terrain)
 	{
-		return coast(relief(ground(rgb), x, y, z, terrain), x, y, z, terrain);
+		if (terrain.roofed(x, y, z))
+		{
+			return building(rgb, x, y, z, terrain);
+		}
+		return shadow(coast(relief(ground(rgb), x, y, z, terrain), x, y, z, terrain), x, y, z, terrain);
 	}
 
 	@Override
@@ -223,7 +240,69 @@ final class TacticalStyle implements MapStyle
 		{
 			return water(x, y, z, terrain);
 		}
-		return coast(relief(surface(rgb), x, y, z, terrain), x, y, z, terrain);
+		if (terrain.roofed(x, y, z))
+		{
+			return building(rgb, x, y, z, terrain);
+		}
+		return shadow(coast(relief(surface(rgb), x, y, z, terrain), x, y, z, terrain), x, y, z, terrain);
+	}
+
+	/**
+	 * A roofed floor tile. Grey floors become flagstones and brown floors
+	 * planks, each textured per tile in three close tones; coloured floors
+	 * (carpets) keep a muted version of their hue. Tiles along a building's
+	 * north and west walls are lit, so with {@link #shadow} on the other
+	 * side buildings read as raised blocks. No terrain relief applies indoors.
+	 */
+	private int building(int rgb, int x, int y, int z, Terrain terrain)
+	{
+		float[] hsb = hsb(rgb);
+		int floor;
+		int tone;
+		if (hsb[1] < 0.25f)
+		{
+			floor = p.buildingStone;
+			// Flagstones two tiles wide, staggered every row.
+			tone = hash((x + (y & 1)) >> 1, y);
+		}
+		else if (hsb[0] < 0.14f)
+		{
+			floor = p.buildingWood;
+			// Planks running east-west, four tiles long, staggered by row.
+			tone = hash((x + 2 * (y % 3)) >> 2, y);
+		}
+		else
+		{
+			float[] stone = hsb(p.buildingStone);
+			floor = Color.HSBtoRGB(hsb[0], Math.min(hsb[1], 0.4f) * 0.7f, stone[2] * 0.85f) & 0xFFFFFF;
+			tone = hash(x, y);
+		}
+		double shade = TEXTURE[Math.floorMod(tone, TEXTURE.length)];
+		if (!terrain.roofed(x, y + 1, z) || !terrain.roofed(x - 1, y, z))
+		{
+			shade *= BUILDING_LIT_EDGE;
+		}
+		return Styles.shade(floor, shade);
+	}
+
+	/** Ground just south or east of a building lies in its shadow. */
+	private int shadow(int rgb, int x, int y, int z, Terrain terrain)
+	{
+		if (terrain.roofed(x, y + 1, z) || terrain.roofed(x - 1, y, z))
+		{
+			return Styles.shade(rgb, p.buildingShadow);
+		}
+		return rgb;
+	}
+
+	/** Per-tile floor tones; mostly the base colour, with a lighter and a darker variant. */
+	private static final double[] TEXTURE = {1.0, 1.0, 0.94, 1.05, 1.0, 0.97};
+	private static final double BUILDING_LIT_EDGE = 1.08;
+
+	private static int hash(int a, int b)
+	{
+		int h = a * 73856093 ^ b * 19349663;
+		return h ^ h >>> 13;
 	}
 
 	/**

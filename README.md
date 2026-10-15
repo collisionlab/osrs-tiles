@@ -224,6 +224,16 @@ the hooks:
   The strength is blended by the window's share of frozen tiles, so the
   frozen sea's edge does not step.
 - **Surfaces:** roads and paths as light stone or tan.
+- **Buildings:** any tile under a roof (tile setting bit `0x4`, which the
+  client uses to hide roofs, exposed as `Terrain.roofed`) is a building
+  floor rather than terrain. Grey floors become flagstones and brown floors
+  planks, each in a light per-palette colour textured per tile in a few
+  close tones (staggered two-tile flagstones, staggered four-tile planks).
+  Coloured floors keep a muted version of their hue. Floor tiles along the
+  north and west walls are lit, and ground just south and east of a building
+  is shadowed, so buildings read as raised blocks. No relief or coast rim
+  applies indoors. Roofless rooms and yards are not flagged and stay
+  terrain.
 - **Walls and doors:** walls in the planner's `--ink` colour, doors in its
   `--orange`.
 - **Icons** (`TacticalIcons.java`, through the `icon` hook): only icons that
