@@ -319,8 +319,8 @@ final class TacticalStyle implements MapStyle
 	}
 
 	/**
-	 * Water by RuneLite's displayed colour, or by definition: a blue base
-	 * colour on a textured or two-colour overlay. The definition test catches
+	 * Water by RuneLite's displayed colour, or by definition: a blue or teal
+	 * base colour on a textured or two-colour overlay. The definition test catches
 	 * Sailing's regional seas, whose textures average to colours outside the
 	 * blue window (teal textures 180-184, purple-blue 145-149), so every sea
 	 * gets the same water bands.
@@ -336,7 +336,10 @@ final class TacticalStyle implements MapStyle
 			return false;
 		}
 		float[] hsb = hsb(overlay.getRgbColor());
-		return hsb[0] > 0.45f && hsb[0] < 0.75f && hsb[1] > 0.2f;
+		// Textured water may be nearly grey: the fetid sea west of the Feldip
+		// Hills (textures 175-179) is ~11% saturated.
+		float minSaturation = overlay.getTexture() >= 0 ? 0.08f : 0.2f;
+		return hsb[0] > 0.45f && hsb[0] < 0.75f && hsb[1] > minSaturation;
 	}
 
 	/**

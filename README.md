@@ -199,9 +199,11 @@ the hooks:
   shallow channel. On the land side, any tile that is partly water or has
   water on one of its four sides is darkened (`coastShade`), so every
   coast and river bank also has a land-side edge. A tile counts as water by its displayed colour or by
-  definition (a blue base colour on a textured or two-colour overlay). The
-  definition test catches Sailing's regional seas, whose textures average
-  outside the blue window. Sailing also textures those seas with thousands
+  definition (a blue or teal base colour on a textured or two-colour
+  overlay; textured ones may be as grey as 8% saturation). The definition
+  test catches Sailing's regional seas, whose textures average outside the
+  blue window, and the near-grey fetid sea west of the Feldip Hills
+  (textures 175-179). Sailing also textures those seas with thousands
   of nameless decoration objects (map-scene sprites ≥ 201, which sit almost
   only on water across the whole surface). The tactical style drops them via
   `keep`, so every sea gets the same bands and the open-ocean rectangles in
