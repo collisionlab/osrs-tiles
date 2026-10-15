@@ -78,7 +78,7 @@
     },
     "tactical.png": {
       "renderer": "StyledMapImageDumper",
-      "sha256": "03a277be19b4ab7649dfa682da9f1366267801fc11ce3096e359fe3680fdff8e"
+      "sha256": "1cacdb0463a057610b0597e7228a38706035076c89bedafc94611fa0dbe7a5f2"
     },
     "height.png": {
       "renderer": "height",
@@ -90,7 +90,7 @@
     },
     "compare.png": {
       "renderer": "compare",
-      "sha256": "e859553e71be6dadc27dfc49d1bb324206f1756c59587e0403aa08efe076c74c"
+      "sha256": "703106781d42cc3eefdebe402fb322dc87872b06d125d693a6f87eca450eb059"
     }
   }
 }

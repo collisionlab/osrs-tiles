@@ -156,9 +156,11 @@ something is drawn needs the fork**. That is the extension point: one fork of
 `MapImageDumper` with a `MapStyle` hook at each colour decision, plus one
 for map icons. Each colour hook
 gets the colour RuneLite would draw plus the decoded data behind it
-(definition, world x/y/plane, and a `Terrain` height lookup over every
-loaded square). The fork is small: 51 lines added, 71 removed, and the
-removals are the old `main()`. Its default behaviour
+(definition, world x/y/plane, and a `Terrain` view of every loaded square:
+heights, plus RuneLite's overlay colour for any tile). The fork's diff
+against upstream is +95/−105: the old `main()` is gone, the hooks are in,
+and the overlay-colour code moved verbatim into its own method so `Terrain`
+can reuse it. Its default behaviour
 is verified identical, so every visual difference is attributable to a
 hook. `muted` exercises all three colour hooks (underlay, overlay,
 wall/door). It is a proof of control, not a proposed style.
@@ -186,7 +188,12 @@ the hooks:
 - **Elevation:** 192-unit (1.5-tile) terraces, with a dark cliff line on
   tiles whose north or west neighbour is a step higher, plus a three-level
   quantised hillshade.
-- **Surfaces:** flat teal water, and roads and paths as light stone or tan.
+- **Water:** banded by squared distance to the nearest land tile, using
+  `Terrain.overlay` to see neighbouring tiles up to 4 tiles away. The bands
+  are a pale foam line (≤ 1.4 tiles), two shallow bands, then deep teal with
+  sparse two-tile wave dashes. Rivers come out as foam banks around a
+  shallow channel.
+- **Surfaces:** roads and paths as light stone or tan.
 - **Walls and doors:** walls in the planner's `--ink` colour, doors in its
   `--orange`.
 - **Icons** (`TacticalIcons.java`, through the `icon` hook): only icons that
@@ -206,9 +213,8 @@ Not done yet: RuneLite's object sprites still use RuneScape art: trees and
 rocks (a real tactics look wants our own forest and mountain glyphs) and
 in-building ladders and stairs, which matter for routing and need an
 object-sprite hook. Quest starts may deserve a quieter third badge kind.
-Coastlines have no outline (needs a "neighbour is water" lookup next to
-`Terrain`), and the palette has only been checked by eye against the
-planner.
+Rocky coasts have foam but no land-side edge, and the palette has only
+been checked by eye against the planner.
 
 ## Recommended next step: terrain and relief
 

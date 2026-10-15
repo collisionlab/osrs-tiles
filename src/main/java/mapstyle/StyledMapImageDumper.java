@@ -162,7 +162,7 @@ public class StyledMapImageDumper
 	{
 		this.store = store;
 		this.regionLoader = regionLoader;
-		this.terrain = new Terrain(regionLoader); // map-style
+		this.terrain = new Terrain(regionLoader, id -> overlayRgb(findOverlay(id))); // map-style
 		this.areas = new AreaManager(store);
 		this.sprites = new SpriteManager(store);
 		this.fonts = new FontManager(store);
@@ -498,41 +498,7 @@ public class StyledMapImageDumper
 									rotation = r.getOverlayRotation(z, convert(xi), convert(yi));
 
 									OverlayDefinition overlayDefinition = findOverlay(overlayId - 1);
-									int overlayTexture = overlayDefinition.getTexture();
-									int hsl;
-
-									if (overlayTexture >= 0)
-									{
-										hsl = rsTextureProvider.getAverageTextureRGB(overlayTexture);
-										//Repack it into full hsl
-										hsl = packHslFull(JagexColor.unpackHue((short) hsl) * 4, JagexColor.unpackSaturation((short) hsl) * 32, JagexColor.unpackLuminance((short) hsl) * 2);
-									}
-									else if (overlayDefinition.getRgbColor() == 0xFF_00FF)
-									{
-										hsl = -2;
-									}
-									else
-									{
-										// randomness added here
-										//Overlay Hsl
-										hsl = packHslFull(overlayDefinition.getHue(), overlayDefinition.getSaturation(), overlayDefinition.getLightness());
-									}
-
-									if (hsl != -2)
-									{
-										hsl = adjustHSLListness0(hsl);
-										overlayRgb = JagexColor.getRGBFull(hsl);
-									}
-
-									//Water, some cliffs, some buildings
-									if (overlayDefinition.getSecondaryRgbColor() != -1)
-									{
-										int hue = overlayDefinition.getOtherHue();
-										int sat = overlayDefinition.getOtherSaturation();
-										int olight = overlayDefinition.getOtherLightness();
-										hsl = packHslFull(hue, sat, olight);
-										overlayRgb = JagexColor.getRGBFull(hsl);
-									}
+									overlayRgb = overlayRgb(overlayDefinition); // map-style: extracted, unchanged
 
 									// map-style
 									overlayRgb = style.overlay(overlayRgb, overlayDefinition,
@@ -601,6 +567,50 @@ public class StyledMapImageDumper
 				}
 			}
 		}
+	}
+
+	// map-style: the overlay colour computation from drawMap(), moved here
+	// verbatim so Terrain can answer it for neighbouring tiles.
+	private int overlayRgb(OverlayDefinition overlayDefinition)
+	{
+		int overlayRgb = 0;
+		int overlayTexture = overlayDefinition.getTexture();
+		int hsl;
+
+		if (overlayTexture >= 0)
+		{
+			hsl = rsTextureProvider.getAverageTextureRGB(overlayTexture);
+			//Repack it into full hsl
+			hsl = packHslFull(JagexColor.unpackHue((short) hsl) * 4, JagexColor.unpackSaturation((short) hsl) * 32, JagexColor.unpackLuminance((short) hsl) * 2);
+		}
+		else if (overlayDefinition.getRgbColor() == 0xFF_00FF)
+		{
+			hsl = -2;
+		}
+		else
+		{
+			// randomness added here
+			//Overlay Hsl
+			hsl = packHslFull(overlayDefinition.getHue(), overlayDefinition.getSaturation(), overlayDefinition.getLightness());
+		}
+
+		if (hsl != -2)
+		{
+			hsl = adjustHSLListness0(hsl);
+			overlayRgb = JagexColor.getRGBFull(hsl);
+		}
+
+		//Water, some cliffs, some buildings
+		if (overlayDefinition.getSecondaryRgbColor() != -1)
+		{
+			int hue = overlayDefinition.getOtherHue();
+			int sat = overlayDefinition.getOtherSaturation();
+			int olight = overlayDefinition.getOtherLightness();
+			hsl = packHslFull(hue, sat, olight);
+			overlayRgb = JagexColor.getRGBFull(hsl);
+		}
+
+		return overlayRgb;
 	}
 
 	private void setPixels(int[][] pixels, int x, int y, int value)

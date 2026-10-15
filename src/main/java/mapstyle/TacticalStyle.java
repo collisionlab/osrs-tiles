@@ -15,7 +15,8 @@ import net.runelite.cache.definitions.UnderlayDefinition;
  * Elevation is drawn as terraces: every {@link #TERRACE} height units is
  * one step, and tiles at the foot of a step (the step is to their
  * north or west) get a dark cliff line. A three-level hillshade adds the
- * slope within a terrace.
+ * slope within a terrace. Water is banded by distance to land, with a foam
+ * line along every shore.
  */
 final class TacticalStyle implements MapStyle
 {
@@ -32,7 +33,14 @@ final class TacticalStyle implements MapStyle
 	private static final int DIRT = 0x8A7044;
 	private static final int DIRT_DARK = 0x5E4B2E;
 	private static final int ROCK = 0x7D7B68;
-	private static final int WATER = 0x3F7D86;
+	// Water by distance to land: foam line, two shallow bands, open water.
+	private static final int FOAM = 0x86C4BB;
+	private static final int SHALLOW = 0x5D9EA0;
+	private static final int MID = 0x4B8D93;
+	private static final int DEEP = 0x3D7A85;
+	private static final int WAVE = 0x5A97A0;
+	/** How far (tiles) to look for land; beyond it a tile is open water. */
+	private static final int SHORE_REACH = 4;
 	private static final int ROAD = 0xB5B29A;
 	private static final int PATH = 0xB89A62;
 
@@ -57,7 +65,7 @@ final class TacticalStyle implements MapStyle
 		}
 		if (Styles.isWater(rgb))
 		{
-			return WATER;
+			return water(x, y, z, terrain);
 		}
 		return relief(surface(rgb), x, y, z, terrain);
 	}
@@ -73,6 +81,48 @@ final class TacticalStyle implements MapStyle
 	{
 		TacticalIcons.draw(image, area, cx, cy);
 		return true;
+	}
+
+	/**
+	 * Water banded by squared distance to the nearest land tile: a foam
+	 * line on the first ring, shallows, then open water with sparse
+	 * two-tile wave dashes.
+	 */
+	private static int water(int x, int y, int z, Terrain terrain)
+	{
+		int nearest = Integer.MAX_VALUE;
+		for (int dx = -SHORE_REACH; dx <= SHORE_REACH; dx++)
+		{
+			for (int dy = -SHORE_REACH; dy <= SHORE_REACH; dy++)
+			{
+				int d2 = dx * dx + dy * dy;
+				if (d2 < nearest && isLand(terrain.overlay(x + dx, y + dy, z)))
+				{
+					nearest = d2;
+				}
+			}
+		}
+		if (nearest <= 2)
+		{
+			return FOAM;
+		}
+		if (nearest <= 5)
+		{
+			return SHALLOW;
+		}
+		if (nearest <= 10)
+		{
+			return MID;
+		}
+		// Dashes two tiles long; the hash keeps them sparse and stable.
+		int h = (x >> 1) * 73856093 ^ y * 19349663;
+		return Math.floorMod(h, 29) == 0 ? WAVE : DEEP;
+	}
+
+	/** Land is any loaded tile without a water overlay; unloaded tiles count as sea. */
+	private static boolean isLand(int overlayRgb)
+	{
+		return overlayRgb >= 0 && (overlayRgb == 0 || !Styles.isWater(overlayRgb));
 	}
 
 	/**

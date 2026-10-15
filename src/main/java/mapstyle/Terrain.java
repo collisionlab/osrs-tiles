@@ -1,23 +1,46 @@
 package mapstyle;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.IntUnaryOperator;
 import net.runelite.cache.region.Region;
 import net.runelite.cache.region.RegionLoader;
 
 /**
- * Elevation of the loaded map squares, for styles that need more than the
- * tile being drawn (slope, aspect, relief). Heights are RuneLite's raw
- * tile-corner heights: 0 at sea level, more negative the higher the
- * ground, 128 units to a tile.
+ * The loaded map squares as seen from a style that needs more than the tile
+ * being drawn: elevation (slope, aspect, relief) and neighbouring overlays
+ * (shorelines). Heights are RuneLite's raw tile-corner heights: 0 at sea
+ * level, more negative the higher the ground, 128 units to a tile.
  */
 public final class Terrain
 {
 	public static final int TILE = 128;
 
 	private final RegionLoader regions;
+	private final IntUnaryOperator overlayColour;
+	private final Map<Integer, Integer> overlayCache = new HashMap<>();
 
-	Terrain(RegionLoader regions)
+	/** {@code overlayColour} maps an overlay definition id to RuneLite's colour for it. */
+	Terrain(RegionLoader regions, IntUnaryOperator overlayColour)
 	{
 		this.regions = regions;
+		this.overlayColour = overlayColour;
+	}
+
+	/**
+	 * RuneLite's colour for the overlay at (x, y, z) before any style is
+	 * applied: 0 when the tile has no visible overlay, -1 outside the loaded
+	 * squares.
+	 */
+	public int overlay(int x, int y, int z)
+	{
+		Region r = regions.findRegionForWorldCoordinates(x, y);
+		if (r == null)
+		{
+			return -1;
+		}
+		int id = r.getOverlayId(z, x & (Region.X - 1), y & (Region.Y - 1));
+		return id == 0 ? 0 : overlayCache.computeIfAbsent(id - 1, overlayColour::applyAsInt);
 	}
 
 	/** Height at world tile (x, y, z), or {@code fallback} outside the loaded squares. */
