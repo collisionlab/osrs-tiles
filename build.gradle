@@ -51,3 +51,13 @@ application {
 tasks.named('run') {
     workingDir = providers.environmentVariable('PWD').orElse(rootDir.path).get()
 }
+
+// Whole-map tiles in the route planner's (Explv's) layout; see Tiles.java.
+//   gradle tiles --args='--cache work/cache --xteas work/keys.json --out work/tiles'
+tasks.register('tiles', JavaExec) {
+    description = 'Writes map tiles in the Explv/planner layout.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'mapstyle.Tiles'
+    jvmArgs = application.applicationDefaultJvmArgs
+    workingDir = providers.environmentVariable('PWD').orElse(rootDir.path).get()
+}

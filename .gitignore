@@ -1,0 +1,5 @@
+build/
+.gradle/
+result
+result-*
+/work/
