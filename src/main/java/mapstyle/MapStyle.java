@@ -63,4 +63,45 @@ public interface MapStyle
 	{
 		return true;
 	}
+
+	/**
+	 * This style with every map icon hidden, for tiles shown under a viewer
+	 * that draws its own markers.
+	 */
+	default MapStyle withoutIcons()
+	{
+		MapStyle base = this;
+		return new MapStyle()
+		{
+			@Override
+			public int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, Terrain terrain)
+			{
+				return base.underlay(rgb, underlay, x, y, z, terrain);
+			}
+
+			@Override
+			public int overlay(int rgb, OverlayDefinition overlay, int x, int y, int z, Terrain terrain)
+			{
+				return base.overlay(rgb, overlay, x, y, z, terrain);
+			}
+
+			@Override
+			public int wall(int rgb, ObjectDefinition object)
+			{
+				return base.wall(rgb, object);
+			}
+
+			@Override
+			public boolean icon(BufferedImage image, AreaDefinition area, int cx, int cy)
+			{
+				return true;
+			}
+
+			@Override
+			public boolean keep(Location location, ObjectDefinition object)
+			{
+				return base.keep(location, object);
+			}
+		};
+	}
 }

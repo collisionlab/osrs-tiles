@@ -43,7 +43,7 @@ import net.runelite.cache.util.XteaKeyManager;
  */
 public final class RenderRegions
 {
-	private static final int MAP_SCALE = 4; // MapImageDumper's pixels per tile
+	private static final int MAP_SCALE = AreaRenderer.MAP_SCALE;
 	private static final int GUTTER = 8;
 
 	private RenderRegions()
@@ -93,31 +93,17 @@ public final class RenderRegions
 			ObjectManager objects = new ObjectManager(store);
 			objects.load();
 
+			AreaRenderer renderer = new AreaRenderer(store, objects, keys);
 			for (Styles style : args.styles)
 			{
 				long start = System.nanoTime();
-				// Fresh regions per style: MapStyle.keep edits their location lists.
-				RegionLoader regions = loadRegions(store, keys, args);
-				filterLocations(regions, objects, style.style);
-
-				BufferedImage full;
-				if (style.forked)
+				AreaRenderer.Result result = renderer.render(style, style.style, args.labels,
+					args.x0, args.y0, args.x1, args.y1, args.plane);
+				if (result == null)
 				{
-					StyledMapImageDumper dumper = new StyledMapImageDumper(store, regions);
-					dumper.setStyle(style.style);
-					dumper.setLowMemory(false);
-					dumper.setRenderLabels(args.labels);
-					full = dumper.load().drawMap(args.plane);
+					throw new IllegalStateException("no map regions found for area " + args.areaString());
 				}
-				else
-				{
-					MapImageDumper dumper = new MapImageDumper(store, regions);
-					dumper.setLowMemory(false);
-					dumper.setRenderLabels(args.labels);
-					full = dumper.load().drawMap(args.plane);
-				}
-
-				BufferedImage image = crop(full, regions, args);
+				BufferedImage image = result.image;
 				File file = out.resolve(style.id() + ".png").toFile();
 				ImageIO.write(image, "png", file);
 				outputs.put(file.getName(), outputEntry(file, style.forked ? "StyledMapImageDumper" : "MapImageDumper"));
@@ -170,36 +156,6 @@ public final class RenderRegions
 			throw new IllegalStateException("no map regions found for area " + args.areaString());
 		}
 		return loader;
-	}
-
-	private static void filterLocations(RegionLoader regions, ObjectManager objects, MapStyle style)
-	{
-		for (Region region : regions.getRegions())
-		{
-			region.getLocations().removeIf(loc -> !style.keep(loc, objects.getObject(loc.getId())));
-		}
-	}
-
-	/** Cuts the requested area out of an image spanning the loaded regions' bounds. */
-	private static BufferedImage crop(BufferedImage full, RegionLoader regions, Args args)
-	{
-		// drawMap() has already called calculateBounds(); pixel row 0 is the
-		// northern edge of the highest region.
-		int minX = regions.getLowestX().getBaseX();
-		int maxY = regions.getHighestY().getBaseY() + Region.Y;
-		int px = (args.x0 - minX) * MAP_SCALE;
-		int py = (maxY - 1 - args.y1) * MAP_SCALE;
-		int w = (args.x1 - args.x0 + 1) * MAP_SCALE;
-		int h = (args.y1 - args.y0 + 1) * MAP_SCALE;
-		if (px < 0 || py < 0 || px + w > full.getWidth() || py + h > full.getHeight())
-		{
-			throw new IllegalStateException("area " + args.areaString() + " extends past the cache's map regions");
-		}
-		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = image.createGraphics();
-		g.drawImage(full.getSubimage(px, py, w, h), 0, 0, null);
-		g.dispose();
-		return image;
 	}
 
 	/** Grey ramp over the area's own height range, white = highest ground. */
