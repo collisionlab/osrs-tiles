@@ -5,7 +5,8 @@ map. It renders a few map squares straight from a game cache, once per style,
 so each change can be compared against the standard RuneLite rendering in
 seconds instead of a full-world render plus tile pyramid.
 
-Branch `experiment/map-style`. Local only. Nothing here touches the plugin,
+Branch `experiment/map-style`. Local only. Status, history and what blocks
+production are in [HANDOFF.md](HANDOFF.md). Nothing here touches the plugin,
 the pathfinder, the web viewer or any production tile assets.
 
 ## Render a region
