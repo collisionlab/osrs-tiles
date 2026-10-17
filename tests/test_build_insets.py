@@ -89,13 +89,14 @@ class CachedRasterTest(unittest.TestCase):
                     Path(arguments[1]).write_text(json.dumps(topology))
                 else:
                     flags = dict(zip(arguments[::2], arguments[1::2]))
-                    out = Path(flags['--out']) / 'tactical'
-                    native = out / '8/35/31.png'
-                    native.parent.mkdir(parents=True)
-                    native.write_bytes(b'pixels')
-                    build.write(out / 'index.json', {'8/35/31.png': build.digest(b'pixels')})
-                    # Simulate a cache warmed by a different metadata revision.
-                    build.write(out / 'manifest.json', dict(missingKeyRegions=[], rendererCommit=str(len(calls))))
+                    for style in flags['--styles'].split(','):
+                        out = Path(flags['--out']) / style
+                        native = out / '8/35/31.png'
+                        native.parent.mkdir(parents=True)
+                        native.write_bytes(style.encode())
+                        build.write(out / 'index.json', {'8/35/31.png': build.digest(style.encode())})
+                        # Simulate a cache warmed by a different metadata revision.
+                        build.write(out / 'manifest.json', dict(missingKeyRegions=[], rendererCommit=str(len(calls))))
             with patch.object(build, 'fetch', side_effect=lambda url: manifest if url.endswith('manifest.json') else {}), \
                     patch.object(build, 'read_transports', return_value=([], 'transport-hash')), \
                     patch.object(build.subprocess, 'run', side_effect=generate):
@@ -111,6 +112,41 @@ class CachedRasterTest(unittest.TestCase):
                 shutil.rmtree(args.output.parent / 'inset-raster')
                 build.build(args)
                 self.assertEqual((candidate / 'manifest.json').read_bytes(), first)
+
+
+class StandardStyleTest(unittest.TestCase):
+    def test_renders_supplemental_tiles_for_every_pinned_style(self):
+        import shlex
+        with tempfile.TemporaryDirectory() as temporary:
+            args = BuildTest().prepare(Path(temporary))
+            args.pin.write_text(json.dumps(dict(base='https://tiles', version='1-renderer', styles=['standard', 'tactical'])))
+            manifest = dict(layout='explv-tms-v1', plane=0,
+                            cacheIdx255Sha256=build.digest(b'cache'), xteasSha256=build.digest(b'[]'))
+            topology = dict(schemaVersion=1, mapIndexRevision=1, loadedMapSquares=[50 << 8 | 50],
+                            surfaceRects=[[0, 3200, 3200, 64, 64]], spans=[[1, 3200, 3200, 3202]])
+            rendered = []
+            def generate(command, **kwargs):
+                arguments = shlex.split(command[3].removeprefix('--args='))
+                if command[2] == 'insetTopology':
+                    Path(arguments[1]).write_text(json.dumps(topology))
+                    return
+                flags = dict(zip(arguments[::2], arguments[1::2]))
+                rendered.append(flags['--styles'])
+                for style in flags['--styles'].split(','):
+                    out = Path(flags['--out']) / style
+                    (out / '8/35/31.png').parent.mkdir(parents=True)
+                    (out / '8/35/31.png').write_bytes(style.encode())
+                    build.write(out / 'index.json', {'8/35/31.png': build.digest(style.encode())})
+                    build.write(out / 'manifest.json', dict(missingKeyRegions=[]))
+            with patch.object(build, 'fetch', side_effect=lambda url: manifest if url.endswith('manifest.json') else {}), \
+                    patch.object(build, 'read_transports', return_value=([], 'transport-hash')), \
+                    patch.object(build.subprocess, 'run', side_effect=generate):
+                candidate = build.build(args)
+            self.assertEqual(rendered, ['tactical,standard'])
+            self.assertEqual((candidate / 'planes/1/8/35/31.png').read_bytes(), b'tactical')
+            self.assertEqual((candidate / 'planes-standard/1/8/35/31.png').read_bytes(), b'standard')
+            self.assertEqual(json.loads((candidate / 'manifest.json').read_text())['supplementalStyles'],
+                             {'tactical': 'planes', 'standard': 'planes-standard'})
 
 
 if __name__ == '__main__':
