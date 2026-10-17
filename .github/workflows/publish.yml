@@ -50,9 +50,11 @@ jobs:
           cache_id=${CACHE_ID:-$(python3 -I scripts/fetch-cache --latest-id)}
           renderer=$(git log -1 --format=%H -- src/main/java ':!src/main/java/mapstyle/InsetTopology.java' build.gradle settings.gradle flake.nix flake.lock)
           version="$cache_id-${renderer:0:12}"
-          echo "cache_id=$cache_id" >> "$GITHUB_OUTPUT"
-          echo "renderer=$renderer" >> "$GITHUB_OUTPUT"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          {
+            echo "cache_id=$cache_id"
+            echo "renderer=$renderer"
+            echo "version=$version"
+          } >> "$GITHUB_OUTPUT"
           published=true
           for style in ${STYLES//,/ }; do
             nix develop -c scripts/upload --exists "$version" "$style" || published=false

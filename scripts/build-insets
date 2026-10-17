@@ -6,7 +6,6 @@ plane-0 index are rendered as supplemental tactical imagery, in the same layout.
 """
 import argparse
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
 import shlex
