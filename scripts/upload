@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Uploads one rendered version to the tiles bucket. Each style's manifest.json
+# goes last, so a version with a manifest is complete; the publish workflow
+# treats an existing manifest as "already published".
+#
+#   scripts/upload VERSION RENDER-DIR        (R2_ENDPOINT, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY)
+#   scripts/upload --exists VERSION STYLE    exit 0 if that style's version is published
+set -euo pipefail
+
+bucket=collisionlab-tiles
+export RCLONE_CONFIG_R2_TYPE=s3
+export RCLONE_CONFIG_R2_PROVIDER=Cloudflare
+export RCLONE_CONFIG_R2_ENDPOINT=$R2_ENDPOINT
+export RCLONE_CONFIG_R2_ACCESS_KEY_ID=$R2_ACCESS_KEY_ID
+export RCLONE_CONFIG_R2_SECRET_ACCESS_KEY=$R2_SECRET_ACCESS_KEY
+# The upload token is scoped to the bucket and cannot list or create buckets.
+export RCLONE_CONFIG_R2_NO_CHECK_BUCKET=true
+
+if [ "$1" = --exists ]; then
+  [ -n "$(rclone lsf "r2:$bucket/$3/$2/manifest.json" 2>/dev/null)" ]
+  exit
+fi
+
+version=$1
+render=$2
+# Versions never change once uploaded.
+immutable="Cache-Control: public, max-age=31536000, immutable"
+
+for dir in "$render"/*/; do
+  style=$(basename "$dir")
+  [ -f "$dir/manifest.json" ] || continue
+  if scripts/upload --exists "$version" "$style"; then
+    echo "$style/$version is already published" >&2
+    exit 1
+  fi
+  echo "uploading $style/$version"
+  rclone copy "$dir" "r2:$bucket/$style/$version" --exclude manifest.json \
+    --header-upload "$immutable" --transfers 32 --checkers 32 --stats-one-line --stats 30s
+  rclone copyto "$dir/manifest.json" "r2:$bucket/$style/$version/manifest.json" --header-upload "$immutable"
+done

@@ -1,0 +1,95 @@
+name: publish
+
+# Renders a new tiles version when the game cache or the renderer changes,
+# uploads it to tiles.collisionlab.world and opens a pin PR in osrs-planner.
+# A version is <openrs2 cache id>-<last renderer commit>, and is skipped if
+# already published.
+on:
+  schedule:
+    # Thursdays: game updates land on Wednesdays and openrs2 archives them soon after.
+    - cron: "0 6 * * 4"
+  push:
+    branches: [main]
+    paths: [src/**, build.gradle, settings.gradle, flake.nix, flake.lock]
+  workflow_dispatch:
+    inputs:
+      cache_id:
+        description: "openrs2 cache id (default: the latest live cache)"
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      STYLES: standard,tactical
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: cachix/install-nix-action@v31
+      - uses: cachix/cachix-action@v17
+        with:
+          name: collisionlab
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Version
+        id: version
+        env:
+          CACHE_ID: ${{ inputs.cache_id }}
+        run: |
+          cache_id=${CACHE_ID:-$(python3 -I scripts/fetch-cache --latest-id)}
+          renderer=$(git log -1 --format=%H -- src build.gradle settings.gradle flake.nix flake.lock)
+          version="$cache_id-${renderer:0:12}"
+          echo "cache_id=$cache_id" >> "$GITHUB_OUTPUT"
+          echo "renderer=$renderer" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          published=true
+          for style in ${STYLES//,/ }; do
+            nix develop -c scripts/upload --exists "$version" "$style" || published=false
+          done
+          echo "published=$published" >> "$GITHUB_OUTPUT"
+          echo "version $version (published: $published)"
+      - name: Golden check
+        if: steps.version.outputs.published == 'false'
+        run: nix develop -c scripts/check-golden
+      - name: Render
+        if: steps.version.outputs.published == 'false'
+        run: |
+          python3 -I scripts/fetch-cache work/source --id "${{ steps.version.outputs.cache_id }}"
+          nix develop -c gradle -q tiles --args="--cache work/source/cache --xteas work/source/keys.json \
+            --out work/tiles --styles $STYLES --commit ${{ steps.version.outputs.renderer }} \
+            --cache-id ${{ steps.version.outputs.cache_id }}"
+      - name: Compare with the pinned version
+        id: compare
+        if: steps.version.outputs.published == 'false'
+        run: |
+          curl -sSf https://raw.githubusercontent.com/collisionlab/osrs-planner/main/tiles.json -o work/pinned.json ||
+            rm -f work/pinned.json
+          python3 -I scripts/compare-version work/tiles work/pinned.json --summary work/summary.md
+          cat work/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload
+        if: steps.version.outputs.published == 'false'
+        run: nix develop -c scripts/upload "${{ steps.version.outputs.version }}" work/tiles
+      - uses: actions/create-github-app-token@v2
+        if: steps.version.outputs.published == 'false'
+        id: bot
+        with:
+          app-id: ${{ vars.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+          owner: collisionlab
+          repositories: osrs-planner
+      - name: Pin in osrs-planner
+        if: steps.version.outputs.published == 'false'
+        env:
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
+        run: scripts/pin-tiles "${{ steps.version.outputs.version }}" "$STYLES" "${{ steps.compare.outputs.review }}" work/summary.md
