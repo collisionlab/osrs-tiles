@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""Compare a fresh render with the version the planner has pinned.
+
+    scripts/compare-version RENDER-DIR PINNED-JSON [--summary FILE]
+
+RENDER-DIR holds one directory per style as written by Tiles (index.json and
+manifest.json in each). PINNED-JSON is osrs-planner's tiles.json, or a
+missing file when nothing is pinned yet. The pinned version's index and
+manifest are read from its base URL.
+
+Prints a Markdown summary (also written to --summary) and exits 1 if the new
+render is missing decryption keys for map squares the pinned version had.
+It writes "review=true" to $GITHUB_OUTPUT when any style changed more than
+REVIEW_FRACTION of its tiles, so a person looks before the pin merges.
+"""
+import argparse
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+REVIEW_FRACTION = 0.10
+
+
+def fetch(url: str):
+    try:
+        with urllib.request.urlopen(url, timeout=60) as r:
+            return json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return None
+        raise
+
+
+def main() -> None:
+    p = argparse.ArgumentParser()
+    p.add_argument("render", type=Path)
+    p.add_argument("pinned", type=Path)
+    p.add_argument("--summary", type=Path)
+    a = p.parse_args()
+
+    pinned = json.loads(a.pinned.read_text()) if a.pinned.is_file() else None
+    lines = []
+    review = False
+    coverage_lost = []
+    styles = sorted(d.name for d in a.render.iterdir() if (d / "manifest.json").is_file())
+    if pinned:
+        lines.append(f"Compared with the pinned version `{pinned['version']}`.\n")
+    else:
+        lines.append("Nothing is pinned yet, so there is nothing to compare with.\n")
+    lines.append("| style | tiles | changed | added | removed | missing keys |")
+    lines.append("|---|---:|---:|---:|---:|---:|")
+    for style in styles:
+        manifest = json.loads((a.render / style / "manifest.json").read_text())
+        index = json.loads((a.render / style / "index.json").read_text())
+        missing = set(manifest["missingKeyRegions"])
+        old_index = old_manifest = None
+        if pinned and style in pinned["styles"]:
+            base = f"{pinned['base']}/{style}/{pinned['version']}"
+            old_index = fetch(f"{base}/index.json")
+            old_manifest = fetch(f"{base}/manifest.json")
+        if old_index is None or old_manifest is None:
+            lines.append(f"| {style} | {len(index)} | new | | | {len(missing)} |")
+            continue
+        changed = sum(1 for k, v in index.items() if k in old_index and old_index[k] != v)
+        added = len(index.keys() - old_index.keys())
+        removed = len(old_index.keys() - index.keys())
+        lost = sorted(missing - set(old_manifest["missingKeyRegions"]))
+        if lost:
+            coverage_lost.append(f"{style}: {', '.join(map(str, lost))}")
+        if changed + added + removed > REVIEW_FRACTION * max(len(old_index), 1):
+            review = True
+        lines.append(f"| {style} | {len(index)} | {changed} | {added} | {removed} | {len(missing)} |")
+
+    if review:
+        lines.append(f"\nMore than {REVIEW_FRACTION:.0%} of a style's tiles differ, so this pin waits for review.")
+    if coverage_lost:
+        lines.append("\nNewly missing decryption keys (map squares whose objects can no longer be drawn): "
+                     + "; ".join(coverage_lost))
+    summary = "\n".join(lines) + "\n"
+    print(summary)
+    if a.summary:
+        a.summary.write_text(summary)
+    if "GITHUB_OUTPUT" in os.environ:
+        with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+            out.write(f"review={'true' if review else 'false'}\n")
+    if coverage_lost:
+        sys.exit("coverage gate failed: newly missing decryption keys")
+
+
+if __name__ == "__main__":
+    main()

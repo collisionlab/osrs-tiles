@@ -42,7 +42,7 @@ import net.runelite.cache.util.XteaKeyManager;
  *
  * <pre>
  * Tiles --cache DIR --xteas FILE --out DIR [--styles standard,tactical]
- *       [--no-icons tactical] [--plane 0] [--block 16] [--commit SHA]
+ *       [--no-icons tactical] [--plane 0] [--block 16] [--commit SHA] [--cache-id N]
  * </pre>
  *
  * Writes {@code <out>/<style>/<z>/<x>/<y>.png}, plus per style
@@ -284,6 +284,10 @@ public final class Tiles
 		m.put("tiles", tiles);
 		m.put("mapSquares", present.size());
 		m.put("missingKeyRegions", new ArrayList<>(missingKeys));
+		if (args.cacheId != null)
+		{
+			m.put("cacheId", args.cacheId);
+		}
 		m.put("cacheIdx255Sha256", sha256(new File(args.cache, "main_file_cache.idx255")));
 		m.put("xteasSha256", sha256(args.xteas));
 		m.put("runeliteCache", runeliteCacheVersion());
@@ -337,12 +341,13 @@ public final class Tiles
 	{
 		static final String USAGE = String.join("\n",
 			"usage: Tiles --cache DIR --xteas FILE --out DIR [--styles S[,S...]] [--no-icons S[,S...]]",
-			"             [--plane Z] [--block N] [--extent RX0,RY0,RX1,RY1] [--commit SHA]",
+			"             [--plane Z] [--block N] [--extent RX0,RY0,RX1,RY1] [--commit SHA] [--cache-id N]",
 			"  --styles    styles to write (default standard,tactical)",
 			"  --no-icons  styles drawn without map icons (default tactical)",
 			"  --block     map squares per render block side (default 16)",
 			"  --extent    inclusive map-square rectangle to write (default Explv's: 15,19,63,196)",
-			"  --commit    renderer commit recorded in each manifest");
+			"  --commit    renderer commit recorded in each manifest",
+			"  --cache-id  openrs2 cache id recorded in each manifest");
 
 		File cache;
 		File xteas;
@@ -351,6 +356,7 @@ public final class Tiles
 		int block = 16;
 		int[] extent = {ORIGIN_RX, ORIGIN_RY, MAX_RX, MAX_RY};
 		String commit;
+		Integer cacheId;
 		List<Styles> styles = new ArrayList<>(List.of(Styles.STANDARD, Styles.TACTICAL));
 		Set<Styles> noIcons = new HashSet<>(Set.of(Styles.TACTICAL));
 
@@ -397,6 +403,9 @@ public final class Tiles
 					}
 					case "--commit":
 						a.commit = value;
+						break;
+					case "--cache-id":
+						a.cacheId = Integer.parseInt(value);
 						break;
 					case "--styles":
 						a.styles = styles(value);

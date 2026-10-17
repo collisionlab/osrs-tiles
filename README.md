@@ -5,9 +5,43 @@ map. It renders a few map squares straight from a game cache, once per style,
 so each change can be compared against the standard RuneLite rendering in
 seconds instead of a full-world render plus tile pyramid.
 
-Branch `experiment/map-style`. Local only. Status, history and what blocks
-production are in [HANDOFF.md](HANDOFF.md). Nothing here touches the plugin,
-the pathfinder, the web viewer or any production tile assets.
+Status and history of the styles are in [HANDOFF.md](HANDOFF.md).
+
+## Published tiles
+
+`Tiles` writes the whole map in the route planner's (Explv's) layout, and
+the `publish` workflow serves it from `tiles.collisionlab.world`:
+
+```text
+https://tiles.collisionlab.world/<style>/<version>/{z}/{x}/{y}.png    z3-8, TMS rows
+https://tiles.collisionlab.world/<style>/<version>/manifest.json      cache, renderer, extent, missing keys
+https://tiles.collisionlab.world/<style>/<version>/index.json         sha256 per tile
+```
+
+Styles are `standard` (RuneLite's rendering, matching Explv's tiles) and
+`tactical` (no icons). A version is `<openrs2 cache id>-<renderer commit>`,
+where the renderer commit is the last one touching `src/`, the Gradle files
+or the flake. Versions never change once uploaded. There is no "latest":
+osrs-planner's `tiles.json` pins the version it shows.
+
+The workflow runs on Thursdays (after Wednesday's game update), on renderer
+changes to `main`, and by hand with an optional cache id. When the version
+is new it:
+
+1. re-renders `examples/lumbridge` from openrs2 cache 2727 and requires
+   every hash to match (`scripts/check-golden`, also run on every PR);
+2. renders both styles from the cache;
+3. compares them with the pinned version (`scripts/compare-version`): newly
+   missing decryption keys fail the run, and more than 10% of a style's tiles
+   changed marks the pin for review;
+4. uploads with rclone, each style's `manifest.json` last
+   (`scripts/upload`);
+5. opens a pin PR in osrs-planner as collisionlab-bot (`scripts/pin-tiles`).
+   osrs-planner merges it once its checks pass, unless it opened as a
+   draft for review.
+
+Change a style's pixels on purpose and you regenerate the examples in the
+same commit, or the golden check fails.
 
 ## Render a region
 
