@@ -19,6 +19,7 @@ repositories {
 def runeLiteVersion = '1.13.2'
 
 dependencies {
+    testImplementation "junit:junit:4.13.2"
     implementation group: 'net.runelite', name: 'cache', version: runeLiteVersion
     // The cache POM publishes these as runtime-only; the fork and CLI
     // compile against them, at the versions the cache already uses.
@@ -60,4 +61,11 @@ tasks.register('tiles', JavaExec) {
     mainClass = 'mapstyle.Tiles'
     jvmArgs = application.applicationDefaultJvmArgs
     workingDir = providers.environmentVariable('PWD').orElse(rootDir.path).get()
+}
+
+// Terrain extraction is a real CLI: exceptions fail the sidecar build.
+tasks.register('insetTopology', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'mapstyle.InsetTopology'
+    jvmArgs = application.applicationDefaultJvmArgs
 }

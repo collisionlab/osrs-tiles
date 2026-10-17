@@ -3,3 +3,6 @@ build/
 result
 result-*
 /work/
+
+__pycache__/
+*.pyc

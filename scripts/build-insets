@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+"""Build an immutable inset candidate against a published Explv tiles manifest.
+
+Metadata-only changes reuse imagery. Only native squares absent from the pinned
+plane-0 index are rendered as supplemental tactical imagery, in the same layout.
+"""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import shlex
+import shutil
+import subprocess
+import tempfile
+import urllib.request
+
+from discover_inset_regions import discover
+from anchor_inset_regions import read_transports, build_anchors
+from label_inset_regions import compile_labels, encoded
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def write(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n')
+
+
+def fetch(url):
+    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "collisionlab-insets/1.0"}), timeout=60) as response:
+        return json.load(response)
+
+
+def required_squares(catalogue):
+    result = [set() for _ in range(4)]
+    for region in catalogue['regions']:
+        for x, y, w, h in region['mask']:
+            for sx in range(x // 64, (x + w - 1) // 64 + 1):
+                for sy in range(y // 64, (y + h - 1) // 64 + 1):
+                    result[region['plane']].add(sx << 8 | sy)
+    return result
+
+
+def native_path(square):
+    return f'8/{(square >> 8) - 15}/{(square & 255) - 19}.png'
+
+
+def build(args):
+    pin = json.loads(args.pin.read_text())
+    tiles_base = f"{pin['base']}/tactical/{pin['version']}"
+    tile_manifest, tile_index = fetch(f'{tiles_base}/manifest.json'), fetch(f'{tiles_base}/index.json')
+    cache_hash = digest((args.cache / 'main_file_cache.idx255').read_bytes())
+    keys_hash = digest(args.xteas.read_bytes())
+    if (tile_manifest.get('layout') != 'explv-tms-v1' or tile_manifest.get('plane') != 0
+            or tile_manifest.get('cacheIdx255Sha256') != cache_hash
+            or tile_manifest.get('xteasSha256') != keys_hash):
+        raise ValueError('Cache/keys do not match pinned imagery')
+    transports, transport_hash = read_transports(args.transports)
+    inputs = dict(cacheIdx255Sha256=cache_hash, xteasSha256=keys_hash,
+                  tileVersion=pin['version'], tileManifestSha256=digest(encoded(tile_manifest).encode()),
+                  transportsSha256=transport_hash,
+                  generatorRevision=args.commit,
+                  # Include scripts, curated decisions, Java extractor and renderer build inputs.
+                  sourceHashes={str(p.relative_to(ROOT)): digest(p.read_bytes()) for directory in
+                      ('scripts', 'data/inset-labels', 'src') for p in sorted((ROOT / directory).rglob('*'))
+                      if p.is_file() and '__pycache__' not in p.parts},
+                  buildHashes={p: digest((ROOT / p).read_bytes()) for p in
+                               ('build.gradle', 'settings.gradle', 'flake.nix', 'flake.lock')})
+    version = digest(encoded(inputs).encode())[:24]
+    final = args.output / version
+    if (final / 'manifest.json').is_file():
+        print(final)
+        return final
+    args.output.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.candidate-', dir=args.output) as temporary:
+        out = Path(temporary)
+        topology_key = digest(encoded(dict(cache=cache_hash, source=inputs['sourceHashes']['src/main/java/mapstyle/InsetTopology.java'],
+                                           build=inputs['buildHashes'])).encode())
+        topology_cache = args.output.parent / 'inset-topology' / f'{topology_key}.json'
+        topology_cache.parent.mkdir(parents=True, exist_ok=True)
+        if not topology_cache.is_file():
+            topology = out / 'topology.json'
+            subprocess.run(['gradle', '-q', 'insetTopology', '--args=' + shlex.join([str(args.cache.resolve()), str(topology.resolve())])], check=True, cwd=ROOT)
+            json.loads(topology.read_bytes())  # Never cache truncated extraction output.
+            topology.replace(topology_cache)
+        raw = topology_cache.read_bytes()
+        catalogue = discover(json.loads(raw))
+        catalogue['topologySha256'] = digest(raw)
+        write(out / 'regions.json', catalogue)
+        catalogue_hash = digest((out / 'regions.json').read_bytes())
+        anchors = build_anchors(catalogue, transports)
+        anchors.update(catalogueSha256=catalogue_hash, transportsSha256=transport_hash)
+        write(out / 'anchors.json', anchors)
+        sources = json.loads((ROOT / 'data/inset-labels/sources.json').read_text())
+        annotations = json.loads((ROOT / 'data/inset-labels/annotations.json').read_text())
+        labels, report = compile_labels(catalogue, anchors, sources, annotations, catalogue_hash)
+        # Uncertain associations stay unresolved: compile_labels never guesses a name.
+        write(out / 'labels.json', labels)
+        write(out / 'review.json', report)
+        required = required_squares(catalogue)
+        supplemental = [set() for _ in range(4)]
+        for plane, squares in enumerate(required):
+            missing = squares - ({s for s in squares if native_path(s) in tile_index} if plane == 0 else set())
+            supplemental[plane] = missing
+            if not missing:
+                continue
+            square_file = out / f'squares-{plane}.json'
+            write(square_file, sorted(missing))
+            xs, ys = [s >> 8 for s in missing], [s & 255 for s in missing]
+            raster_key = digest(encoded(dict(cache=cache_hash, keys=keys_hash, plane=plane, squares=sorted(missing),
+                source={p: h for p, h in inputs['sourceHashes'].items() if p.startswith('src/main/java/')},
+                build=inputs['buildHashes'])).encode())
+            render = args.output.parent / 'inset-raster' / raster_key
+            generated = render / 'tactical'
+            flags = ['--cache', str(args.cache.resolve()), '--xteas', str(args.xteas.resolve()),
+                     '--out', str(render.resolve()), '--styles', 'tactical', '--plane', str(plane),
+                     '--extent', f'{min(xs)},{min(ys)},{max(xs)},{max(ys)}',
+                     '--squares', str(square_file.resolve())]
+            if not (generated / 'manifest.json').is_file():
+                if render.exists():
+                    shutil.rmtree(render)  # Partial cached renders never become candidates.
+                subprocess.run(['gradle', '-q', 'tiles', '--args=' + shlex.join(flags)], check=True, cwd=ROOT)
+            manifest = json.loads((generated / 'manifest.json').read_text())
+            index = json.loads((generated / 'index.json').read_text())
+            if manifest['missingKeyRegions'] or any(native_path(s) not in index for s in missing):
+                raise ValueError(f'Incomplete supplemental plane {plane}')
+            for relative, expected in index.items():
+                if digest((generated / relative).read_bytes()) != expected:
+                    raise ValueError('Supplemental tile hash mismatch')
+            destination = out / 'planes' / str(plane)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(generated, destination)
+            # Cached pixels must produce the same release bytes as a cold render.
+            # Full renderer source hashes are already recorded in the outer inputs.
+            manifest.pop('rendererCommit', None)
+            write(destination / 'manifest.json', manifest)
+            square_file.unlink()
+        files = {str(p.relative_to(out)): digest(p.read_bytes()) for p in sorted(out.rglob('*.json'))}
+        manifest = dict(schemaVersion=1, layout='explv-tms-v1', version=version,
+                        tileVersion=pin['version'], cacheIdx255Sha256=cache_hash, inputs=inputs,
+                        files=files, planes=[sorted(s) for s in required],
+                        supplemental=[sorted(s) for s in supplemental],
+                        componentCount=len(catalogue['regions']), namingReviewCount=len(report['issues']))
+        write(out / 'manifest.json', manifest)
+        if final.exists():
+            raise ValueError(f'Incomplete candidate already exists: {final}')
+        shutil.move(out, final)
+    print(final)
+    return final
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--cache', type=Path, required=True)
+    p.add_argument('--xteas', type=Path, required=True)
+    p.add_argument('--pin', type=Path, required=True)
+    p.add_argument('--transports', type=Path, required=True)
+    p.add_argument('--commit', required=True)
+    p.add_argument('--output', type=Path, required=True)
+    build(p.parse_args())
+
+
+if __name__ == '__main__':
+    main()

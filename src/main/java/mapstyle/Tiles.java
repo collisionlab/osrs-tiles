@@ -1,5 +1,6 @@
 package mapstyle;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -124,6 +125,7 @@ public final class Tiles
 					{
 						int rx = id >> 8;
 						int ry = id & 0xFF;
+						if (args.squares != null && !args.squares.contains(id)) continue;
 						BufferedImage tile = result.image.getSubimage((rx - rx0) * TILE, (ry1 - ry) * TILE, TILE, TILE);
 						write(dir, NATIVE_ZOOM, rx - ORIGIN_RX, ry - ORIGIN_RY, tile);
 						written.add(key(rx - ORIGIN_RX, ry - ORIGIN_RY));
@@ -161,7 +163,7 @@ public final class Tiles
 				{
 					for (int ry = ry0; ry < ry0 + block && ry <= e[3]; ry++)
 					{
-						if (renderer.hasMap(rx << 8 | ry))
+						if ((args.squares == null || args.squares.contains(rx << 8 | ry)) && renderer.hasMap(rx << 8 | ry))
 						{
 							blocks.add(new int[]{rx0, ry0});
 							break search;
@@ -342,6 +344,7 @@ public final class Tiles
 		static final String USAGE = String.join("\n",
 			"usage: Tiles --cache DIR --xteas FILE --out DIR [--styles S[,S...]] [--no-icons S[,S...]]",
 			"             [--plane Z] [--block N] [--extent RX0,RY0,RX1,RY1] [--commit SHA] [--cache-id N]",
+			"  --squares   JSON array of packed map square IDs to render (optional)",
 			"  --styles    styles to write (default standard,tactical)",
 			"  --no-icons  styles drawn without map icons (default tactical)",
 			"  --block     map squares per render block side (default 16)",
@@ -357,6 +360,7 @@ public final class Tiles
 		int[] extent = {ORIGIN_RX, ORIGIN_RY, MAX_RX, MAX_RY};
 		String commit;
 		Integer cacheId;
+		Set<Integer> squares;
 		List<Styles> styles = new ArrayList<>(List.of(Styles.STANDARD, Styles.TACTICAL));
 		Set<Styles> noIcons = new HashSet<>(Set.of(Styles.TACTICAL));
 
@@ -407,6 +411,16 @@ public final class Tiles
 					case "--cache-id":
 						a.cacheId = Integer.parseInt(value);
 						break;
+					case "--squares":
+                        try {
+                            int[] ids = new Gson().fromJson(Files.readString(Path.of(value)), int[].class);
+                            a.squares = new HashSet<>();
+                            for (int id : ids) {
+                                if (id < 0 || id > 65535) throw new IllegalArgumentException("Invalid map square");
+                                a.squares.add(id);
+                            }
+                        } catch (IOException ex) { throw new IllegalArgumentException("Cannot read --squares", ex); }
+                        break;
 					case "--styles":
 						a.styles = styles(value);
 						break;
@@ -430,11 +444,11 @@ public final class Tiles
 				throw new IllegalArgumentException("no such XTEA file: " + a.xteas);
 			}
 			int[] e = a.extent;
-			if (e[0] < ORIGIN_RX || e[1] < ORIGIN_RY || e[2] > MAX_RX || e[3] > MAX_RY || e[0] > e[2] || e[1] > e[3])
+			if (e[0] < 0 || e[1] < 0 || e[2] > 255 || e[3] > 255 || e[0] > e[2] || e[1] > e[3])
 			{
-				throw new IllegalArgumentException("--extent must lie within " + ORIGIN_RX + "," + ORIGIN_RY + ","
-					+ MAX_RX + "," + MAX_RY);
+				throw new IllegalArgumentException("--extent must lie within 0,0,255,255");
 			}
+			if (a.plane < 0 || a.plane > 3) throw new IllegalArgumentException("--plane must be 0..3");
 			if (a.block < 1)
 			{
 				throw new IllegalArgumentException("--block must be positive");
