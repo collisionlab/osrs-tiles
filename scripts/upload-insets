@@ -19,7 +19,7 @@ if rclone cat "$destination/manifest.json" > "$published_manifest" 2>/dev/null; 
   exit 0
 fi
 immutable="Cache-Control: public, max-age=31536000, immutable"
-rclone copy "$candidate" "$destination" --exclude manifest.json --header-upload "$immutable" --transfers 16
+rclone copy "$candidate" "$destination" --exclude /manifest.json --header-upload "$immutable" --transfers 16
 # Check remote bytes before publishing the completion marker.
-rclone check "$candidate" "$destination" --exclude manifest.json --download --one-way
+rclone check "$candidate" "$destination" --exclude /manifest.json --download --one-way
 rclone copyto "$candidate/manifest.json" "$destination/manifest.json" --header-upload "$immutable"

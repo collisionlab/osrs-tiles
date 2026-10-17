@@ -71,6 +71,47 @@ class BuildTest(unittest.TestCase):
                     build.build(args)
                 run.assert_not_called()
 
+class CachedRasterTest(unittest.TestCase):
+    def test_warm_and_cold_render_caches_produce_identical_release_bytes(self):
+        import shlex
+        import shutil
+        with tempfile.TemporaryDirectory() as temporary:
+            args = BuildTest().prepare(Path(temporary))
+            manifest = dict(layout='explv-tms-v1', plane=0,
+                            cacheIdx255Sha256=build.digest(b'cache'), xteasSha256=build.digest(b'[]'))
+            topology = dict(schemaVersion=1, mapIndexRevision=1, loadedMapSquares=[50 << 8 | 50],
+                            surfaceRects=[[0, 3200, 3200, 64, 64]], spans=[[1, 3200, 3200, 3202]])
+            calls = []
+            def generate(command, **kwargs):
+                calls.append(command[2])
+                arguments = shlex.split(command[3].removeprefix('--args='))
+                if command[2] == 'insetTopology':
+                    Path(arguments[1]).write_text(json.dumps(topology))
+                else:
+                    flags = dict(zip(arguments[::2], arguments[1::2]))
+                    out = Path(flags['--out']) / 'tactical'
+                    native = out / '8/35/31.png'
+                    native.parent.mkdir(parents=True)
+                    native.write_bytes(b'pixels')
+                    build.write(out / 'index.json', {'8/35/31.png': build.digest(b'pixels')})
+                    # Simulate a cache warmed by a different metadata revision.
+                    build.write(out / 'manifest.json', dict(missingKeyRegions=[], rendererCommit=str(len(calls))))
+            with patch.object(build, 'fetch', side_effect=lambda url: manifest if url.endswith('manifest.json') else {}), \
+                    patch.object(build, 'read_transports', return_value=([], 'transport-hash')), \
+                    patch.object(build.subprocess, 'run', side_effect=generate):
+                candidate = build.build(args)
+                first = (candidate / 'manifest.json').read_bytes()
+                self.assertNotIn('rendererCommit', json.loads((candidate / 'planes/1/manifest.json').read_text()))
+                shutil.rmtree(args.output)
+                build.build(args)
+                self.assertEqual(calls, ['insetTopology', 'tiles'])
+                self.assertEqual((candidate / 'manifest.json').read_bytes(), first)
+                shutil.rmtree(args.output)
+                shutil.rmtree(args.output.parent / 'inset-topology')
+                shutil.rmtree(args.output.parent / 'inset-raster')
+                build.build(args)
+                self.assertEqual((candidate / 'manifest.json').read_bytes(), first)
+
 
 if __name__ == '__main__':
     unittest.main()

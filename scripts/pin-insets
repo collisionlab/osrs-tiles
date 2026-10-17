@@ -33,9 +33,9 @@ def main():
         # A late job cannot roll back to an older game cache.
         if int(current['version'].split('-')[0]) > int(pin['version'].split('-')[0]):
             raise ValueError('Candidate predates the planner cache')
-        if current['version'] != pin['version']:
-            candidate_renderer = pin['version'].split('-', 1)[1]
-            current_renderer = current['version'].split('-', 1)[1]
+        candidate_renderer = pin['version'].split('-', 1)[1]
+        current_renderer = current['version'].split('-', 1)[1]
+        if current_renderer != candidate_renderer:
             stale = subprocess.run(['git', 'merge-base', '--is-ancestor', candidate_renderer, current_renderer], cwd=Path(__file__).resolve().parents[1])
             if stale.returncode == 0:
                 raise ValueError('Candidate renderer predates the planner tiles')
