@@ -1,0 +1,13 @@
+{
+  "catalogueSha256": "1b1868f5751c1d9c2760e123cd9b10dd8a66e92f90222e7fa58f587375d1180e",
+  "issues": [],
+  "required": 280,
+  "requiredDescriptive": 1,
+  "requiredNamed": 279,
+  "schemaVersion": 1,
+  "totals": {
+    "descriptive": 1,
+    "named": 279,
+    "unresolved": 4612
+  }
+}

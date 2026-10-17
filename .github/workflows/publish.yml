@@ -10,7 +10,7 @@ on:
     - cron: "0 6 * * 4"
   push:
     branches: [main]
-    paths: [src/**, build.gradle, settings.gradle, flake.nix, flake.lock]
+    paths: ['src/main/java/**', '!src/main/java/mapstyle/InsetTopology.java', build.gradle, settings.gradle, flake.nix, flake.lock]
   workflow_dispatch:
     inputs:
       cache_id:
@@ -48,7 +48,7 @@ jobs:
           CACHE_ID: ${{ inputs.cache_id }}
         run: |
           cache_id=${CACHE_ID:-$(python3 -I scripts/fetch-cache --latest-id)}
-          renderer=$(git log -1 --format=%H -- src build.gradle settings.gradle flake.nix flake.lock)
+          renderer=$(git log -1 --format=%H -- src/main/java ':!src/main/java/mapstyle/InsetTopology.java' build.gradle settings.gradle flake.nix flake.lock)
           version="$cache_id-${renderer:0:12}"
           echo "cache_id=$cache_id" >> "$GITHUB_OUTPUT"
           echo "renderer=$renderer" >> "$GITHUB_OUTPUT"
@@ -77,19 +77,24 @@ jobs:
             rm -f work/pinned.json
           python3 -I scripts/compare-version work/tiles work/pinned.json --summary work/summary.md
           cat work/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain public game-cache keys for reproducible inset builds
+        if: steps.version.outputs.published == 'false'
+        run: |
+          for style in ${STYLES//,/ }; do cp work/source/keys.json "work/tiles/$style/xteas.json"; done
       - name: Upload
         if: steps.version.outputs.published == 'false'
         run: nix develop -c scripts/upload "${{ steps.version.outputs.version }}" work/tiles
-      - uses: actions/create-github-app-token@v2
-        if: steps.version.outputs.published == 'false'
-        id: bot
-        with:
-          app-id: ${{ vars.BOT_APP_ID }}
-          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
-          owner: collisionlab
-          repositories: osrs-planner
-      - name: Pin in osrs-planner
-        if: steps.version.outputs.published == 'false'
+      # The inset sidecar consumes this candidate and pins the validated pair.
+      - name: Record tile candidate
         env:
-          GH_TOKEN: ${{ steps.bot.outputs.token }}
-        run: scripts/pin-tiles "${{ steps.version.outputs.version }}" "$STYLES" "${{ steps.compare.outputs.review }}" work/summary.md
+          VERSION: ${{ steps.version.outputs.version }}
+          REVIEW: ${{ steps.compare.outputs.review }}
+        run: |
+          mkdir -p work/candidate
+          jq -n --arg version "$VERSION" --arg styles "$STYLES" \
+            '{base: "https://tiles.collisionlab.world", version: $version, styles: ($styles | split(","))}' > work/candidate/pin.json
+          echo "${REVIEW:-true}" > work/candidate/review
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tile-candidate
+          path: work/candidate
