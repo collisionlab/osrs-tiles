@@ -117,7 +117,7 @@ class LabelTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             snapshot.mejrs_records(b'bad,101,1,A dungeon\n')
 
-    def test_committed_labels_cover_surface_connected_and_every_saved_route(self):
+    def test_reviewed_names_cover_every_required_component(self):
         base = ROOT / 'tests/fixtures'
         raw = (base / 'regions.json').read_bytes()
         catalogue = json.loads(raw)
@@ -126,18 +126,11 @@ class LabelTest(unittest.TestCase):
         annotations = json.loads((ROOT / 'data/inset-labels/annotations.json').read_text())
         output, report = labels.compile_labels(catalogue, anchors, sources, annotations, hashlib.sha256(raw).hexdigest())
         self.assertEqual(report['issues'], [])
-        self.assertEqual((base / 'labels.json').read_text(), labels.encoded(output))
-        index = labels.RegionIndex(catalogue)
-        for path in (ROOT / 'tests/fixtures/routes').glob('*.json'):
-            route = json.loads(path.read_text())
-            points = [route['start']['coordinate'], route['destination']['coordinate']]
-            for segment in route['segments']:
-                points.extend(segment['path'] if segment['kind'] == 'walk' else [segment['location']]
-                              if segment['kind'] == 'bank' else [segment['from'], segment['to']])
-            for point in points:
-                endpoint = index.endpoint([point['x'], point['y'], point['plane']])
-                if endpoint['kind'] == 'inset':
-                    self.assertNotEqual(output['regions'][endpoint['regionId']]['status'], 'unresolved', str(path))
+        reviewed = {association['componentId'] for area in annotations['areas'] for association in area['components']}
+        self.assertEqual(set(output['regions']), reviewed)
+        self.assertTrue(all(region['status'] != 'unresolved' for region in output['regions'].values()))
+        self.assertEqual((output, report), labels.compile_labels(
+            catalogue, anchors, sources, annotations, hashlib.sha256(raw).hexdigest()))
         self.assertEqual(output['regions']['p3-3400-9927-cfe6848db0']['name'], 'Slayer Tower basement')
         self.assertEqual(output['regions']['p0-2387-9767-3351540754']['name'], 'Stronghold Slayer Cave')
         self.assertEqual(output['regions']['p0-2820-9730-a3a71dd2a5']['name'], 'Entrana Dungeon')

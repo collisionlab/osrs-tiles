@@ -169,7 +169,7 @@ def main():
     parser.add_argument('--sources', type=Path, default=DATA / 'sources.json')
     parser.add_argument('--annotations', type=Path, default=DATA / 'annotations.json')
     parser.add_argument('--output', type=Path, default=ROOT / 'build/inset-metadata/labels.json')
-    parser.add_argument('--report', type=Path, default=DATA / 'coverage.json')
+    parser.add_argument('--report', type=Path, default=ROOT / 'build/inset-metadata/coverage.json')
     parser.add_argument('--worklist', type=Path, help='Also generate candidate evidence for all inset components')
     parser.add_argument('--allow-unresolved', action='store_true', help='Publish safe fallback labels and a review report for uncertain associations')
     parser.add_argument('--check', action='store_true', help='Check committed outputs without rewriting them')
