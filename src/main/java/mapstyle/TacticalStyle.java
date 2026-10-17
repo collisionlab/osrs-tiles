@@ -222,6 +222,10 @@ final class TacticalStyle implements MapStyle
 	@Override
 	public int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, Terrain terrain)
 	{
+		if (isDark(rgb))
+		{
+			return rgb;
+		}
 		if (terrain.roofed(x, y, z))
 		{
 			return building(rgb, x, y, z, terrain);
@@ -285,6 +289,10 @@ final class TacticalStyle implements MapStyle
 		if (rgb == 0)
 		{
 			return 0;
+		}
+		if (isDark(rgb))
+		{
+			return rgb;
 		}
 		if (isWater(overlay, rgb))
 		{
@@ -565,8 +573,26 @@ final class TacticalStyle implements MapStyle
 	 * blue window (teal textures 180-184, purple-blue 145-149), so every sea
 	 * gets the same water bands.
 	 */
+	/**
+	 * Darkness: a chasm, a void or an unlit pit, which RuneLite draws near
+	 * black. Classing it by hue makes the blue-black void around the Chasm of
+	 * Fire's upper floors water and its grey-black pit a pale road, so it keeps
+	 * RuneLite's own colour instead.
+	 */
+	static boolean isDark(int rgb)
+	{
+		return hsb(rgb)[2] < DARK;
+	}
+
+	/** Brightness below which a displayed colour is darkness (see {@link #isDark}). */
+	private static final float DARK = 0.2f;
+
 	static boolean isWater(OverlayDefinition overlay, int rgb)
 	{
+		if (isDark(rgb))
+		{
+			return false;
+		}
 		if (Styles.isWater(rgb))
 		{
 			return true;
