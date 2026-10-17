@@ -222,7 +222,7 @@ final class TacticalStyle implements MapStyle
 	@Override
 	public int underlay(int rgb, UnderlayDefinition underlay, int x, int y, int z, Terrain terrain)
 	{
-		if (isDark(rgb))
+		if (isVoid(rgb, y))
 		{
 			return rgb;
 		}
@@ -290,7 +290,7 @@ final class TacticalStyle implements MapStyle
 		{
 			return 0;
 		}
-		if (isDark(rgb))
+		if (isVoid(rgb, y))
 		{
 			return rgb;
 		}
@@ -382,7 +382,7 @@ final class TacticalStyle implements MapStyle
 	private static boolean isWaterAt(Terrain terrain, int x, int y, int z)
 	{
 		int rgb = terrain.overlay(x, y, z);
-		return rgb > 0 && isWater(terrain.overlayDefinition(x, y, z), rgb);
+		return rgb > 0 && !isVoid(rgb, y) && isWater(terrain.overlayDefinition(x, y, z), rgb);
 	}
 
 	@Override
@@ -563,8 +563,25 @@ final class TacticalStyle implements MapStyle
 	private static boolean isLand(Terrain terrain, int x, int y, int z)
 	{
 		int rgb = terrain.overlay(x, y, z);
-		return rgb == 0 || rgb > 0 && !isWater(terrain.overlayDefinition(x, y, z), rgb);
+		return rgb == 0 || rgb > 0 && (isVoid(rgb, y) || !isWater(terrain.overlayDefinition(x, y, z), rgb));
 	}
+
+	/**
+	 * Darkness underground: a chasm, a void or an unlit pit, which RuneLite
+	 * draws near black. Classing it by hue makes the blue-black void around the
+	 * Chasm of Fire's upper floors water and its grey-black pit a pale road, so
+	 * it keeps RuneLite's own colour instead. The surface keeps its classes:
+	 * dark rock there (Crandor, the Karamja volcano) is terrain, not a void.
+	 */
+	static boolean isVoid(int rgb, int y)
+	{
+		return y >= UNDERGROUND_Y && hsb(rgb)[2] < DARK;
+	}
+
+	/** Brightness below which an underground colour is darkness (see {@link #isVoid}). */
+	private static final float DARK = 0.2f;
+	/** World y from which the map holds underground areas and instances rather than the surface. */
+	private static final int UNDERGROUND_Y = 4160;
 
 	/**
 	 * Water by RuneLite's displayed colour, or by definition: a blue or teal
@@ -573,26 +590,8 @@ final class TacticalStyle implements MapStyle
 	 * blue window (teal textures 180-184, purple-blue 145-149), so every sea
 	 * gets the same water bands.
 	 */
-	/**
-	 * Darkness: a chasm, a void or an unlit pit, which RuneLite draws near
-	 * black. Classing it by hue makes the blue-black void around the Chasm of
-	 * Fire's upper floors water and its grey-black pit a pale road, so it keeps
-	 * RuneLite's own colour instead.
-	 */
-	static boolean isDark(int rgb)
-	{
-		return hsb(rgb)[2] < DARK;
-	}
-
-	/** Brightness below which a displayed colour is darkness (see {@link #isDark}). */
-	private static final float DARK = 0.2f;
-
 	static boolean isWater(OverlayDefinition overlay, int rgb)
 	{
-		if (isDark(rgb))
-		{
-			return false;
-		}
 		if (Styles.isWater(rgb))
 		{
 			return true;
