@@ -13,7 +13,7 @@ export RCLONE_CONFIG_R2_NO_CHECK_BUCKET=true
 destination="r2:collisionlab-tiles/insets/$version"
 published_manifest=$(mktemp)
 trap 'rm -f "$published_manifest"' EXIT
-if rclone cat "$destination/manifest.json" > "$published_manifest" 2>/dev/null; then
+if rclone cat "$destination/manifest.json" > "$published_manifest" 2>/dev/null && [ -s "$published_manifest" ]; then
   cmp "$candidate/manifest.json" "$published_manifest"
   echo "Already published $version"
   exit 0
