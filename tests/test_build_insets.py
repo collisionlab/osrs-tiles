@@ -48,6 +48,11 @@ class BuildTest(unittest.TestCase):
                 first = (result / 'manifest.json').read_bytes()
                 self.assertEqual(build.build(args), result)
                 self.assertEqual((result / 'manifest.json').read_bytes(), first)
+                descriptor = json.loads((result / 'preview-source.json').read_text())
+                self.assertEqual(descriptor['planes'], [0, 1, 2, 3])
+                self.assertEqual(descriptor['origin'], [15, 19])
+                self.assertEqual(descriptor['insetVersion'], result.name)
+                self.assertIn('preview-source.json', json.loads(first)['files'])
                 self.assertEqual(run.call_count, 1)
                 self.assertEqual(json.loads(first)['supplemental'], [[], [], [], []])
 
@@ -123,7 +128,7 @@ class StandardStyleTest(unittest.TestCase):
             manifest = dict(layout='explv-tms-v1', plane=0,
                             cacheIdx255Sha256=build.digest(b'cache'), xteasSha256=build.digest(b'[]'))
             topology = dict(schemaVersion=1, mapIndexRevision=1, loadedMapSquares=[50 << 8 | 50],
-                            surfaceRects=[[0, 3200, 3200, 64, 64]], spans=[[1, 3200, 3200, 3202]])
+                            surfaceRects=[[0, 3200, 3200, 64, 64]], spans=[[p, 3200, 3200, 3202] for p in range(4)])
             rendered = []
             def generate(command, **kwargs):
                 arguments = shlex.split(command[3].removeprefix('--args='))
@@ -142,7 +147,13 @@ class StandardStyleTest(unittest.TestCase):
                     patch.object(build, 'read_transports', return_value=([], 'transport-hash')), \
                     patch.object(build.subprocess, 'run', side_effect=generate):
                 candidate = build.build(args)
-            self.assertEqual(rendered, ['tactical,standard'])
+            self.assertEqual(rendered, ['tactical,standard'] * 4)
+            for plane in range(4):
+                for style, directory in build.SUPPLEMENTAL_DIRS.items():
+                    self.assertEqual((candidate / directory / str(plane) / '8/35/31.png').read_bytes(), style.encode())
+            descriptor = json.loads((candidate / 'preview-source.json').read_text())
+            self.assertEqual(descriptor['planes'], [0, 1, 2, 3])
+            self.assertEqual(descriptor['styles'], ['tactical', 'standard'])
             self.assertEqual((candidate / 'planes/1/8/35/31.png').read_bytes(), b'tactical')
             self.assertEqual((candidate / 'planes-standard/1/8/35/31.png').read_bytes(), b'standard')
             self.assertEqual(json.loads((candidate / 'manifest.json').read_text())['supplementalStyles'],

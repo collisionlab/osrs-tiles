@@ -1,0 +1,29 @@
+name: coordinate-preview-consumer
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Released collisionlab/osrs-coord-preview tag or full commit
+        required: true
+permissions:
+  contents: read
+jobs:
+  external-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: collisionlab/osrs-coord-preview
+          ref: ${{ inputs.revision }}
+          path: preview-action
+      - name: Run released Action without installing dependencies
+        uses: ./preview-action
+        with:
+          coordinates: '[{"coordinate":"3222/3218/0","id":"lumbridge"},{"coordinate":"3222/3218/1","id":"upper-floor"}]'
+      - name: Verify manifest and public PNG
+        run: |
+          test "$(jq .renderCount .osrs-coordinate-preview/manifest.json)" = 2
+          jq -r '.items[].imageUrl' .osrs-coordinate-preview/manifest.json | while read -r url; do
+            curl --fail --silent --show-error "$url" -o preview.png
+            test "$(file --mime-type -b preview.png)" = image/png
+          done
