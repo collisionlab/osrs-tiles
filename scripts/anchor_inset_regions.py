@@ -117,6 +117,36 @@ class RegionIndex:
                     membership='mask' if region_id else 'surface-footprint' if on_surface else 'unmatched')
 
 
+def reachable(index, connections):
+    """Inset regions some chain of transports reaches, following each row's own direction.
+
+    Every row counts, teleports and travel networks included: this is what a player can get to,
+    not geography. Chains start on the main world (any non-inset region) or at a row with no
+    source, such as a spell, which can be used from anywhere.
+    """
+    def entered(endpoint):
+        return endpoint is None or endpoint['kind'] == 'surface' or bool(
+            endpoint['regionId'] and index.regions[endpoint['regionId']]['classification'] != 'inset')
+
+    edges = defaultdict(set)
+    reached = set()
+    for connection in connections.values():
+        source, target = connection['source'], connection['target']
+        if not target or not target['regionId'] or index.regions[target['regionId']]['classification'] != 'inset':
+            continue
+        if entered(source):
+            reached.add(target['regionId'])
+        elif source['regionId']:
+            edges[source['regionId']].add(target['regionId'])
+    queue = deque(sorted(reached))
+    while queue:
+        for neighbour in sorted(edges[queue.popleft()]):
+            if neighbour not in reached:
+                reached.add(neighbour)
+                queue.append(neighbour)
+    return sorted(reached)
+
+
 def build_anchors(catalogue, transports):
     index = RegionIndex(catalogue)
     connections = {}
@@ -188,6 +218,8 @@ def build_anchors(catalogue, transports):
                                  connectionIds=sorted(set(by_region[region_id])))
     totals.update({f'{kind}Regions': sum(r['status'] == kind for r in regions.values()) for kind in ('direct', 'indirect', 'unresolved')})
     totals.update({f'{kind}Connections': sum(c['policy'] == kind for c in connections.values()) for kind in ('local', 'non-local', 'review')})
+    reachable_ids = reachable(index, connections)
+    totals['reachableRegions'] = len(reachable_ids)
     totals['referenceEndpoints'] = len(catalogue.get('checks', []))
     totals['anchoredReferenceEndpoints'] = sum(
         len(c['regionIds']) == 1 and regions.get(c['regionIds'][0], {}).get('status') in ('direct', 'indirect')
@@ -196,6 +228,8 @@ def build_anchors(catalogue, transports):
                 policy='physical actions in transports/agility_shortcuts; no teleport or travel network anchoring; exact mask membership',
                 traversal='undirected geography; stored transport directions and conditions remain authoritative for travel',
                 insetRegionIds=[region_id for region_id, record in regions.items() if record['anchors']],
+                reachability='directed; every transport row; from the main world or a sourceless row',
+                reachableRegionIds=reachable_ids,
                 summary=dict(totals), regions=regions, connections=connections)
 
 

@@ -98,7 +98,8 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
                            status='named' if any(m['status'] == 'named' for m in matches)
                            else 'descriptive' if matches else 'unresolved',
                            plane=region['plane'], areas=matches)
-    required = set(anchors['insetRegionIds']) | set(annotations.get('routeRequiredRegionIds', []))
+    # Every inset region a player can reach needs a name: the planner's area search lists only named ones.
+    required = set(anchors['reachableRegionIds']) | set(annotations.get('routeRequiredRegionIds', []))
     for rid in sorted(required):
         if rid not in labels or labels[rid]['status'] == 'unresolved':
             issues.append(dict(componentId=rid, reason='required-component-unnamed'))

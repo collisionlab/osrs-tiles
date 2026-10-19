@@ -61,6 +61,17 @@ class AnchorTest(unittest.TestCase):
         assert result['summary']['non-localConnections'] == 3
         assert result['summary']['reviewConnections'] == 1
 
+    def test_reachability_follows_every_row_in_its_own_direction(self):
+        rows = [transport(None, [200, 200, 0], 'Teleport', file='teleportation_spells.tsv'),
+                transport([200, 200, 0], [100, 100, 1], 'Talk-to Guide 1'),
+                transport([100, 100, 0], [10, 10, 0], 'Exit Portal 1')]
+        result = anchors.build_anchors(catalogue(), rows)
+        assert result['reachableRegionIds'] == ['b', 'c']  # a can only be left
+        assert result['insetRegionIds'] == []
+        assert result['summary']['reachableRegions'] == 2
+        rows.append(transport([10, 10, 0], [100, 100, 0], 'Enter Portal 2'))
+        assert anchors.build_anchors(catalogue(), rows)['reachableRegionIds'] == ['a', 'b', 'c']
+
     def test_hole_endpoint_does_not_snap_or_anchor_neighbouring_component(self):
         data = catalogue()
         data['regions'][1]['mask'] = [[100, 100, 1, 4], [101, 103, 3, 1]]
