@@ -119,6 +119,17 @@ class AnchorTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 anchors.read_transports(Path(directory))
 
+    def test_reader_ignores_account_metadata_but_rejects_unknown_transport_schemas(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'transports.tsv').write_text('Origin\tDestination\n10 10 0\t100 100 0\n')
+            expected = anchors.read_transports(root)
+            (root / 'teleport_restrictions.tsv').write_text('familyName\tmemberItemIds\nCloaks\t13121\n')
+            self.assertEqual(anchors.read_transports(root), expected)
+            (root / 'broken.tsv').write_text('Unexpected\tSchema\n')
+            with self.assertRaisesRegex(ValueError, 'missing Destination'):
+                anchors.read_transports(root)
+
 
 if __name__ == '__main__':
     unittest.main()

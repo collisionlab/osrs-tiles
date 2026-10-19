@@ -56,7 +56,8 @@ def coordinate(value, source):
 
 
 def read_transports(directory):
-    files = sorted(directory.glob('*.tsv'))
+    # Account restrictions describe teleport families, not geographic transport edges.
+    files = sorted(file for file in directory.glob('*.tsv') if file.name != 'teleport_restrictions.tsv')
     if not files or not any(f.name == 'transports.tsv' for f in files):
         raise ValueError(f'Transport directory missing transports.tsv: {directory}')
     rows = []
