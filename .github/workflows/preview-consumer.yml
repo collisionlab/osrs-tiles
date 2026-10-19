@@ -26,6 +26,45 @@ jobs:
       - name: Execute released bundle against a controlled HTTP fixture
         working-directory: preview-action
         run: node --test test/action.test.mjs
+      - name: Start controlled renderer fixture
+        run: |
+          python3 -u - <<'PYTHON' > "$RUNNER_TEMP/action-fixture.log" 2>&1 &
+          import json
+          from http.server import BaseHTTPRequestHandler, HTTPServer
+          class Handler(BaseHTTPRequestHandler):
+              def do_GET(self):
+                  self.send_response(200)
+                  self.end_headers()
+                  self.wfile.write(b'ok')
+              def do_POST(self):
+                  assert self.path == '/render'
+                  body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+                  assert body == [{'coordinate': '3200/3200/0', 'id': 'smoke'}]
+                  self.send_response(200)
+                  self.send_header('content-type', 'application/json')
+                  self.end_headers()
+                  self.wfile.write(json.dumps({'renderCount': 1, 'failedCount': 0, 'items': [{
+                      'status': 'success', 'id': 'smoke', 'coordinate': '3200/3200/0',
+                      'resolved': {'tileX': 35, 'tileY': 31, 'pixelX': 2, 'pixelY': 254},
+                      'imageUrl': 'https://example.invalid/controlled-fixture.png'
+                  }]}).encode())
+          HTTPServer(('127.0.0.1', 8080), Handler).serve_forever()
+          PYTHON
+          curl --retry 10 --retry-connrefused --retry-delay 1 --fail http://127.0.0.1:8080/health
+      - name: Run the released Action through GitHub's Action loader
+        id: smoke
+        uses: ./preview-action
+        with:
+          coordinates: '[{"coordinate":"3200/3200/0","id":"smoke"}]'
+          renderer-url: http://127.0.0.1:8080/render
+          output-dir: released-preview
+      - name: Check released Action outputs
+        env:
+          COUNT: ${{ steps.smoke.outputs.render_count }}
+          MANIFEST: ${{ steps.smoke.outputs.manifest_path }}
+        run: |
+          test "$COUNT" = 1
+          jq -e '.items[0].status == "success" and .items[0].id == "smoke"' "$MANIFEST"
   external-action:
     needs: released-package
     if: inputs.public_api
