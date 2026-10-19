@@ -153,6 +153,12 @@ def build(args):
                 manifest.pop('rendererCommit', None)
                 write(destination / 'manifest.json', manifest)
             square_file.unlink()
+        # Coordinate previews reuse the same sparse rasters, including main-world upper floors.
+        write(out / 'preview-source.json', dict(schemaVersion=1, layout='explv-tms-v1',
+              tileVersion=pin['version'], insetVersion=version, cacheIdx255Sha256=cache_hash,
+              rendererRevision=args.commit, nativeZoom=8, tileSize=256, pixelsPerSquare=4,
+              origin=[15, 19], planes=[0, 1, 2, 3], styles=styles,
+              supplementalStyles={style: SUPPLEMENTAL_DIRS[style] for style in styles}))
         files = {str(p.relative_to(out)): digest(p.read_bytes()) for p in sorted(out.rglob('*.json'))}
         manifest = dict(schemaVersion=1, layout='explv-tms-v1', version=version,
                         tileVersion=pin['version'], cacheIdx255Sha256=cache_hash, inputs=inputs,

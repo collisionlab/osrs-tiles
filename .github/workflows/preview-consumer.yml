@@ -1,0 +1,49 @@
+name: coordinate-preview-consumer
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Released collisionlab/osrs-coord-preview tag or full commit
+        required: true
+      public_api:
+        description: Also exercise the deployed preview API (after approved route activation)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  released-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: collisionlab/osrs-coord-preview
+          ref: ${{ inputs.revision }}
+          path: preview-action
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Execute released bundle against a controlled HTTP fixture
+        working-directory: preview-action
+        run: node --test test/action.test.mjs
+  external-action:
+    needs: released-package
+    if: inputs.public_api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: collisionlab/osrs-coord-preview
+          ref: ${{ inputs.revision }}
+          path: preview-action
+      - name: Run released Action without installing dependencies
+        uses: ./preview-action
+        with:
+          coordinates: '[{"coordinate":"3222/3218/0","id":"lumbridge"},{"coordinate":"3222/3218/1","id":"upper-floor"}]'
+      - name: Verify manifest and public PNG
+        run: |
+          test "$(jq .renderCount .osrs-coordinate-preview/manifest.json)" = 2
+          jq -r '.items[].imageUrl' .osrs-coordinate-preview/manifest.json | while read -r url; do
+            curl --fail --silent --show-error "$url" -o preview.png
+            test "$(file --mime-type -b preview.png)" = image/png
+          done
