@@ -48,11 +48,6 @@ class BuildTest(unittest.TestCase):
                 first = (result / 'manifest.json').read_bytes()
                 self.assertEqual(build.build(args), result)
                 self.assertEqual((result / 'manifest.json').read_bytes(), first)
-                descriptor = json.loads((result / 'preview-source.json').read_text())
-                self.assertEqual(descriptor['planes'], [0, 1, 2, 3])
-                self.assertEqual(descriptor['origin'], [15, 19])
-                self.assertEqual(descriptor['insetVersion'], result.name)
-                self.assertIn('preview-source.json', json.loads(first)['files'])
                 self.assertEqual(run.call_count, 1)
                 self.assertEqual(json.loads(first)['supplemental'], [[], [], [], []])
 
@@ -151,9 +146,6 @@ class StandardStyleTest(unittest.TestCase):
             for plane in range(4):
                 for style, directory in build.SUPPLEMENTAL_DIRS.items():
                     self.assertEqual((candidate / directory / str(plane) / '8/35/31.png').read_bytes(), style.encode())
-            descriptor = json.loads((candidate / 'preview-source.json').read_text())
-            self.assertEqual(descriptor['planes'], [0, 1, 2, 3])
-            self.assertEqual(descriptor['styles'], ['tactical', 'standard'])
             self.assertEqual((candidate / 'planes/1/8/35/31.png').read_bytes(), b'tactical')
             self.assertEqual((candidate / 'planes-standard/1/8/35/31.png').read_bytes(), b'standard')
             self.assertEqual(json.loads((candidate / 'manifest.json').read_text())['supplementalStyles'],

@@ -20,55 +20,62 @@ def main():
     parser.add_argument('pin', type=Path)
     parser.add_argument('manifest', type=Path)
     parser.add_argument('--review', action='store_true')
+    parser.add_argument('--repo', action='append', help='Consumer repository; repeat for multiple consumers')
     args = parser.parse_args()
     pin, manifest = json.loads(args.pin.read_text()), json.loads(args.manifest.read_text())
     if manifest['tileVersion'] != pin['version'] or not re.fullmatch('[a-f0-9]{24}', manifest['version']):
         raise ValueError('Inset candidate does not match tiles')
     pin['insets'] = dict(version=manifest['version'], tileVersion=pin['version'])
+    for repo in args.repo or ['collisionlab/osrs-planner', 'collisionlab/osrs-coord-preview']:
+        pin_repo(repo, pin, manifest, args.review)
+
+
+def pin_repo(repo, pin, manifest, review):
     branch = "pin/map-assets"
     with tempfile.TemporaryDirectory() as temporary:
         work = Path(temporary)
-        run('gh', 'repo', 'clone', 'collisionlab/osrs-planner', str(work), '--', '--depth', '1')
+        run('gh', 'repo', 'clone', repo, str(work), '--', '--depth', '1')
         current = json.loads((work / 'tiles.json').read_text())
         # A late job cannot roll back to an older game cache.
         if int(current['version'].split('-')[0]) > int(pin['version'].split('-')[0]):
-            raise ValueError('Candidate predates the planner cache')
+            raise ValueError('Candidate predates the consumer cache')
         candidate_renderer = pin['version'].split('-', 1)[1]
         current_renderer = current['version'].split('-', 1)[1]
         if current_renderer != candidate_renderer:
             stale = subprocess.run(['git', 'merge-base', '--is-ancestor', candidate_renderer, current_renderer], cwd=Path(__file__).resolve().parents[1])
             if stale.returncode == 0:
-                raise ValueError('Candidate renderer predates the planner tiles')
+                raise ValueError('Candidate renderer predates the consumer tiles')
             newer = subprocess.run(['git', 'merge-base', '--is-ancestor', current_renderer, candidate_renderer], cwd=Path(__file__).resolve().parents[1])
             if newer.returncode != 0:
                 raise ValueError('Cannot establish tile renderer ordering')
-        if current == pin:
-            print('Planner already pins this pair')
+        updated = {**current, **pin}
+        if current == updated:
+            print(f'{repo} already pins this pair')
             return
-        existing = run('gh', 'pr', 'list', '--repo', 'collisionlab/osrs-planner', '--head', branch,
+        existing = run('gh', 'pr', 'list', '--repo', repo, '--head', branch,
                        '--state', 'open', '--json', 'number', capture_output=True)
         existing_prs = json.loads(existing.stdout)
         remote = run('git', 'ls-remote', 'origin', f'refs/heads/{branch}', cwd=work, capture_output=True).stdout.split()
         previous_head = remote[0] if remote else ''
         run('git', 'switch', '-c', branch, cwd=work)
-        (work / 'tiles.json').write_text(json.dumps(pin, indent=2) + '\n')
+        (work / 'tiles.json').write_text(json.dumps(updated, indent=2) + '\n')
         run('git', 'add', 'tiles.json', cwd=work)
         run('git', '-c', 'user.name=collisionlab-bot', '-c', 'user.email=collisionlab-bot@users.noreply.github.com',
             'commit', '-m', f"Use inset assets {manifest['version']}", cwd=work)
-        if existing_prs and args.review:
-            run('gh', 'pr', 'ready', str(existing_prs[0]['number']), '--undo', '--repo', 'collisionlab/osrs-planner', cwd=work)
+        if existing_prs and review:
+            run('gh', 'pr', 'ready', str(existing_prs[0]['number']), '--undo', '--repo', repo, cwd=work)
         run('git', 'push', f'--force-with-lease=refs/heads/{branch}:{previous_head}', 'origin', branch, cwd=work)
         body = work / 'body.md'
         body.write_text(f"Use tiles `{pin['version']}` with inset metadata `{manifest['version']}`.\n\n"
                         f"The build checked cache hashes and required native tile coverage. "
                         f"{manifest['namingReviewCount']} naming issues use fallback labels and do not block publication.\n")
-        common = ['--repo', 'collisionlab/osrs-planner', '--title', f"Use inset assets {manifest['version']}", '--body-file', str(body)]
+        common = ['--repo', repo, '--title', f"Use inset assets {manifest['version']}", '--body-file', str(body)]
         if existing_prs:
             number = str(existing_prs[0]['number'])
             run('gh', 'pr', 'edit', number, *common, cwd=work)
         else:
             run('gh', 'pr', 'create', '--head', branch, *common,
-                *(['--draft'] if args.review else []), cwd=work)
+                *(['--draft'] if review else []), cwd=work)
 
 
 if __name__ == '__main__':
