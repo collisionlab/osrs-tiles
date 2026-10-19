@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+"""Decide whether a candidate tile pin needs a person to look before it merges. Read-only.
+
+    scripts/tile-review CANDIDATE-PIN PINNED-JSON > tile-review.json
+
+Compares the candidate's published tiles with the planner's pinned ones from their index.json files on
+the tiles host, so any run can recompute it, not only the publish run that rendered the tiles. Writes
+{"review": bool, "styles": {style: {"tiles", "changed", "added", "removed"}}}. The candidate needs
+review when any style changed more than compare-version's REVIEW_FRACTION of its tiles, or is new.
+"""
+import json
+from pathlib import Path
+import runpy
+import sys
+
+compare = runpy.run_path(str(Path(__file__).resolve().parent / 'compare-version'))
+
+
+def tile_review(candidate, pinned, fetch=compare['fetch']):
+    if pinned.get('version') == candidate['version']:
+        return dict(review=False, styles={})
+    styles, review = {}, False
+    for style in candidate['styles']:
+        index = fetch(f"{candidate['base']}/{style}/{candidate['version']}/index.json")
+        if index is None:
+            raise ValueError(f"Candidate tiles {candidate['version']} have no published {style} index")
+        old = fetch(f"{pinned['base']}/{style}/{pinned['version']}/index.json") \
+            if pinned.get('version') and style in pinned.get('styles', []) else None
+        if old is None:
+            styles[style] = dict(tiles=len(index), new=True)
+            review = True
+            continue
+        changed = sum(1 for key, value in index.items() if key in old and old[key] != value)
+        added, removed = len(index.keys() - old.keys()), len(old.keys() - index.keys())
+        styles[style] = dict(tiles=len(index), changed=changed, added=added, removed=removed)
+        review |= changed + added + removed > compare['REVIEW_FRACTION'] * max(len(old), 1)
+    return dict(review=review, styles=styles)
+
+
+def main():
+    candidate, pinned = (json.loads(Path(path).read_text()) for path in sys.argv[1:3])
+    print(json.dumps(tile_review(candidate, pinned), sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()

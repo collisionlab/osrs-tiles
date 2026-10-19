@@ -43,10 +43,22 @@ jobs:
           name: collisionlab
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - name: Current map assets pin
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p work/candidate
+          cp planner/tiles.json work/pinned.json
           cp planner/tiles.json work/candidate/pin.json
-          if jq -e '.insets != null' planner/tiles.json >/dev/null; then echo false; else echo true; fi > work/candidate/review
+          # An open pin PR can carry newer tiles from a publish run: build for those rather than
+          # reverting the PR to main's tiles.
+          if [ -n "$(gh pr list --repo collisionlab/osrs-planner --head pin/map-assets --state open --json number --jq '.[].number')" ]; then
+            git -C planner fetch -q --depth 1 origin pin/map-assets
+            git -C planner show FETCH_HEAD:tiles.json > work/open-pin.json
+            if [ "$(jq -r .version work/open-pin.json)" != "$(jq -r .version work/pinned.json)" ] &&
+               [ "$(jq -r '.version | split("-")[0] | tonumber' work/open-pin.json)" -ge "$(jq -r '.version | split("-")[0] | tonumber' work/pinned.json)" ]; then
+              cp work/open-pin.json work/candidate/pin.json
+            fi
+          fi
       - uses: actions/download-artifact@v4
         if: github.event_name == 'workflow_run'
         with:
@@ -100,9 +112,13 @@ jobs:
           GH_TOKEN: ${{ steps.bot.outputs.token }}
         run: |
           gh auth setup-git
-          review=()
-          # Drafts wait for review: big tile or geometry changes, or reachable areas without a name
-          # (the planner's area search lists only named ones).
-          if [ "$(cat work/candidate/review)" = true ] || [ "$(cat work/geometry-review)" = true ] ||
-             [ "$(jq .namingReviewCount '${{ steps.build.outputs.manifest }}')" -gt 0 ]; then review=(--review); fi
-          python3 -I scripts/pin-insets work/candidate/pin.json '${{ steps.build.outputs.manifest }}' "${review[@]}"
+          # The PR is a draft exactly while a person needs to check something: big tile or inset
+          # changes, the first insets, or reachable areas without a name. pin-insets lists them.
+          python3 -I scripts/tile-review work/candidate/pin.json work/pinned.json > work/tile-review.json
+          flags=(--tile-review work/tile-review.json --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID")
+          if ! jq -e '.insets != null' work/pinned.json >/dev/null; then
+            flags+=(--first-insets)
+          elif [ "$(cat work/geometry-review)" = true ]; then
+            flags+=(--geometry-review)
+          fi
+          python3 -I scripts/pin-insets work/candidate/pin.json '${{ steps.build.outputs.manifest }}' "${flags[@]}"

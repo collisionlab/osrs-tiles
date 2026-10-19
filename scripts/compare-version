@@ -11,7 +11,9 @@ manifest are read from its base URL.
 Prints a Markdown summary (also written to --summary) and exits 1 if the new
 render is missing decryption keys for map squares the pinned version had.
 It writes "review=true" to $GITHUB_OUTPUT when any style changed more than
-REVIEW_FRACTION of its tiles, so a person looks before the pin merges.
+REVIEW_FRACTION of its tiles, for the run summary. Whether the pin waits for a
+person is decided by the insets job, which recomputes this from the published
+indexes (scripts/tile-review).
 """
 import argparse
 import json
