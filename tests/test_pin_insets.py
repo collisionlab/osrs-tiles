@@ -53,7 +53,7 @@ class PinTest(unittest.TestCase):
                 if command[:2] == ('git', 'add'):
                     written.append(json.loads((kwargs['cwd'] / 'tiles.json').read_text()))
                 return SimpleNamespace(stdout='[]' if command[:3] == ('gh', 'pr', 'list') else '')
-            with patch.object(module, 'run', side_effect=run), patch('sys.argv', ['pin-insets', str(root/'pin.json'), str(root/'manifest.json'), '--review']):
+            with patch.object(module, 'run', side_effect=run), patch('sys.argv', ['pin-insets', str(root/'pin.json'), str(root/'manifest.json'), '--first-insets']):
                 module.main()
             self.assertEqual(repositories, ['collisionlab/osrs-planner', 'collisionlab/osrs-coord-preview'])
             self.assertEqual(written, [{**pin, 'custom': True, 'insets': dict(version='a'*24, tileVersion=pin['version'])}]*2)
@@ -73,6 +73,77 @@ class PinTest(unittest.TestCase):
                 module.main()
             self.assertEqual([c[3] for c in commands], ['owner/one', 'owner/two'])
             self.assertTrue(all(c[:3] == ('gh', 'repo', 'clone') for c in commands))
+
+    def pin_with(self, flags, draft, naming=(), previous=''):
+        """Refresh an open pin PR; returns the commands run and the body written."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            pin = dict(base='https://tiles', version='2-renderer', styles=['tactical'])
+            manifest = dict(version='a'*24, tileVersion=pin['version'], namingReviewCount=len(naming), componentCount=9)
+            (root / 'pin.json').write_text(json.dumps(pin))
+            (root / 'manifest.json').write_text(json.dumps(manifest))
+            (root / 'review.json').write_text(json.dumps(dict(issues=[dict(componentId=c, reason='required-component-unnamed')
+                                                                      for c in naming])))
+            (root / 'labels.json').write_text(json.dumps(dict(regions={c: dict(name=f'Unidentified terrain at {c}')
+                                                                       for c in naming})))
+            commands, bodies = [], []
+            def run(*command, **kwargs):
+                commands.append(command)
+                if command[:3] == ('gh', 'repo', 'clone'):
+                    (Path(command[4]) / 'tiles.json').write_text(json.dumps(dict(version='2-renderer')))
+                if command[:3] == ('gh', 'pr', 'edit'):
+                    bodies.append(Path(command[command.index('--body-file') + 1]).read_text())
+                listing = json.dumps([dict(number=7, isDraft=draft, body=previous)])
+                return SimpleNamespace(stdout=listing if command[:3] == ('gh', 'pr', 'list') else '')
+            with patch.object(module, 'run', side_effect=run), \
+                    patch('sys.argv', ['pin-insets', str(root/'pin.json'), str(root/'manifest.json'), '--repo', 'owner/one',
+                                       '--run-url', 'https://run', *flags]):
+                module.main()
+            return commands, bodies[0]
+
+    def test_a_draft_that_no_longer_needs_review_is_marked_ready(self):
+        commands, body = self.pin_with([], draft=True)
+        self.assertIn(('gh', 'pr', 'ready', '7', '--repo', 'owner/one'), commands)
+        self.assertLess(next(i for i, c in enumerate(commands) if c[:2] == ('git', 'push')),
+                        commands.index(('gh', 'pr', 'ready', '7', '--repo', 'owner/one')))
+        self.assertIn('No action needed', body)
+        self.assertNotIn('Action needed', body)
+
+    def test_review_drafts_before_the_push_and_says_what_to_do(self):
+        commands, body = self.pin_with(['--geometry-review'], draft=False, naming=['p0-1-2-abc'])
+        undo = commands.index(('gh', 'pr', 'ready', '7', '--undo', '--repo', 'owner/one'))
+        self.assertLess(undo, next(i for i, c in enumerate(commands) if c[:2] == ('git', 'push')))
+        self.assertNotIn(('gh', 'pr', 'ready', '7', '--repo', 'owner/one'), commands)
+        self.assertIn('## Action needed', body)
+        self.assertIn('**draft**', body)
+        self.assertIn('The inset areas changed a lot.', body)
+        self.assertIn('1 reachable areas have no name', body)
+        self.assertIn('`p0-1-2-abc` (required-component-unnamed): shown as "Unidentified terrain at p0-1-2-abc"', body)
+        self.assertIn('mark it ready', body)
+        self.assertIn('Built by https://run.', body)
+
+    def test_a_draft_that_still_needs_review_stays_a_draft(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            review = Path(temporary) / 'tiles.json'
+            review.write_text(json.dumps(dict(review=True, styles=dict(tactical=dict(tiles=10, changed=3, added=0, removed=0)))))
+            commands, body = self.pin_with(['--tile-review', str(review)], draft=True)
+        self.assertFalse([c for c in commands if c[:3] == ('gh', 'pr', 'ready')])
+        self.assertIn('The map tiles changed a lot.', body)
+        self.assertIn('tactical: 3 changed, 0 added, 0 removed of 10', body)
+
+    def test_a_person_accepting_the_same_reasons_is_remembered(self):
+        _, drafted = self.pin_with(['--geometry-review'], draft=True, naming=['p0-1-2-abc'])
+        self.assertIn('<!-- review-keys: geometry:2-renderer naming:p0-1-2-abc -->', drafted)
+        # Marked ready by a person, then refreshed with the same findings: stays ready.
+        commands, body = self.pin_with(['--geometry-review'], draft=False, naming=['p0-1-2-abc'], previous=drafted)
+        self.assertFalse([c for c in commands if c[:3] == ('gh', 'pr', 'ready')])
+        self.assertIn('A person marked this ready', body)
+        self.assertIn('- [x] **The inset areas changed a lot.**', body)
+        # Something new turns up: back to draft.
+        commands, body = self.pin_with(['--geometry-review'], draft=False, naming=['p0-1-2-abc', 'p0-3-4-def'], previous=drafted)
+        self.assertIn(('gh', 'pr', 'ready', '7', '--undo', '--repo', 'owner/one'), commands)
+        self.assertIn('## Action needed', body)
+
 
 if __name__ == '__main__':
     unittest.main()

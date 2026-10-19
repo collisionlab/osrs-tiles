@@ -395,10 +395,17 @@ The planner pins `{version, tileVersion}` under `tiles.json.insets`. Runtime
 never follows a latest pointer. Existing tile URLs stay unchanged.
 
 `scripts/compare-insets` requests review for the first release or >10% change in
-component count or covered map squares. A reachable component without a name
-also opens the pin as a draft: name it in `data/inset-labels/annotations.json`
-(`scripts/label_inset_regions.py --worklist` suggests evidence), or mark the PR
-ready to publish with the coordinate label.
+component count or covered map squares, and `scripts/tile-review` for more than
+10% of a style's tiles changed (recomputed from the published indexes on every
+run). Those, the first insets, and a reachable component without a name keep
+the pin PR a **draft**, and its body lists each one under "Action needed" with
+what to do: check and mark it ready, or for names, add them in
+`data/inset-labels/annotations.json` (`scripts/label_inset_regions.py
+--worklist` suggests evidence). A refresh with nothing left to check marks the
+PR ready, so CI merges it. A PR a person marked ready stays ready while every
+remaining reason is one it already listed (`review-keys` in the body).
+While a pin PR is open, every run builds for its tiles, not `main`'s, so a
+daily run never reverts a tile update.
 `scripts/pin-insets` maintains a single bot-owned `pin/map-assets` branch and
 uses an expected-head lease when updating it. Planner CI validates asset hashes
 and coverage and matches the tested PR head before auto-merging.

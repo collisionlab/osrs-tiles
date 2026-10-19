@@ -87,15 +87,15 @@ jobs:
         if: steps.version.outputs.published == 'false'
         run: nix develop -c scripts/upload "${{ steps.version.outputs.version }}" work/tiles
       # The inset sidecar consumes this candidate and pins the validated pair.
+      # Whether the tiles need review is recomputed by the insets job (scripts/tile-review), so a
+      # run that published nothing new doesn't ask for one.
       - name: Record tile candidate
         env:
           VERSION: ${{ steps.version.outputs.version }}
-          REVIEW: ${{ steps.compare.outputs.review }}
         run: |
           mkdir -p work/candidate
           jq -n --arg version "$VERSION" --arg styles "$STYLES" \
             '{base: "https://tiles.collisionlab.world", version: $version, styles: ($styles | split(","))}' > work/candidate/pin.json
-          echo "${REVIEW:-true}" > work/candidate/review
       - uses: actions/upload-artifact@v4
         with:
           name: tile-candidate

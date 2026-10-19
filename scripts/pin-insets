@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Open a PR pinning one validated tile/inset pair; never reset a newer pin.
 
+The PR is a draft exactly while something needs a person (see review_reasons), and its body says what to
+do. When a refresh no longer needs review it is marked ready, so CI merges it.
+
 Uses gh's credential helper rather than embedding credentials in clone URLs.
 """
 import argparse
@@ -19,18 +22,90 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('pin', type=Path)
     parser.add_argument('manifest', type=Path)
-    parser.add_argument('--review', action='store_true')
+    parser.add_argument('--tile-review', type=Path, help="scripts/tile-review's output for this candidate")
+    parser.add_argument('--geometry-review', action='store_true', help='compare-insets asked for review')
+    parser.add_argument('--first-insets', action='store_true', help='the consumer pins no insets yet')
+    parser.add_argument('--run-url', default='', help='The workflow run that built the candidate')
     parser.add_argument('--repo', action='append', help='Consumer repository; repeat for multiple consumers')
     args = parser.parse_args()
     pin, manifest = json.loads(args.pin.read_text()), json.loads(args.manifest.read_text())
     if manifest['tileVersion'] != pin['version'] or not re.fullmatch('[a-f0-9]{24}', manifest['version']):
         raise ValueError('Inset candidate does not match tiles')
     pin['insets'] = dict(version=manifest['version'], tileVersion=pin['version'])
+    reasons = review_reasons(args, manifest)
     for repo in args.repo or ['collisionlab/osrs-planner', 'collisionlab/osrs-coord-preview']:
-        pin_repo(repo, pin, manifest, args.review)
+        pin_repo(repo, pin, manifest, reasons, args.run_url)
 
 
-def pin_repo(repo, pin, manifest, review):
+def unnamed(manifest_dir):
+    """Reachable components without a name, with the coordinate label they fall back to."""
+    review_path, labels_path = manifest_dir / 'review.json', manifest_dir / 'labels.json'
+    if not review_path.is_file():
+        return []
+    regions = json.loads(labels_path.read_text())['regions'] if labels_path.is_file() else {}
+    return [dict(issue, fallback=regions.get(issue['componentId'], {}).get('name'))
+            for issue in json.loads(review_path.read_text())['issues']]
+
+
+def review_reasons(args, manifest):
+    """Why a person must look before this pin merges, each as (key, title, what to do).
+
+    The key identifies what was checked, so a PR a person marked ready stays ready while nothing new
+    turns up (see pin_repo)."""
+    pin_version = manifest['tileVersion']
+    reasons = []
+    if args.first_insets:
+        reasons.append(('first', 'This is the first inset bundle.', 'Check the insets in the planner, then mark this PR ready.'))
+    tiles = json.loads(args.tile_review.read_text()) if args.tile_review else dict(review=False, styles={})
+    if tiles['review']:
+        counts = '; '.join(f"{style}: new" if detail.get('new') else
+                           f"{style}: {detail['changed']} changed, {detail['added']} added, {detail['removed']} removed "
+                           f"of {detail['tiles']}" for style, detail in sorted(tiles['styles'].items()))
+        reasons.append((f'tiles:{pin_version}', 'The map tiles changed a lot.',
+                        f"More than 10% of a style's tiles differ from the pinned version ({counts}). Look over the "
+                        f"map in the planner, then mark this PR ready."))
+    if args.geometry_review:
+        reasons.append((f'geometry:{pin_version}', 'The inset areas changed a lot.',
+                        f"More than 10% of inset areas or covered map squares differ from the pinned bundle "
+                        f"(now {manifest['componentCount']} areas). Check the insets in the planner, then mark this "
+                        f"PR ready."))
+    if manifest.get('namingReviewCount'):
+        issues = unnamed(Path(args.manifest).parent)
+        listed = ''.join(f"\n  - `{i['componentId']}` ({i['reason']})" + (f": shown as \"{i['fallback']}\"" if i.get('fallback') else '')
+                         for i in issues[:20]) + ('\n  - …' if len(issues) > 20 else '')
+        reasons.append(('naming:' + ','.join(sorted(i['componentId'] for i in issues)),
+                        f"{manifest['namingReviewCount']} reachable areas have no name, so the planner's area "
+                        f"search can't find them.",
+                        "Name them in osrs-tiles `data/inset-labels/annotations.json` (`scripts/label_inset_regions.py "
+                        "--worklist` suggests evidence) and push to `main`: the rebuild refreshes this PR and marks it "
+                        "ready once nothing else needs review. Or mark it ready now to publish the coordinate "
+                        "labels." + listed))
+    return reasons
+
+
+KEYS = re.compile(r'<!-- review-keys: (.*?) -->')
+
+
+def body(pin, manifest, reasons, run_url, accepted=False):
+    text = (f"Use tiles `{pin['version']}` with inset metadata `{manifest['version']}`.\n\n"
+            "The build checked cache hashes and required native tile coverage.\n\n")
+    if accepted:
+        text += ("**No action needed.** A person marked this ready after checking it; CI merges it once it "
+                 "passes, and the merge releases it. Checked:\n\n"
+                 + ''.join(f"- [x] **{title}**\n" for _, title, _ in reasons))
+    elif reasons:
+        text += ("## Action needed\n\n"
+                 "This PR is a **draft** because a person needs to check it; it won't merge by itself until it is "
+                 "marked ready. Then CI runs and merges it, and the merge releases it.\n\n"
+                 + ''.join(f"- [ ] **{title}** {action}\n" for _, title, action in reasons))
+    else:
+        text += "**No action needed.** Nothing needs review: CI merges this once it passes, and the merge releases it.\n"
+    if run_url:
+        text += f"\nBuilt by {run_url}.\n"
+    return text + f"\n<!-- review-keys: {' '.join(key for key, _, _ in reasons)} -->\n"
+
+
+def pin_repo(repo, pin, manifest, reasons, run_url):
     branch = "pin/map-assets"
     with tempfile.TemporaryDirectory() as temporary:
         work = Path(temporary)
@@ -53,8 +128,14 @@ def pin_repo(repo, pin, manifest, review):
             print(f'{repo} already pins this pair')
             return
         existing = run('gh', 'pr', 'list', '--repo', repo, '--head', branch,
-                       '--state', 'open', '--json', 'number', capture_output=True)
+                       '--state', 'open', '--json', 'number,isDraft,body', capture_output=True)
         existing_prs = json.loads(existing.stdout)
+        # Marked ready by a person (the bot only does that with nothing to check) after seeing every
+        # reason that still applies: keep it ready.
+        seen = KEYS.search(existing_prs[0].get('body') or '') if existing_prs else None
+        accepted = bool(reasons and existing_prs and not existing_prs[0].get('isDraft') and seen
+                        and {key for key, _, _ in reasons} <= set(seen.group(1).split()))
+        draft = bool(reasons) and not accepted
         remote = run('git', 'ls-remote', 'origin', f'refs/heads/{branch}', cwd=work, capture_output=True).stdout.split()
         previous_head = remote[0] if remote else ''
         run('git', 'switch', '-c', branch, cwd=work)
@@ -62,24 +143,22 @@ def pin_repo(repo, pin, manifest, review):
         run('git', 'add', 'tiles.json', cwd=work)
         run('git', '-c', 'user.name=collisionlab-bot', '-c', 'user.email=collisionlab-bot@users.noreply.github.com',
             'commit', '-m', f"Use inset assets {manifest['version']}", cwd=work)
-        if existing_prs and review:
+        # Back to draft before the push, so CI on the new head can't merge it.
+        if existing_prs and draft and not existing_prs[0].get('isDraft'):
             run('gh', 'pr', 'ready', str(existing_prs[0]['number']), '--undo', '--repo', repo, cwd=work)
         run('git', 'push', f'--force-with-lease=refs/heads/{branch}:{previous_head}', 'origin', branch, cwd=work)
-        body = work / 'body.md'
-        naming = manifest['namingReviewCount']
-        body.write_text(f"Use tiles `{pin['version']}` with inset metadata `{manifest['version']}`.\n\n"
-                        f"The build checked cache hashes and required native tile coverage. "
-                        + (f"{naming} reachable areas have no name, so the planner's area search can't find them; "
-                           f"see `review.json` in the inset bundle. Name them in `data/inset-labels/annotations.json` "
-                           f"or mark this ready to publish with fallback labels.\n" if naming else
-                           "Every reachable area has a name.\n"))
-        common = ['--repo', repo, '--title', f"Use inset assets {manifest['version']}", '--body-file', str(body)]
+        body_file = work / 'body.md'
+        body_file.write_text(body(pin, manifest, reasons, run_url, accepted))
+        common = ['--repo', repo, '--title', f"Use inset assets {manifest['version']}", '--body-file', str(body_file)]
         if existing_prs:
             number = str(existing_prs[0]['number'])
             run('gh', 'pr', 'edit', number, *common, cwd=work)
+            # Nothing left to check: ready_for_review starts the CI run that merges it.
+            if not draft and existing_prs[0].get('isDraft'):
+                run('gh', 'pr', 'ready', number, '--repo', repo, cwd=work)
         else:
             run('gh', 'pr', 'create', '--head', branch, *common,
-                *(['--draft'] if review else []), cwd=work)
+                *(['--draft'] if draft else []), cwd=work)
 
 
 if __name__ == '__main__':
