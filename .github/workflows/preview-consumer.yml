@@ -5,10 +5,30 @@ on:
       revision:
         description: Released collisionlab/osrs-coord-preview tag or full commit
         required: true
+      public_api:
+        description: Also exercise the deployed preview API (after approved route activation)
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
+  released-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: collisionlab/osrs-coord-preview
+          ref: ${{ inputs.revision }}
+          path: preview-action
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Execute released bundle against a controlled HTTP fixture
+        working-directory: preview-action
+        run: node --test test/action.test.mjs
   external-action:
+    needs: released-package
+    if: inputs.public_api
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
