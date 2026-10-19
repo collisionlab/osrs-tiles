@@ -42,7 +42,7 @@ jobs:
         with:
           name: collisionlab
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      - name: Current planner pin
+      - name: Current map assets pin
         run: |
           mkdir -p work/candidate
           cp planner/tiles.json work/candidate/pin.json
@@ -92,7 +92,9 @@ jobs:
           app-id: ${{ vars.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
           owner: collisionlab
-          repositories: osrs-planner
+          repositories: |
+            osrs-planner
+            osrs-coord-preview
       - name: Pin validated pair
         env:
           GH_TOKEN: ${{ steps.bot.outputs.token }}
