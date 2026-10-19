@@ -39,8 +39,8 @@ is new it:
    (`scripts/upload`);
 5. records a tile candidate artifact. The `insets` sidecar builds compatible
    metadata and opens one tile/inset pin PR in osrs-planner. Routine validated
-   pairs merge after planner checks; the initial pair and substantial changes
-   wait in draft for review.
+   pairs merge after planner checks; the initial pair, substantial changes and
+   reachable areas without names wait in draft for review.
 
 Change a style's pixels on purpose and you regenerate the examples in the
 same commit, or the golden check fails.
@@ -372,9 +372,14 @@ The `insets` workflow is a build job, not a runtime server. It runs after tile
 publication, daily to detect transport changes in the planner's pinned tooling,
 and when inset code or curated labels change. `scripts/build-insets` extracts
 cache terrain with `InsetTopology`, discovers exact connected masks, builds
-entrance evidence and compiles reviewed names. A changed component or missing
-name uses a coordinate label and appears in `review.json`; it does not stop a
-valid geometry release. Unknown or removed evidence never supplies a name.
+entrance evidence and compiles reviewed names. Every inset component a player
+can reach needs a name, because the planner's area search lists only named
+areas. Reachable means that some chain of transport rows leads there, following
+each row's own direction and counting every file, teleports included, starting
+from the main world or from a row with no source, such as a spell
+(`reachableRegionIds` in `anchors.json`). A changed component or missing name
+uses a coordinate label and appears in `review.json`. Unknown or removed
+evidence never supplies a name.
 
 Native imagery uses the existing `explv-tms-v1` layout. Plane 0 reuses published
 tiles; missing native squares and upper planes are rendered as supplements.
@@ -390,7 +395,10 @@ The planner pins `{version, tileVersion}` under `tiles.json.insets`. Runtime
 never follows a latest pointer. Existing tile URLs stay unchanged.
 
 `scripts/compare-insets` requests review for the first release or >10% change in
-component count or covered map squares. Naming uncertainty alone is advisory.
+component count or covered map squares. A reachable component without a name
+also opens the pin as a draft: name it in `data/inset-labels/annotations.json`
+(`scripts/label_inset_regions.py --worklist` suggests evidence), or mark the PR
+ready to publish with the coordinate label.
 `scripts/pin-insets` maintains a single bot-owned `pin/map-assets` branch and
 uses an expected-head lease when updating it. Planner CI validates asset hashes
 and coverage and matches the tested PR head before auto-merging.

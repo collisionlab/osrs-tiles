@@ -101,5 +101,8 @@ jobs:
         run: |
           gh auth setup-git
           review=()
-          if [ "$(cat work/candidate/review)" = true ] || [ "$(cat work/geometry-review)" = true ]; then review=(--review); fi
+          # Drafts wait for review: big tile or geometry changes, or reachable areas without a name
+          # (the planner's area search lists only named ones).
+          if [ "$(cat work/candidate/review)" = true ] || [ "$(cat work/geometry-review)" = true ] ||
+             [ "$(jq .namingReviewCount '${{ steps.build.outputs.manifest }}')" -gt 0 ]; then review=(--review); fi
           python3 -I scripts/pin-insets work/candidate/pin.json '${{ steps.build.outputs.manifest }}' "${review[@]}"

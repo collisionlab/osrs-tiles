@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-17",
-  "scope": "All 278 surface-connected components plus two additional components used by saved routes.",
+  "reviewed": "2026-10-19",
+  "scope": "Every inset component reachable through the transport data (directed, all transport files) plus two components used by saved routes; components reviewed earlier for surface connection keep their names.",
   "routeRequiredRegionIds": [
     "p0-2500-10007-9be7a9c161",
     "p0-2639-4493-ae82ff9b66"
@@ -213,6 +213,113 @@
       ]
     },
     {
+      "key": "abyss-inner-ring",
+      "name": "Abyss – inner ring",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3023-4816-8e805be233",
+          "seed": [
+            3039,
+            4844,
+            0
+          ],
+          "evidence": [
+            "s-8e5d94e3a67802a3",
+            "c-11ca662dd6be4fef",
+            "c-413216eb541304c2",
+            "c-46c6aa1d73a695f4",
+            "c-5e387272d80cf8bc"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "abyss-outer-ring",
+      "name": "Abyss – outer ring",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2950-4737-fbc16cd317",
+          "seed": [
+            3035,
+            4852,
+            0
+          ],
+          "evidence": [
+            "c-09b047aa93c07a45"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
+      "key": "abyssal-area",
+      "name": "Abyssal Area",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3011-4867-419465fe76",
+          "seed": [
+            3059,
+            4875,
+            0
+          ],
+          "evidence": [
+            "c-c19a90d63963ed23"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
+      "key": "abyssal-nexus",
+      "name": "Abyssal Nexus",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2950-4737-fbc16cd317",
+          "seed": [
+            3037,
+            4763,
+            0
+          ],
+          "evidence": [
+            "s-6279362b5559739f",
+            "c-13f926e5042af23c",
+            "c-5ec54c4ddcd9709f"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "air-altar",
+      "name": "Air Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2415-4544-5efbfa8466",
+          "seed": [
+            2846,
+            4836,
+            0
+          ],
+          "evidence": [
+            "s-f74518a2c082882a",
+            "c-5c889d853818a090"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "alchemical-society",
       "name": "Alchemical Society",
       "status": "named",
@@ -289,6 +396,73 @@
       ]
     },
     {
+      "key": "ancient-guthixian-temple",
+      "name": "Ancient Guthixian Temple",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p1-4059-4553-0454ea0f0f",
+          "seed": [
+            4065,
+            4554,
+            1
+          ],
+          "evidence": [
+            "c-32ad0dc8609eaae9",
+            "c-cefdcc6adcf2fd54"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-4057-4549-5ec0b51633",
+          "seed": [
+            4063,
+            4550,
+            2
+          ],
+          "evidence": [
+            "c-2ad5a49220a5801a",
+            "c-f688ed2aca6858eb"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p0-4033-4356-3931b69953",
+          "seed": [
+            4061,
+            4466,
+            0
+          ],
+          "evidence": [
+            "c-a965a81de7cc810a"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
+      "key": "ancient-vault",
+      "name": "Ancient Vault",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3288-6428-15ce15ddc4",
+          "seed": [
+            3296,
+            6436,
+            0
+          ],
+          "evidence": [
+            "s-4c060a7174cbe1eb",
+            "c-c9f6d52f2fe2ef30"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "ape-atoll-dungeon",
       "name": "Ape Atoll Dungeon",
       "status": "named",
@@ -308,6 +482,27 @@
             "c-b7107159a9b636ac"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "arzinian-mine",
+      "name": "Arzinian Mine",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2498-4929-34e574128c",
+          "seed": [
+            2615,
+            4966,
+            0
+          ],
+          "evidence": [
+            "s-e3b413629d1ce4b2",
+            "c-0414e33804bbf63b"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -357,6 +552,27 @@
       ]
     },
     {
+      "key": "barrows-tunnels",
+      "name": "Barrows tunnels",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3524-9667-27f776f419",
+          "seed": [
+            3551,
+            9694,
+            0
+          ],
+          "evidence": [
+            "s-cc5d5491be194a85",
+            "c-91400a7a797b42ce"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "blast-furnace",
       "name": "Blast Furnace",
       "status": "named",
@@ -381,6 +597,27 @@
       ]
     },
     {
+      "key": "blood-altar",
+      "name": "Blood Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3136-4800-4729f3fd91",
+          "seed": [
+            3229,
+            4834,
+            0
+          ],
+          "evidence": [
+            "s-706ec0f47b20ce02",
+            "c-e197c61b6f25ac1b"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "blue-moon-inn-basement",
       "name": "Blue Moon Inn basement",
       "status": "named",
@@ -399,6 +636,27 @@
             "c-9ee38ffc54cee225"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "body-altar",
+      "name": "Body Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2506-4824-7ab73820aa",
+          "seed": [
+            2520,
+            4848,
+            0
+          ],
+          "evidence": [
+            "s-81a9c813429f557c",
+            "c-b9f05d8ed83cb623"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -541,6 +799,52 @@
       ]
     },
     {
+      "key": "castle-wars-saradomin-waiting-room",
+      "name": "Castle Wars Saradomin waiting room",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2370-9482-5f06af1913",
+          "seed": [
+            2376,
+            9489,
+            0
+          ],
+          "evidence": [
+            "c-13d30e3347bb7399",
+            "c-2b012bfc88fb1b19",
+            "c-2e31c2c6912eb1bd",
+            "c-5669a7d96a614b78"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
+      "key": "castle-wars-zamorak-waiting-room",
+      "name": "Castle Wars Zamorak waiting room",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2411-9514-1f530dbf1e",
+          "seed": [
+            2416,
+            9524,
+            0
+          ],
+          "evidence": [
+            "c-02e421c04c3f91ae",
+            "c-46122698a3449b02",
+            "c-8ab9a7c78811c917",
+            "c-9fa065fd58874898"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
       "key": "catacombs-of-kourend",
       "name": "Catacombs of Kourend",
       "status": "named",
@@ -586,6 +890,27 @@
             "c-095f0a95d7d14dd6"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "chaos-altar-runecraft",
+      "name": "Chaos Altar (Runecraft)",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2267-4838-d1dacdc440",
+          "seed": [
+            2269,
+            4840,
+            0
+          ],
+          "evidence": [
+            "s-eff44708350f1db4",
+            "c-04f46e0adab0cbdf"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -690,6 +1015,90 @@
       ]
     },
     {
+      "key": "chasm-of-tears-while-guthix-sleeps",
+      "name": "Chasm of Tears (While Guthix Sleeps)",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-4050-4554-eef2c2d625",
+          "seed": [
+            4075,
+            4601,
+            0
+          ],
+          "evidence": [
+            "s-44719675e6b2034a",
+            "c-59496e0bf01d3697",
+            "c-ed9d12b66ed2587b"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "clan-cup-portal-cave",
+      "name": "Clan Cup portal cave",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3150-9817-cf6165587f",
+          "seed": [
+            3157,
+            9818,
+            0
+          ],
+          "evidence": [
+            "s-88434cb57ceeee02",
+            "c-a728677af1ae501a"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "clan-wars",
+      "name": "Clan Wars",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3264-4672-14a6c41d22",
+          "seed": [
+            3327,
+            4751,
+            0
+          ],
+          "evidence": [
+            "s-f032ade58eb3bfe3",
+            "s-38e5e3a871578741",
+            "s-0d2f7f850c056275",
+            "c-0a0d8cb4a380c740",
+            "c-38867306fcaf9a84",
+            "c-6f9957155b9cfd9b",
+            "c-8f60e8f4d21347ff"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        },
+        {
+          "componentId": "p1-3364-4806-a07be09694",
+          "seed": [
+            3371,
+            4810,
+            1
+          ],
+          "evidence": [
+            "c-15e1e0c1d7bce922",
+            "c-6602b48a49c81c0e",
+            "c-8322e73b9e041f84",
+            "c-dc51d8bbae4d1ba4"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
       "key": "clock-tower-dungeon",
       "name": "Clock Tower Dungeon",
       "status": "named",
@@ -756,6 +1165,51 @@
             "c-d81926257cfd46b3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "cosmic-altar",
+      "name": "Cosmic Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2137-4828-4e2af7ffc0",
+          "seed": [
+            2142,
+            4836,
+            0
+          ],
+          "evidence": [
+            "s-826de3ae661a042e",
+            "c-9af9e3c25d946bd5"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "cosmic-entitys-plane",
+      "name": "Cosmic Entity's Plane",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1600-4736-ea8b5d4447",
+          "seed": [
+            2075,
+            4848,
+            0
+          ],
+          "evidence": [
+            "s-02a39a3f54d9b7e1",
+            "s-ca69b3b72bf2bbba",
+            "s-f0601079ab11ae5f",
+            "c-f62b13905dbd91a7",
+            "c-f6f70986fa9bdc7b"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -888,6 +1342,27 @@
       ]
     },
     {
+      "key": "death-altar",
+      "name": "Death Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2184-4816-81a7faa98b",
+          "seed": [
+            2205,
+            4838,
+            0
+          ],
+          "evidence": [
+            "s-07d7ecde34f06985",
+            "c-b6cc30e75420197d"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "deep-wilderness-dungeon",
       "name": "Deep Wilderness Dungeon",
       "status": "named",
@@ -907,6 +1382,219 @@
             "c-3dac7c21366fd5f6"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "dorgesh-kaan",
+      "name": "Dorgesh-Kaan",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2690-5283-39d4071469",
+          "seed": [
+            2748,
+            5374,
+            0
+          ],
+          "evidence": [
+            "s-b0af70a0db2c77de",
+            "s-36f0069054e36734",
+            "s-ff05c79b326cdd41",
+            "c-1315842e85a07bdd",
+            "c-1cd93bf70769823a",
+            "c-253bb8050cdb4331",
+            "c-300ec83bb4f1ddce"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        },
+        {
+          "componentId": "p0-2695-5253-b493a0a916",
+          "seed": [
+            2713,
+            5277,
+            0
+          ],
+          "evidence": [
+            "s-7a252bdb5b72bd32",
+            "c-004cc89218bf63da",
+            "c-0323de3e1c678714",
+            "c-0b2c0adf246b1e21",
+            "c-0f81870ef85f8629"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        },
+        {
+          "componentId": "p0-2719-5274-f566194bee",
+          "seed": [
+            2722,
+            5276,
+            0
+          ],
+          "evidence": [
+            "c-70f76572b91f3e6a",
+            "c-ec906153563fdb8e"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p0-2728-5302-e3605729d6",
+          "seed": [
+            2729,
+            5304,
+            0
+          ],
+          "evidence": [
+            "c-0400465f793fe547",
+            "c-4c3591455d70e6ca",
+            "c-538238f18700b992",
+            "c-d7dafebd83312448"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p1-2690-5250-9759700227",
+          "seed": [
+            2734,
+            5306,
+            1
+          ],
+          "evidence": [
+            "s-df7780b0b26ef55a",
+            "s-d75464f32799c19f",
+            "s-5a2771c902c9d7b8",
+            "c-085dcd391b2450b4",
+            "c-0cfc09fa4c56e0d2",
+            "c-0e346e5551af7a48",
+            "c-1c3582c876e06ad3"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        },
+        {
+          "componentId": "p1-2707-5270-55ace9fb62",
+          "seed": [
+            2708,
+            5275,
+            1
+          ],
+          "evidence": [
+            "c-3645b255444b518f"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p1-2731-5272-57ddf59a8e",
+          "seed": [
+            2733,
+            5278,
+            1
+          ],
+          "evidence": [
+            "c-74b38f252f547fc4",
+            "c-af5c05aa97a0ebe4"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2695-5289-fc4c66d57a",
+          "seed": [
+            2696,
+            5294,
+            2
+          ],
+          "evidence": [
+            "c-46d098bac8c967e8",
+            "c-70f8796e5da104ab"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2695-5300-39b6aba263",
+          "seed": [
+            2695,
+            5304,
+            2
+          ],
+          "evidence": [
+            "c-0cd0c15650ebea64"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2701-5362-e6048be4e0",
+          "seed": [
+            2703,
+            5363,
+            2
+          ],
+          "evidence": [
+            "c-ecbc73caf163d3f7"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2737-5282-b8a8685e73",
+          "seed": [
+            2743,
+            5289,
+            2
+          ],
+          "evidence": [
+            "c-3b3866e9a6a0e21e"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2737-5294-2fac2835b4",
+          "seed": [
+            2742,
+            5296,
+            2
+          ],
+          "evidence": [
+            "c-8e49f58cb5d98217"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2739-5257-f7c586de59",
+          "seed": [
+            2739,
+            5257,
+            2
+          ],
+          "evidence": [
+            "c-42ea64be6468e055",
+            "c-7c3ccadb27393755"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2739-5358-51628ea41f",
+          "seed": [
+            2740,
+            5362,
+            2
+          ],
+          "evidence": [
+            "c-6c0b06f70da71a14",
+            "c-bdcdc76256dbe318"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2743-5350-be10ce2751",
+          "seed": [
+            2745,
+            5355,
+            2
+          ],
+          "evidence": [
+            "s-c7fee77e32619436",
+            "c-a6b16169b18d1fdc"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -948,6 +1636,29 @@
             "c-f118fd6a1ed75a95"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "dorgeshuun-mines",
+      "name": "Dorgeshuun Mines",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3308-9600-2727b9a0a7",
+          "seed": [
+            3313,
+            9613,
+            0
+          ],
+          "evidence": [
+            "c-4df714bb47872548",
+            "c-a7c40c094a9f3e85",
+            "c-cf4a618eb1559ac8",
+            "c-d8465b8a8efca552"
+          ],
+          "reason": "Transport rows landing here."
         }
       ]
     },
@@ -1064,6 +1775,51 @@
             "c-c4330217a02a7685"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "earth-altar",
+      "name": "Earth Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2627-4815-a62c6c5be1",
+          "seed": [
+            2660,
+            4843,
+            0
+          ],
+          "evidence": [
+            "s-fd4159c44d81c7ca",
+            "c-721cae117e9cdbd0"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "ectofuntus-basement",
+      "name": "Ectofuntus basement",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3674-9879-c31abc4a5e",
+          "seed": [
+            3683,
+            9888,
+            0
+          ],
+          "evidence": [
+            "s-46148c65169d07d3",
+            "c-07eba057c677a3ed",
+            "c-19a065a0877cdbdd",
+            "c-4f8680b9d24597b6",
+            "c-5ca01f03c787f29b"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -1259,6 +2015,29 @@
       ]
     },
     {
+      "key": "enchanted-valley",
+      "name": "Enchanted Valley",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3014-4485-ae16170baa",
+          "seed": [
+            3041,
+            4532,
+            0
+          ],
+          "evidence": [
+            "s-729d072efa88960e",
+            "s-b74b283481b2ef43",
+            "c-b37f120eba65eef3",
+            "c-d467ebbb1643b359"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "entrana-dungeon",
       "name": "Entrana Dungeon",
       "status": "named",
@@ -1305,6 +2084,51 @@
       ]
     },
     {
+      "key": "fairy-resistance-hideout",
+      "name": "Fairy Resistance Hideout",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2325-4424-d8f878f5a6",
+          "seed": [
+            2328,
+            4426,
+            0
+          ],
+          "evidence": [
+            "s-cade2bcb3226489d",
+            "s-6f165bc40e90fa0f",
+            "c-ce915987f6e708fc"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "falador-mole-lair",
+      "name": "Falador Mole Lair",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1732-5144-a5da448092",
+          "seed": [
+            1759,
+            5189,
+            0
+          ],
+          "evidence": [
+            "s-dd405afa068d078a",
+            "s-717df00d6cdecd91",
+            "s-25f3fb61e910ef7a",
+            "c-ea0bf620bb89aaf5"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "ferox-enclave-dungeon",
       "name": "Ferox Enclave Dungeon",
       "status": "named",
@@ -1324,6 +2148,90 @@
             "c-1d90879dfde64957"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "fire-altar",
+      "name": "Fire Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2415-4544-5efbfa8466",
+          "seed": [
+            2587,
+            4836,
+            0
+          ],
+          "evidence": [
+            "s-4ce2ee33e68d9235",
+            "c-9b613ca91c95a928"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "fisher-realm",
+      "name": "Fisher Realm",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2415-4544-5efbfa8466",
+          "seed": [
+            2650,
+            4730,
+            0
+          ],
+          "evidence": [
+            "s-ed372c7cff1a58ca",
+            "s-9e8a3d771c4f4ba7",
+            "s-6310cdd9432893da",
+            "c-4d48a014badfec0b",
+            "c-fdd2fec5a0d4966d"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        },
+        {
+          "componentId": "p1-2628-4675-2eb8577998",
+          "seed": [
+            2634,
+            4682,
+            1
+          ],
+          "evidence": [
+            "c-2f59a4c9c02a0c6e",
+            "c-684ad5cb80ab518a",
+            "c-8c73a6449b9d5579",
+            "c-a5b87d878a549b48"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2637-4680-828af8d8c5",
+          "seed": [
+            2640,
+            4685,
+            2
+          ],
+          "evidence": [
+            "c-92b0dc553f7c9701"
+          ],
+          "reason": "Transport rows landing here."
+        },
+        {
+          "componentId": "p2-2646-4681-7a77b0daa5",
+          "seed": [
+            2651,
+            4685,
+            2
+          ],
+          "evidence": [
+            "c-00adaf9003163924"
+          ],
+          "reason": "Transport rows landing here."
         }
       ]
     },
@@ -1411,6 +2319,29 @@
             "c-944394d8440bea6b"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "ghorrock-dungeon",
+      "name": "Ghorrock Dungeon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2897-10307-169d4deb3d",
+          "seed": [
+            2912,
+            10336,
+            0
+          ],
+          "evidence": [
+            "s-c5f10fbaf83a1edc",
+            "s-012e50d3411011f8",
+            "c-4f293ae53e939b7d",
+            "c-8276c9e5a278b26d"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -1567,6 +2498,29 @@
             "c-9f2e9e9ac0259e96"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "gorak-plane",
+      "name": "Gorak Plane",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3009-5315-e074ec88b7",
+          "seed": [
+            3038,
+            5348,
+            0
+          ],
+          "evidence": [
+            "s-67e513e4bbd56efc",
+            "s-b1bc3519ce082ae7",
+            "c-cca9333e8fe05eb1",
+            "c-fe74002601861426"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -1847,6 +2801,26 @@
             "c-000b64d38df64b65"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "jalsavrah",
+      "name": "Jalsavrah",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p3-1927-4420-4faf3d3a53",
+          "seed": [
+            1934,
+            4428,
+            3
+          ],
+          "evidence": [
+            "c-1f196843cf2dc68a"
+          ],
+          "reason": "Transport rows landing here."
         }
       ]
     },
@@ -2400,6 +3374,74 @@
       ]
     },
     {
+      "key": "kgp-headquarters",
+      "name": "KGP headquarters",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2631-10370-6ba7d86a54",
+          "seed": [
+            2656,
+            10423,
+            0
+          ],
+          "evidence": [
+            "s-a4cfa180b3a314e1",
+            "c-4b66722b9de04715",
+            "c-d9ae30ba5c2085db"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "king-black-dragon-lair",
+      "name": "King Black Dragon Lair",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2253-4677-5654786d9d",
+          "seed": [
+            2271,
+            4680,
+            0
+          ],
+          "evidence": [
+            "s-e1b8ffb6c6a0b9b2",
+            "s-ba79c3779d78bf73",
+            "c-1f6526d7af5564fa",
+            "c-4aecd382ec201479"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "lassar-undercity",
+      "name": "Lassar Undercity",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2528-6277-903188b249",
+          "seed": [
+            2588,
+            6435,
+            0
+          ],
+          "evidence": [
+            "s-bea4616ae8cae5ee",
+            "s-308e26a32d683792",
+            "s-4593b49b99a58ebd",
+            "c-ac80c9c0db9ef074"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "lava-maze-dungeon",
       "name": "Lava Maze Dungeon",
       "status": "named",
@@ -2420,6 +3462,27 @@
             "c-193d77e29c1ac0fb"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "law-altar",
+      "name": "Law Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2444-4811-a2c91072a0",
+          "seed": [
+            2464,
+            4826,
+            0
+          ],
+          "evidence": [
+            "s-9f4d7868a558ae1c",
+            "c-146f4c3835c22d22"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -2514,6 +3577,27 @@
       ]
     },
     {
+      "key": "mage-arena-bank",
+      "name": "Mage Arena bank",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2529-4710-221e91148d",
+          "seed": [
+            2539,
+            4712,
+            0
+          ],
+          "evidence": [
+            "c-2a8a39f31679da26",
+            "c-cd789bbdd25d1d79"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
       "key": "meiyerditch-laboratories",
       "name": "Meiyerditch Laboratories",
       "status": "named",
@@ -2532,6 +3616,47 @@
             "c-9c20c6259658f2ed"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "meiyerditch-laboratories-cave",
+      "name": "Meiyerditch Laboratories cave",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3551-9787-20f6f524b7",
+          "seed": [
+            3557,
+            9798,
+            0
+          ],
+          "evidence": [
+            "c-0f17983c8aadfb39"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
+      "key": "mind-altar",
+      "name": "Mind Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2415-4544-5efbfa8466",
+          "seed": [
+            2784,
+            4843,
+            0
+          ],
+          "evidence": [
+            "s-9a23efa602f9a2ad",
+            "c-60ba08df959386f4"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -2816,6 +3941,27 @@
       ]
     },
     {
+      "key": "nature-altar",
+      "name": "Nature Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2369-4804-6477e58ad6",
+          "seed": [
+            2400,
+            4844,
+            0
+          ],
+          "evidence": [
+            "s-c43c2328f47f0309",
+            "c-a30d988938ef2761"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "nature-grotto",
       "name": "Nature Grotto",
       "status": "named",
@@ -2924,6 +4070,29 @@
             "c-f1bb2e220f2eabd1"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "player-owned-house",
+      "name": "Player-owned house",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1856-7040-65925be2aa",
+          "seed": [
+            1858,
+            7051,
+            0
+          ],
+          "evidence": [
+            "c-0044cfcedad2628f",
+            "c-1378366fe5db821b",
+            "c-34acae2aaf639ea4",
+            "c-3817ddb4131642bb"
+          ],
+          "reason": "Transport rows landing here."
         }
       ]
     },
@@ -3539,6 +4708,30 @@
             "c-b260fa3e2276a04d"
           ],
           "reason": "Ladder 20278 joins Sophanem bank basement to the dungeon. Sheet plane differs; do not use faraway plane-2 labels."
+        }
+      ]
+    },
+    {
+      "key": "soul-wars",
+      "name": "Soul Wars",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1856-5824-12b59bddc2",
+          "seed": [
+            2018,
+            5929,
+            0
+          ],
+          "evidence": [
+            "s-bea67163fe822b6c",
+            "c-0487d416e3303bb8",
+            "c-0ad3f92d225d2cb1",
+            "c-19881367a214659c",
+            "c-1e8e1131efb7aba0"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -4557,6 +5750,30 @@
       ]
     },
     {
+      "key": "temple-of-the-eye",
+      "name": "Temple of the Eye",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3548-9441-2acb140215",
+          "seed": [
+            3619,
+            9473,
+            0
+          ],
+          "evidence": [
+            "s-6b5e7d6f8675282f",
+            "c-37aeee6af2e109e6",
+            "c-3b4ee1bbf246329e",
+            "c-3e93fd1ab881b1d3",
+            "c-3f1d9e2b250f8d8b"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "that-70s-show-basement",
       "name": "That '70s Show basement",
       "status": "named",
@@ -4574,6 +5791,49 @@
             "c-ed82569508d426c7"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "the-gauntlet",
+      "name": "The Gauntlet",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p1-3027-6118-1060d1afbe",
+          "seed": [
+            3038,
+            6129,
+            1
+          ],
+          "evidence": [
+            "c-0884140a2120655c",
+            "c-2f54aa34a0366388",
+            "c-40a0419d9bc6a7a8"
+          ],
+          "reason": "Transport rows landing here."
+        }
+      ]
+    },
+    {
+      "key": "the-scar",
+      "name": "The Scar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1976-6304-250796e49f",
+          "seed": [
+            2081,
+            6372,
+            0
+          ],
+          "evidence": [
+            "c-b3560d837fa36de5",
+            "c-bf5edd03b9e4281a"
+          ],
+          "reason": "Transport rows landing here."
         }
       ]
     },
@@ -4662,6 +5922,28 @@
             "c-95c0b9e6e70219ce"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "tonali-cavern",
+      "name": "Tonali Cavern",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1281-9344-8ba92721cd",
+          "seed": [
+            1315,
+            9378,
+            0
+          ],
+          "evidence": [
+            "s-e3f0c5b052c2626b",
+            "c-008d1636ffffe0fd",
+            "c-70dc26c634d0c297"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },
@@ -5712,6 +6994,27 @@
       ]
     },
     {
+      "key": "viyeldi-caves",
+      "name": "Viyeldi caves",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2368-4673-094143606e",
+          "seed": [
+            2381,
+            4714,
+            0
+          ],
+          "evidence": [
+            "s-c9894457c527adbf",
+            "c-0d61f7035de76af7"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "warriors-guild-basement",
       "name": "Warriors' Guild basement",
       "status": "named",
@@ -5761,6 +7064,27 @@
       ]
     },
     {
+      "key": "water-altar",
+      "name": "Water Altar",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2415-4544-5efbfa8466",
+          "seed": [
+            2714,
+            4838,
+            0
+          ],
+          "evidence": [
+            "s-9d52b949f6386894",
+            "c-927911b97cabe7a2"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
       "key": "water-ravine-dungeon",
       "name": "Water Ravine Dungeon",
       "status": "named",
@@ -5779,6 +7103,26 @@
             "c-029381ddeefa07cb"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "waterbirth-island-dungeon-lower",
+      "name": "Waterbirth Island Dungeon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p3-1825-4390-0cd57236bd",
+          "seed": [
+            1853,
+            4406,
+            3
+          ],
+          "evidence": [
+            "c-f114e3db40abc742"
+          ],
+          "reason": "Transport rows landing here."
         }
       ]
     },
@@ -6226,6 +7570,29 @@
             "c-12b264f26c85bac5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "yubiusk",
+      "name": "Yu'biusk",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3462-4294-0f1eb24af3",
+          "seed": [
+            3572,
+            4372,
+            0
+          ],
+          "evidence": [
+            "s-b8fba37b2d52358c",
+            "s-9bb7e35721e5cc9e",
+            "c-cf54fa369fdda2b7",
+            "c-fe773d48236a5fd2"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     },

@@ -22,7 +22,8 @@ def fixture():
         dict(id='c', plane=0, bounds=[200, 200, 210, 210], classification='inset', tileCount=100,
              mask=[[200, 200, 10, 10]]),
     ])
-    anchors = dict(schemaVersion=1, catalogueSha256='hash', insetRegionIds=['a', 'b'], regions={}, connections={})
+    anchors = dict(schemaVersion=1, catalogueSha256='hash', insetRegionIds=['a', 'b'], reachableRegionIds=['a', 'b'],
+                   regions={}, connections={})
     sources = dict(schemaVersion=1, records=[dict(id='pin', name='A dungeon', point=[105, 105, 0], source='wiki:rev1')])
     areas = [dict(key='dungeon', name='A dungeon', status='named', reason='reviewed', aliases=['Old name'], components=[
         dict(componentId='a', seed=[100, 101, 0], evidence=['pin'], reason='Pin in void; independently reviewed seed'),
@@ -61,6 +62,16 @@ class LabelTest(unittest.TestCase):
             self.assertTrue(report['issues'], change)
             if change == 'removed-source':
                 self.assertEqual(result['regions']['a']['status'], 'unresolved')
+
+    def test_every_reachable_component_needs_a_name(self):
+        cat, anchors, sources, authored = fixture()
+        anchors['insetRegionIds'] = []
+        anchors['reachableRegionIds'] = ['a', 'b', 'c']
+        _, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
+        self.assertEqual(report['issues'], [dict(componentId='c', reason='required-component-unnamed')])
+        anchors['reachableRegionIds'] = ['a']
+        _, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
+        self.assertEqual((report['issues'], report['required']), ([], 1))
 
     def test_candidates_do_not_promote_nearest_labels_or_cross_planes(self):
         cat, anchors, sources, authored = fixture()
@@ -135,6 +146,11 @@ class LabelTest(unittest.TestCase):
         self.assertEqual(output['regions']['p0-2387-9767-3351540754']['name'], 'Stronghold Slayer Cave')
         self.assertEqual(output['regions']['p0-2820-9730-a3a71dd2a5']['name'], 'Entrana Dungeon')
         self.assertIn('Asgarnian Ice Dungeon', output['regions']['p0-2826-9539-fda078c74d']['name'])
+        # Reached only by teleports, an unrecognised action, or a one-way chain.
+        self.assertEqual(output['regions']['p0-2528-6277-903188b249']['name'], 'Lassar Undercity')
+        self.assertEqual(output['regions']['p0-4033-4356-3931b69953']['name'], 'Ancient Guthixian Temple')
+        self.assertEqual(output['regions']['p0-2137-4828-4e2af7ffc0']['name'], 'Cosmic Altar')
+        self.assertEqual(report['required'], len(anchors['reachableRegionIds']) + 1)
 
 
 if __name__ == '__main__':

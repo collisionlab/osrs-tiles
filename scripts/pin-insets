@@ -66,9 +66,13 @@ def pin_repo(repo, pin, manifest, review):
             run('gh', 'pr', 'ready', str(existing_prs[0]['number']), '--undo', '--repo', repo, cwd=work)
         run('git', 'push', f'--force-with-lease=refs/heads/{branch}:{previous_head}', 'origin', branch, cwd=work)
         body = work / 'body.md'
+        naming = manifest['namingReviewCount']
         body.write_text(f"Use tiles `{pin['version']}` with inset metadata `{manifest['version']}`.\n\n"
                         f"The build checked cache hashes and required native tile coverage. "
-                        f"{manifest['namingReviewCount']} naming issues use fallback labels and do not block publication.\n")
+                        + (f"{naming} reachable areas have no name, so the planner's area search can't find them; "
+                           f"see `review.json` in the inset bundle. Name them in `data/inset-labels/annotations.json` "
+                           f"or mark this ready to publish with fallback labels.\n" if naming else
+                           "Every reachable area has a name.\n"))
         common = ['--repo', repo, '--title', f"Use inset assets {manifest['version']}", '--body-file', str(body)]
         if existing_prs:
             number = str(existing_prs[0]['number'])
