@@ -1,6 +1,5 @@
 package mapstyle;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,12 +22,19 @@ import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import net.runelite.cache.MapImageDumper;
 import net.runelite.cache.ObjectManager;
+import net.runelite.cache.OverlayManager;
+import net.runelite.cache.UnderlayManager;
+import net.runelite.cache.definitions.MapDefinition;
+import net.runelite.cache.definitions.OverlayDefinition;
+import net.runelite.cache.definitions.UnderlayDefinition;
 import net.runelite.cache.fs.Store;
+import net.runelite.cache.region.RegionLoader;
 import net.runelite.cache.util.XteaKeyManager;
 
 /**
  * Writes map tiles in the layout of Explv's osrs_map_tiles, the layer the
- * route planner already uses, so a style is a drop-in URL swap.
+ * route planner already uses, so a style is a drop-in URL swap, for every
+ * plane. See docs/tiles.md.
  *
  * <p>The layout (Leaflet, EPSG:3857, TMS rows counted from the south,
  * 256px tiles):
@@ -37,17 +43,23 @@ import net.runelite.cache.util.XteaKeyManager;
  * square (15 + c, 19 + r);</li>
  * <li>zooms 7..3 average 2x2 blocks of the zoom above;</li>
  * <li>zooms 9..11 are not written: viewers upscale zoom 8
- * ({@code maxNativeZoom 8}).</li>
+ * ({@code maxNativeZoom 8});</li>
+ * <li>plane 0 is at the style's root, as in Explv's set; planes 1..3 are
+ * under {@code p1/}, {@code p2/} and {@code p3/}.</li>
  * </ul>
- * Map squares without terrain in the cache get no tile, as in Explv's set.
+ * A square gets a tile on a plane when it has visible terrain there (the
+ * rule inset regions are cut by, see {@link InsetTopology}), even if that
+ * renders black, so every inset area has its tiles. Plane 0 also gets a tile
+ * for any other map square the cache has unless it renders all black.
+ * Viewers show a missing tile as black.
  *
  * <pre>
  * Tiles --cache DIR --xteas FILE --out DIR [--styles standard,tactical]
- *       [--no-icons tactical] [--plane 0] [--block 16] [--commit SHA] [--cache-id N]
+ *       [--no-icons tactical] [--planes 0,1,2,3] [--block 16] [--commit SHA] [--cache-id N]
  * </pre>
  *
- * Writes {@code <out>/<style>/<z>/<x>/<y>.png}, plus per style
- * {@code manifest.json} (inputs, extent, missing keys) and
+ * Writes {@code <out>/<style>/[p<plane>/]<z>/<x>/<y>.png}, plus per style
+ * {@code manifest.json} (inputs, extent, per-plane counts, missing keys) and
  * {@code index.json} (sha256 per tile path).
  */
 public final class Tiles
@@ -58,9 +70,8 @@ public final class Tiles
 	/** Map square at zoom-8 tile (0, 0). */
 	static final int ORIGIN_RX = 15;
 	static final int ORIGIN_RY = 19;
-	/** Inclusive map-square extent of Explv's plane-0 image. */
-	static final int MAX_RX = 63;
-	static final int MAX_RY = 196;
+	/** Exclusive upper bound of the map archive ids RegionLoader scans. */
+	static final int MAP_IDS = 25287;
 
 	private Tiles()
 	{
@@ -94,8 +105,9 @@ public final class Tiles
 			objects.load();
 			AreaRenderer renderer = new AreaRenderer(store, objects, keys);
 
-			List<int[]> blocks = blocksWithTerrain(renderer, args);
-			System.out.printf("%d blocks of %dx%d map squares with terrain%n", blocks.size(), args.block, args.block);
+			Map<Integer, Integer> terrain = terrainPlanes(store);
+			int[] extent = args.extent != null ? args.extent : extent(terrain.keySet());
+			System.out.printf("%d map squares; extent %d,%d..%d,%d%n", terrain.size(), extent[0], extent[1], extent[2], extent[3]);
 
 			for (Styles style : args.styles)
 			{
@@ -104,75 +116,191 @@ public final class Tiles
 				Path dir = args.out.toPath().resolve(style.id());
 				long start = System.nanoTime();
 
-				TreeSet<Integer> present = new TreeSet<>();
 				TreeSet<Integer> missingKeys = new TreeSet<>();
-				Set<Long> written = new HashSet<>();
-				for (int[] b : blocks)
+				List<Map<String, Object>> planes = new ArrayList<>();
+				int total = 0;
+				for (int plane = 0; plane < 4; plane++)
 				{
-					int rx0 = b[0];
-					int ry0 = b[1];
-					int rx1 = Math.min(rx0 + args.block - 1, args.extent[2]);
-					int ry1 = Math.min(ry0 + args.block - 1, args.extent[3]);
-					AreaRenderer.Result result = renderer.render(style, hooks, false,
-						rx0 << 6, ry0 << 6, (rx1 << 6) + 63, (ry1 << 6) + 63, args.plane);
-					if (result == null)
+					Map<String, Object> summary = new LinkedHashMap<>();
+					summary.put("path", planePath(plane));
+					planes.add(summary);
+					if (!args.planes.contains(plane))
 					{
+						summary.put("tiles", 0);
+						summary.put("mapSquares", 0);
 						continue;
 					}
-					present.addAll(result.present);
-					missingKeys.addAll(result.missingKeys);
-					for (int id : result.present)
+					Set<Integer> squares = new TreeSet<>();
+					for (Map.Entry<Integer, Integer> e : terrain.entrySet())
 					{
-						int rx = id >> 8;
-						int ry = id & 0xFF;
-						if (args.squares != null && !args.squares.contains(id)) continue;
-						BufferedImage tile = result.image.getSubimage((rx - rx0) * TILE, (ry1 - ry) * TILE, TILE, TILE);
-						write(dir, NATIVE_ZOOM, rx - ORIGIN_RX, ry - ORIGIN_RY, tile);
-						written.add(key(rx - ORIGIN_RX, ry - ORIGIN_RY));
+						int rx = e.getKey() >> 8;
+						int ry = e.getKey() & 0xFF;
+						if (rx >= extent[0] && rx <= extent[2] && ry >= extent[1] && ry <= extent[3]
+							&& (plane == 0 || (e.getValue() >> plane & 1) != 0))
+						{
+							squares.add(e.getKey());
+						}
 					}
-				}
-
-				int total = written.size();
-				for (int z = NATIVE_ZOOM - 1; z >= MIN_ZOOM; z--)
-				{
-					written = downsample(dir, z, written);
-					total += written.size();
+					Path planeDir = dir.resolve(planePath(plane));
+					Set<Long> written = new HashSet<>();
+					for (int[] b : blocks(squares, args.block))
+					{
+						int rx0 = b[0];
+						int ry0 = b[1];
+						int rx1 = rx0 + args.block - 1;
+						int ry1 = ry0 + args.block - 1;
+						AreaRenderer.Result result = renderer.render(style, hooks, false,
+							rx0 << 6, ry0 << 6, (rx1 << 6) + 63, (ry1 << 6) + 63, plane);
+						if (result == null)
+						{
+							continue;
+						}
+						for (int id : result.present)
+						{
+							if (!squares.contains(id))
+							{
+								continue;
+							}
+							if (result.missingKeys.contains(id))
+							{
+								missingKeys.add(id);
+							}
+							int rx = id >> 8;
+							int ry = id & 0xFF;
+							BufferedImage tile = result.image.getSubimage((rx - rx0) * TILE, (ry1 - ry) * TILE, TILE, TILE);
+							boolean hasTerrain = (terrain.get(id) >> plane & 1) != 0;
+							if (!hasTerrain && black(tile))
+							{
+								continue;
+							}
+							write(planeDir, NATIVE_ZOOM, rx - ORIGIN_RX, ry - ORIGIN_RY, tile);
+							written.add(key(rx - ORIGIN_RX, ry - ORIGIN_RY));
+						}
+					}
+					summary.put("mapSquares", written.size());
+					int tiles = written.size();
+					for (int z = NATIVE_ZOOM - 1; z >= MIN_ZOOM; z--)
+					{
+						written = downsample(planeDir, z, written);
+						tiles += written.size();
+					}
+					summary.put("tiles", tiles);
+					total += tiles;
+					System.out.printf("%-16s plane %d: %d tiles (%d s)%n", style.id(), plane, tiles,
+						(System.nanoTime() - start) / 1_000_000_000);
 				}
 
 				Map<String, String> index = index(dir);
 				writeJson(dir.resolve("index.json"), index);
-				writeJson(dir.resolve("manifest.json"), manifest(args, style, icons, present, missingKeys, total));
-				System.out.printf("%-16s %d tiles, %d map squares, %d missing keys (%d s)%n", style.id(), total,
-					present.size(), missingKeys.size(), (System.nanoTime() - start) / 1_000_000_000);
+				writeJson(dir.resolve("manifest.json"), manifest(args, style, icons, extent, planes, missingKeys, total));
+				System.out.printf("%-16s %d tiles %s, %d missing keys (%d s)%n", style.id(), total, planes,
+					missingKeys.size(), (System.nanoTime() - start) / 1_000_000_000);
 			}
 		}
 	}
 
-	/** Blocks (lowest map square of each) that contain at least one map square with terrain. */
-	private static List<int[]> blocksWithTerrain(AreaRenderer renderer, Args args) throws IOException
+	/** Where a plane's tiles are, relative to the style directory. */
+	static String planePath(int plane)
 	{
-		int block = args.block;
-		int[] e = args.extent;
-		List<int[]> blocks = new ArrayList<>();
-		for (int rx0 = e[0]; rx0 <= e[2]; rx0 += block)
+		return plane == 0 ? "" : "p" + plane + "/";
+	}
+
+	/**
+	 * Every map square in the cache, with a bit per plane that has visible
+	 * terrain ({@link InsetTopology#visibleTerrain}).
+	 */
+	private static Map<Integer, Integer> terrainPlanes(Store store) throws IOException
+	{
+		UnderlayManager underlays = new UnderlayManager(store);
+		underlays.load();
+		OverlayManager overlays = new OverlayManager(store);
+		overlays.load();
+		RegionLoader loader = new RegionLoader(store, id -> null);
+		Map<Integer, Integer> result = new TreeMap<>();
+		for (int id = 0; id < MAP_IDS; id++)
 		{
-			for (int ry0 = e[1]; ry0 <= e[3]; ry0 += block)
+			MapDefinition map = loader.loadMapDef(id);
+			if (map == null)
+			{
+				continue;
+			}
+			int planes = 0;
+			for (int plane = 0; plane < 4; plane++)
 			{
 				search:
-				for (int rx = rx0; rx < rx0 + block && rx <= e[2]; rx++)
+				for (int x = 0; x < 64; x++)
 				{
-					for (int ry = ry0; ry < ry0 + block && ry <= e[3]; ry++)
+					for (int y = 0; y < 64; y++)
 					{
-						if ((args.squares == null || args.squares.contains(rx << 8 | ry)) && renderer.hasMap(rx << 8 | ry))
+						MapDefinition.Tile tile = map.getTiles()[plane][x][y];
+						OverlayDefinition overlay = tile.overlayId == 0 ? null
+							: overlays.provide(Short.toUnsignedInt(tile.overlayId) - 1);
+						UnderlayDefinition underlay = tile.underlayId == 0 ? null
+							: underlays.provide(Short.toUnsignedInt(tile.underlayId) - 1);
+						if (InsetTopology.visibleTerrain(tile, underlay, overlay))
 						{
-							blocks.add(new int[]{rx0, ry0});
+							planes |= 1 << plane;
 							break search;
 						}
 					}
 				}
 			}
+			result.put(id, planes);
+		}
+		return result;
+	}
+
+	/** The smallest extent holding every map square; one west or south of the layout's origin fails. */
+	static int[] extent(Set<Integer> squares)
+	{
+		int[] e = {255, 255, 0, 0};
+		for (int id : squares)
+		{
+			int rx = id >> 8;
+			int ry = id & 0xFF;
+			if (rx < ORIGIN_RX || ry < ORIGIN_RY)
+			{
+				throw new IllegalStateException("Map square " + rx + "," + ry + " lies outside the tile layout");
+			}
+			e[0] = Math.min(e[0], rx);
+			e[1] = Math.min(e[1], ry);
+			e[2] = Math.max(e[2], rx);
+			e[3] = Math.max(e[3], ry);
+		}
+		return e;
+	}
+
+	/** The block-aligned blocks (lowest map square of each) that hold any of the squares. */
+	static List<int[]> blocks(Set<Integer> squares, int block)
+	{
+		TreeSet<Long> keys = new TreeSet<>();
+		for (int id : squares)
+		{
+			int rx = id >> 8;
+			int ry = id & 0xFF;
+			keys.add(key(rx - Math.floorMod(rx - ORIGIN_RX, block), ry - Math.floorMod(ry - ORIGIN_RY, block)));
+		}
+		List<int[]> blocks = new ArrayList<>();
+		for (long k : keys)
+		{
+			blocks.add(new int[]{col(k), row(k)});
 		}
 		return blocks;
+	}
+
+	static boolean black(BufferedImage tile)
+	{
+		for (int y = 0; y < tile.getHeight(); y++)
+		{
+			for (int x = 0; x < tile.getWidth(); x++)
+			{
+				if ((tile.getRGB(x, y) & 0xFFFFFF) != 0)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -270,21 +398,20 @@ public final class Tiles
 		return index;
 	}
 
-	private static Map<String, Object> manifest(Args args, Styles style, boolean icons, Set<Integer> present,
-		Set<Integer> missingKeys, int tiles) throws IOException
+	private static Map<String, Object> manifest(Args args, Styles style, boolean icons, int[] extent,
+		List<Map<String, Object>> planes, Set<Integer> missingKeys, int tiles) throws IOException
 	{
 		Map<String, Object> m = new LinkedHashMap<>();
 		m.put("layout", "explv-tms-v1");
 		m.put("style", style.id());
 		m.put("icons", icons);
-		m.put("plane", args.plane);
 		m.put("tileSize", TILE);
 		m.put("nativeZoom", NATIVE_ZOOM);
 		m.put("minZoom", MIN_ZOOM);
 		m.put("origin", new int[]{ORIGIN_RX, ORIGIN_RY});
-		m.put("extent", args.extent);
+		m.put("extent", extent);
 		m.put("tiles", tiles);
-		m.put("mapSquares", present.size());
+		m.put("planes", planes);
 		m.put("missingKeyRegions", new ArrayList<>(missingKeys));
 		if (args.cacheId != null)
 		{
@@ -343,24 +470,23 @@ public final class Tiles
 	{
 		static final String USAGE = String.join("\n",
 			"usage: Tiles --cache DIR --xteas FILE --out DIR [--styles S[,S...]] [--no-icons S[,S...]]",
-			"             [--plane Z] [--block N] [--extent RX0,RY0,RX1,RY1] [--commit SHA] [--cache-id N]",
-			"  --squares   JSON array of packed map square IDs to render (optional)",
+			"             [--planes Z[,Z...]] [--block N] [--extent RX0,RY0,RX1,RY1] [--commit SHA] [--cache-id N]",
+			"  --planes    planes to write (default 0,1,2,3)",
 			"  --styles    styles to write (default standard,tactical)",
 			"  --no-icons  styles drawn without map icons (default tactical)",
 			"  --block     map squares per render block side (default 16)",
-			"  --extent    inclusive map-square rectangle to write (default Explv's: 15,19,63,196)",
+			"  --extent    inclusive map-square rectangle to write (default: every map square in the cache)",
 			"  --commit    renderer commit recorded in each manifest",
 			"  --cache-id  openrs2 cache id recorded in each manifest");
 
 		File cache;
 		File xteas;
 		File out;
-		int plane;
+		Set<Integer> planes = new TreeSet<>(List.of(0, 1, 2, 3));
 		int block = 16;
-		int[] extent = {ORIGIN_RX, ORIGIN_RY, MAX_RX, MAX_RY};
+		int[] extent;
 		String commit;
 		Integer cacheId;
-		Set<Integer> squares;
 		List<Styles> styles = new ArrayList<>(List.of(Styles.STANDARD, Styles.TACTICAL));
 		Set<Styles> noIcons = new HashSet<>(Set.of(Styles.TACTICAL));
 
@@ -386,8 +512,12 @@ public final class Tiles
 					case "--out":
 						a.out = new File(value);
 						break;
-					case "--plane":
-						a.plane = Integer.parseInt(value);
+					case "--planes":
+						a.planes = new TreeSet<>();
+						for (String z : value.split(","))
+						{
+							a.planes.add(Integer.parseInt(z.trim()));
+						}
 						break;
 					case "--block":
 						a.block = Integer.parseInt(value);
@@ -399,6 +529,7 @@ public final class Tiles
 						{
 							throw new IllegalArgumentException("--extent expects RX0,RY0,RX1,RY1");
 						}
+						a.extent = new int[4];
 						for (int k = 0; k < 4; k++)
 						{
 							a.extent[k] = Integer.parseInt(v[k].trim());
@@ -411,16 +542,6 @@ public final class Tiles
 					case "--cache-id":
 						a.cacheId = Integer.parseInt(value);
 						break;
-					case "--squares":
-                        try {
-                            int[] ids = new Gson().fromJson(Files.readString(Path.of(value)), int[].class);
-                            a.squares = new HashSet<>();
-                            for (int id : ids) {
-                                if (id < 0 || id > 65535) throw new IllegalArgumentException("Invalid map square");
-                                a.squares.add(id);
-                            }
-                        } catch (IOException ex) { throw new IllegalArgumentException("Cannot read --squares", ex); }
-                        break;
 					case "--styles":
 						a.styles = styles(value);
 						break;
@@ -444,11 +565,14 @@ public final class Tiles
 				throw new IllegalArgumentException("no such XTEA file: " + a.xteas);
 			}
 			int[] e = a.extent;
-			if (e[0] < 0 || e[1] < 0 || e[2] > 255 || e[3] > 255 || e[0] > e[2] || e[1] > e[3])
+			if (e != null && (e[0] < ORIGIN_RX || e[1] < ORIGIN_RY || e[2] > 255 || e[3] > 255 || e[0] > e[2] || e[1] > e[3]))
 			{
-				throw new IllegalArgumentException("--extent must lie within 0,0,255,255");
+				throw new IllegalArgumentException("--extent must lie within " + ORIGIN_RX + "," + ORIGIN_RY + ",255,255");
 			}
-			if (a.plane < 0 || a.plane > 3) throw new IllegalArgumentException("--plane must be 0..3");
+			if (a.planes.isEmpty() || a.planes.stream().anyMatch(z -> z < 0 || z > 3))
+			{
+				throw new IllegalArgumentException("--planes must be among 0..3");
+			}
 			if (a.block < 1)
 			{
 				throw new IllegalArgumentException("--block must be positive");

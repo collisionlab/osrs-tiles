@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Open a PR pinning one validated tile/inset pair; never reset a newer pin.
 
+Consumers that read only the tiles (--tiles-only) get the tile version alone, so their pin moves only
+when the tiles do.
+
 The PR is a draft exactly while something needs a person (see review_reasons), and its body says what to
 do. When a refresh no longer needs review it is marked ready, so CI merges it.
 
@@ -27,14 +30,20 @@ def main():
     parser.add_argument('--first-insets', action='store_true', help='the consumer pins no insets yet')
     parser.add_argument('--run-url', default='', help='The workflow run that built the candidate')
     parser.add_argument('--repo', action='append', help='Consumer repository; repeat for multiple consumers')
+    parser.add_argument('--tiles-only', action='append', default=[], metavar='REPO',
+                        help='Consumer repository that pins only the tiles; repeat for multiple consumers')
     args = parser.parse_args()
     pin, manifest = json.loads(args.pin.read_text()), json.loads(args.manifest.read_text())
     if manifest['tileVersion'] != pin['version'] or not re.fullmatch('[a-f0-9]{24}', manifest['version']):
         raise ValueError('Inset candidate does not match tiles')
-    pin['insets'] = dict(version=manifest['version'], tileVersion=pin['version'])
+    full = dict(pin, insets=dict(version=manifest['version'], tileVersion=pin['version']))
     reasons = review_reasons(args, manifest)
-    for repo in args.repo or ['collisionlab/osrs-planner', 'collisionlab/osrs-coord-preview']:
-        pin_repo(repo, pin, manifest, reasons, args.run_url)
+    if not args.repo and not args.tiles_only:
+        args.repo, args.tiles_only = ['collisionlab/osrs-planner'], ['collisionlab/osrs-coord-preview']
+    for repo in args.repo or []:
+        pin_repo(repo, full, manifest, reasons, args.run_url)
+    for repo in args.tiles_only:
+        pin_repo(repo, pin, None, [reason for reason in reasons if reason[0].startswith('tiles:')], args.run_url)
 
 
 def unnamed(manifest_dir):
@@ -86,9 +95,14 @@ def review_reasons(args, manifest):
 KEYS = re.compile(r'<!-- review-keys: (.*?) -->')
 
 
+def title(pin, manifest):
+    return f"Use inset assets {manifest['version']}" if manifest else f"Use tiles {pin['version']}"
+
+
 def body(pin, manifest, reasons, run_url, accepted=False):
     text = (f"Use tiles `{pin['version']}` with inset metadata `{manifest['version']}`.\n\n"
-            "The build checked cache hashes and required native tile coverage.\n\n")
+            "The build checked cache hashes and that the tiles cover every inset area.\n\n" if manifest else
+            f"Use tiles `{pin['version']}`.\n\n")
     if accepted:
         text += ("**No action needed.** A person marked this ready after checking it; CI merges it once it "
                  "passes, and the merge releases it. Checked:\n\n"
@@ -124,6 +138,8 @@ def pin_repo(repo, pin, manifest, reasons, run_url):
             if newer.returncode != 0:
                 raise ValueError('Cannot establish tile renderer ordering')
         updated = {**current, **pin}
+        if manifest is None:
+            updated.pop('insets', None)  # Tiles-only consumers read no inset bundle.
         if current == updated:
             print(f'{repo} already pins this pair')
             return
@@ -142,14 +158,14 @@ def pin_repo(repo, pin, manifest, reasons, run_url):
         (work / 'tiles.json').write_text(json.dumps(updated, indent=2) + '\n')
         run('git', 'add', 'tiles.json', cwd=work)
         run('git', '-c', 'user.name=collisionlab-bot', '-c', 'user.email=collisionlab-bot@users.noreply.github.com',
-            'commit', '-m', f"Use inset assets {manifest['version']}", cwd=work)
+            'commit', '-m', title(pin, manifest), cwd=work)
         # Back to draft before the push, so CI on the new head can't merge it.
         if existing_prs and draft and not existing_prs[0].get('isDraft'):
             run('gh', 'pr', 'ready', str(existing_prs[0]['number']), '--undo', '--repo', repo, cwd=work)
         run('git', 'push', f'--force-with-lease=refs/heads/{branch}:{previous_head}', 'origin', branch, cwd=work)
         body_file = work / 'body.md'
         body_file.write_text(body(pin, manifest, reasons, run_url, accepted))
-        common = ['--repo', repo, '--title', f"Use inset assets {manifest['version']}", '--body-file', str(body_file)]
+        common = ['--repo', repo, '--title', title(pin, manifest), '--body-file', str(body_file)]
         if existing_prs:
             number = str(existing_prs[0]['number'])
             run('gh', 'pr', 'edit', number, *common, cwd=work)

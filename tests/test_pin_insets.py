@@ -37,7 +37,7 @@ class PinTest(unittest.TestCase):
                             module.main()
                     ancestry.assert_not_called()
 
-    def test_defaults_update_both_consumers_preserving_fields(self):
+    def test_defaults_pin_insets_in_the_planner_and_only_tiles_in_coord_preview(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             pin = dict(base='https://tiles', version='2-renderer', styles=['standard', 'tactical'])
@@ -49,15 +49,20 @@ class PinTest(unittest.TestCase):
                 commands.append(command)
                 if command[:3] == ('gh', 'repo', 'clone'):
                     repositories.append(command[3])
-                    (Path(command[4]) / 'tiles.json').write_text(json.dumps(dict(version='1-renderer', custom=True)))
+                    (Path(command[4]) / 'tiles.json').write_text(json.dumps(dict(version='1-renderer', custom=True,
+                        insets=dict(version='b'*24, tileVersion='1-renderer'))))
                 if command[:2] == ('git', 'add'):
                     written.append(json.loads((kwargs['cwd'] / 'tiles.json').read_text()))
                 return SimpleNamespace(stdout='[]' if command[:3] == ('gh', 'pr', 'list') else '')
             with patch.object(module, 'run', side_effect=run), patch('sys.argv', ['pin-insets', str(root/'pin.json'), str(root/'manifest.json'), '--first-insets']):
                 module.main()
             self.assertEqual(repositories, ['collisionlab/osrs-planner', 'collisionlab/osrs-coord-preview'])
-            self.assertEqual(written, [{**pin, 'custom': True, 'insets': dict(version='a'*24, tileVersion=pin['version'])}]*2)
-            self.assertEqual(sum('--draft' in c for c in commands), 2)
+            self.assertEqual(written, [{**pin, 'custom': True, 'insets': dict(version='a'*24, tileVersion=pin['version'])},
+                                       {**pin, 'custom': True}])
+            # The first insets need a look in the planner; coord-preview reads no insets.
+            created = [c for c in commands if c[:3] == ('gh', 'pr', 'create')]
+            self.assertEqual(['--draft' in c for c in created], [True, False])
+            self.assertIn('Use tiles 2-renderer', created[1])
 
     def test_repeated_repo_arguments_and_already_pinned_are_noops(self):
         with tempfile.TemporaryDirectory() as temporary:

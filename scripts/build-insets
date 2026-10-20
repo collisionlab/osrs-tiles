@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""Build an immutable inset candidate against a published Explv tiles manifest.
+"""Build an immutable inset candidate against a published tile version. See docs/tiles.md.
 
-Metadata-only changes reuse imagery. Only native squares absent from the pinned
-plane-0 index are rendered as supplemental imagery, in the same layout: tactical
-under planes/, and standard under planes-standard/ when the pin has a standard
-style, so the planner can cut insets for either style. The manifest's
-supplementalStyles names each style's directory.
+An inset bundle is metadata only: its areas are cut from the pinned tiles, which cover every plane. The
+build checks that every pinned style has a native tile for each map square an area covers.
 """
 import argparse
 import hashlib
@@ -48,30 +45,25 @@ def required_squares(catalogue):
     return result
 
 
-# Where each style's supplemental tiles go; tactical keeps the directory older planners read.
-SUPPLEMENTAL_DIRS = {'tactical': 'planes', 'standard': 'planes-standard'}
-
-
-def native_path(square):
-    return f'8/{(square >> 8) - 15}/{(square & 255) - 19}.png'
+def native_path(plane, square):
+    """A zoom-8 tile's path in a style directory (Tiles.planePath)."""
+    return f"{f'p{plane}/' if plane else ''}8/{(square >> 8) - 15}/{(square & 255) - 19}.png"
 
 
 def build(args):
     pin = json.loads(args.pin.read_text())
-    tiles_base = f"{pin['base']}/tactical/{pin['version']}"
-    tile_manifest, tile_index = fetch(f'{tiles_base}/manifest.json'), fetch(f'{tiles_base}/index.json')
-    # Supplemental imagery for each published style; tactical first, as the default.
-    styles = ['tactical'] + (['standard'] if 'standard' in pin.get('styles', []) else [])
-    if 'standard' in styles:
-        standard_index = fetch(f"{pin['base']}/standard/{pin['version']}/index.json")
-        if set(standard_index) != set(tile_index):
-            raise ValueError('Pinned standard and tactical tiles cover different squares')
+    styles = pin.get('styles', ['tactical'])
+    tile_manifests = {style: fetch(f"{pin['base']}/{style}/{pin['version']}/manifest.json") for style in styles}
     cache_hash = digest((args.cache / 'main_file_cache.idx255').read_bytes())
     keys_hash = digest(args.xteas.read_bytes())
-    if (tile_manifest.get('layout') != 'explv-tms-v1' or tile_manifest.get('plane') != 0
-            or tile_manifest.get('cacheIdx255Sha256') != cache_hash
-            or tile_manifest.get('xteasSha256') != keys_hash):
-        raise ValueError('Cache/keys do not match pinned imagery')
+    for tile_manifest in tile_manifests.values():
+        if len(tile_manifest.get('planes', [])) != 4:
+            raise ValueError('Pinned tiles predate the all-plane layout')
+        if (tile_manifest.get('layout') != 'explv-tms-v1'
+                or tile_manifest.get('cacheIdx255Sha256') != cache_hash
+                or tile_manifest.get('xteasSha256') != keys_hash):
+            raise ValueError('Cache/keys do not match pinned imagery')
+    tile_manifest = tile_manifests[styles[0]]
     transports, transport_hash = read_transports(args.transports)
     inputs = dict(cacheIdx255Sha256=cache_hash, xteasSha256=keys_hash, styles=styles,
                   tileVersion=pin['version'], tileManifestSha256=digest(encoded(tile_manifest).encode()),
@@ -115,50 +107,17 @@ def build(args):
         write(out / 'labels.json', labels)
         write(out / 'review.json', report)
         required = required_squares(catalogue)
-        supplemental = [set() for _ in range(4)]
-        for plane, squares in enumerate(required):
-            missing = squares - ({s for s in squares if native_path(s) in tile_index} if plane == 0 else set())
-            supplemental[plane] = missing
-            if not missing:
-                continue
-            square_file = out / f'squares-{plane}.json'
-            write(square_file, sorted(missing))
-            xs, ys = [s >> 8 for s in missing], [s & 255 for s in missing]
-            raster_key = digest(encoded(dict(cache=cache_hash, keys=keys_hash, plane=plane, squares=sorted(missing),
-                source={p: h for p, h in inputs['sourceHashes'].items() if p.startswith('src/main/java/')},
-                build=inputs['buildHashes'])).encode())
-            render = args.output.parent / 'inset-raster' / raster_key / '-'.join(styles)
-            flags = ['--cache', str(args.cache.resolve()), '--xteas', str(args.xteas.resolve()),
-                     '--out', str(render.resolve()), '--styles', ','.join(styles), '--plane', str(plane),
-                     '--extent', f'{min(xs)},{min(ys)},{max(xs)},{max(ys)}',
-                     '--squares', str(square_file.resolve())]
-            if not all((render / style / 'manifest.json').is_file() for style in styles):
-                if render.exists():
-                    shutil.rmtree(render)  # Partial cached renders never become candidates.
-                subprocess.run(['gradle', '-q', 'tiles', '--args=' + shlex.join(flags)], check=True, cwd=ROOT)
-            for style in styles:
-                generated = render / style
-                manifest = json.loads((generated / 'manifest.json').read_text())
-                index = json.loads((generated / 'index.json').read_text())
-                if manifest['missingKeyRegions'] or any(native_path(s) not in index for s in missing):
-                    raise ValueError(f'Incomplete supplemental {style} plane {plane}')
-                for relative, expected in index.items():
-                    if digest((generated / relative).read_bytes()) != expected:
-                        raise ValueError('Supplemental tile hash mismatch')
-                destination = out / SUPPLEMENTAL_DIRS[style] / str(plane)
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copytree(generated, destination)
-                # Cached pixels must produce the same release bytes as a cold render.
-                # Full renderer source hashes are already recorded in the outer inputs.
-                manifest.pop('rendererCommit', None)
-                write(destination / 'manifest.json', manifest)
-            square_file.unlink()
+        for style in styles:
+            index = fetch(f"{pin['base']}/{style}/{pin['version']}/index.json")
+            missing = sorted((plane, square) for plane, squares in enumerate(required) for square in squares
+                             if native_path(plane, square) not in index)
+            if missing:
+                raise ValueError(f'Pinned {style} tiles lack {len(missing)} map squares the insets cover, '
+                                 f'such as plane {missing[0][0]} square {missing[0][1] >> 8},{missing[0][1] & 255}')
         files = {str(p.relative_to(out)): digest(p.read_bytes()) for p in sorted(out.rglob('*.json'))}
-        manifest = dict(schemaVersion=1, layout='explv-tms-v1', version=version,
+        manifest = dict(schemaVersion=2, layout='explv-tms-v1', version=version,
                         tileVersion=pin['version'], cacheIdx255Sha256=cache_hash, inputs=inputs,
                         files=files, planes=[sorted(s) for s in required],
-                        supplemental=[sorted(s) for s in supplemental],
-                        supplementalStyles={style: SUPPLEMENTAL_DIRS[style] for style in styles},
                         componentCount=len(catalogue['regions']), namingReviewCount=len(report['issues']))
         write(out / 'manifest.json', manifest)
         if final.exists():

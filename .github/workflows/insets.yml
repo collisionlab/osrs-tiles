@@ -76,9 +76,7 @@ jobs:
           python3 -I scripts/fetch-tile-keys work/candidate/pin.json work/source/keys.json
       - uses: actions/cache@v4
         with:
-          path: |
-            work/inset-topology
-            work/inset-raster
+          path: work/inset-topology
           key: inset-cache-${{ steps.cache.outputs.id }}-${{ hashFiles('src/**', 'build.gradle', 'settings.gradle', 'flake.lock') }}
       - name: Build and validate inset candidate
         id: build
