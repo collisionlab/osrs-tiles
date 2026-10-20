@@ -47,10 +47,10 @@ never rendered, and an upper plane renders only the 16×16-square blocks that ha
 | 2 | 478 | 1,076 |
 | 3 | 226 | 577 |
 
-Locally, rendering both styles takes about 5 minutes: plane 0 in about 50–70 s per style, and
-planes 1–3 in about 100 s more. In CI, plane 0 alone took 100–120 s per style. A style is about
-55–65 MB, and its upper planes about 16 MB of that. Rendering an upper plane in smaller blocks is
-slower: each render has a fixed cost that outweighs the area saved.
+In CI (publish run for `2740-07d92fc06f50`), each style renders plane 0 in 65–90 s and all four
+planes in 195–210 s, so about 7 minutes for both. Uploading takes about 5.5 minutes, and the whole
+publish about 14. A style is about 55–65 MB, and its upper planes about 16 MB of that. Rendering an
+upper plane in smaller blocks is slower: each render has a fixed cost that outweighs the area saved.
 
 **Built by** `.github/workflows/publish.yml`: Thursdays at 06:00 UTC, after Wednesday's game update;
 on renderer pushes to `main`; or by hand with an optional cache id. For a new version it:
