@@ -71,15 +71,15 @@ planner cuts each area's pixels from the pinned tiles of its plane.
 
 | File | Contents | Read by |
 |---|---|---|
-| `manifest.json` | `schemaVersion` 2; `version`, `tileVersion` (the tiles it was built and checked against), cache hash, `files` (sha256 of each file below), `planes` (the map squares the areas cover, per plane), `inputs`, `componentCount`, `namingReviewCount`. Uploaded last | planner (checks it matches the pinned tiles, and the hashes); `compare-insets`; pin scripts |
+| `manifest.json` | `schemaVersion` 2; `version`, `tileVersion` (the tiles it was built and checked against), cache hash, `files` (sha256 of each file below), `planes` (the map squares the areas cover, per plane), `inputs`, `componentCount`, `reviewCount` (the issues in `review.json`). Uploaded last | planner (checks it matches the pinned tiles, and the hashes); `compare-insets`; pin scripts |
 | `regions.json` | every connected area of visible terrain, per plane: `id`, `plane`, `bounds`, `mask` (rectangles), `classification` (`inset`, `main-world`, `mixed`), `tileCount`; and `surfaceRects`, the main map's frame | planner: which area each route tile is in, clipping and outlining insets, which tiles to cut, placement and click hit-testing |
 | `labels.json` | `regions[id]` = `{name, plane, status, areas}` (status `named`, `descriptive` or `unresolved`) and `evidence` for each name | planner: inset headers, door markers and the AREA search (only labels that aren't `unresolved`) |
-| `anchors.json` | `connections` (transport rows matched to areas); `regions[id].anchors` and `defaultAnchor` (ways in from the surface); `reachableRegionIds` (areas some chain of transports reaches) | planner, fetched when first needed: entrances and door markers. The labeller and the pin scripts use the rest |
-| `review.json` | reachable areas without a name | `pin-insets` (the pin PR's "Action needed"), the planner's `scripts/pin-status` |
+| `anchors.json` | `connections` (transport rows matched to areas, and curated anchors); `regions[id].anchors` and `defaultAnchor` (where the area hangs off the main map: a surface point and the chain of connections from it); `reachableRegionIds` (areas some chain of transports reaches); `curatedIssues` | planner, fetched when first needed: placement, entrances and door markers. The labeller and the pin scripts use the rest |
+| `review.json` | reachable areas without a name or an anchor, and curated decisions that no longer fit the terrain; `requiredNamed`, `requiredAnchored` | `pin-insets` (the pin PR's "Action needed"), the planner's `scripts/pin-status` |
 
 The version is a hash of every input: cache and key hashes, tile version and manifest, the pinned
 plugin's transports, this repository's sources, `data/inset-labels/`, and the build files. The
-naming rules and how to add a name are in the README's "Inset sidecar" section.
+rules for names and anchors are below.
 
 **Built by** `.github/workflows/insets.yml`:
 - after each publish;
@@ -89,6 +89,45 @@ naming rules and how to add a name are in the README's "Inset sidecar" section.
 The build (`scripts/build-insets`) extracts terrain from the cache, finds the areas, matches
 transports, compiles names, and then **checks that every style of the tile version has a tile for
 every map square an area covers**. A tile version from before all planes were rendered is rejected.
+
+## Names and anchors
+
+**Every reachable area needs a name and an anchor.** Reachable means some chain of transport rows
+leads there, following each row's own direction and counting every file, leagues and teleports
+included, from the main world or from a row with no source, such as a spell. The name is what the
+planner's area search lists. The anchor is where the planner places the area: beside a point on the
+main map, linked by a line, instead of above the map. A reachable area without either is an issue in
+`review.json`, which keeps the pin PR a draft (osrs-planner's `docs/deployment.md`).
+
+Names come only from `data/inset-labels/annotations.json`, each tied to evidence in `sources.json`
+or to a connection; `scripts/label_inset_regions.py --worklist` suggests evidence. Anchors are worked
+out by `scripts/anchor_inset_regions.py`, preferring, in order:
+
+1. **Physical connections**: ladders, stairs, doors and agility shortcuts in `transports.tsv` and
+   `agility_shortcuts.tsv`, recognised by their action. They count in both directions, since a
+   ladder up out of an area places it as well as one down into it.
+2. **Curated anchors**, for areas no transport places. Areas entered by digging, through a fairy
+   ring, through floors with no terrain, or through an entrance missing from the transport data.
+3. **Any other transport with a source tile**: a lever, a portal, an NPC such as the Light creature
+   into the Chasm of Tears. These count only in their own direction. Seasonal rows never anchor, nor
+   do network stations (a source tile with more than two destinations in one file, such as a fairy
+   ring or a spirit tree).
+
+Among anchors of the same kind, fewer hops win; an anchor through a non-physical connection is used
+only when no physical or curated one exists. A transport endpoint off every area's terrain (stairs
+often land a tile or two off the floor they lead to) joins the only area with terrain within two
+tiles, and stays unmatched when there are none or several.
+
+To add a curated anchor, give the area's component an `anchor` in `annotations.json`:
+
+```json
+"anchor": {"point": [3654, 3519, 0], "reason": "The Ectofuntus trapdoor leads down to it, ..."}
+```
+
+`point` is on the main map, or inside another area, which the anchor then extends: the Viyeldi
+caves start in the Shaman Caves, so they hang off the Shaman Caves' entrance in the Kharazi Jungle.
+Areas reached only by fairy ring start in Zanaris. An anchor whose point isn't on the main map or
+in another area, or whose seed no longer lies in its component, is a `review.json` issue.
 
 ## Who pins what
 

@@ -76,6 +76,11 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
                 issues.append(dict(area=key, componentId=rid, seed=point,
                                    nowResolvesTo=endpoint['regionId'], reason='geometry-or-seed-changed'))
                 continue
+            anchor = association.get('anchor')
+            if anchor is not None and (not isinstance(anchor.get('reason'), str) or not anchor['reason'].strip()
+                                       or not isinstance(anchor.get('point'), list) or len(anchor['point']) != 3
+                                       or any(type(n) is not int for n in anchor['point'])):
+                raise ValueError(f'{key}/{rid}: an anchor needs a point and a reason')
             refs = association.get('evidence', [])
             if not refs or not association.get('reason'):
                 raise ValueError(f'{key}/{rid}: missing association evidence/reason')
@@ -98,15 +103,20 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
                            status='named' if any(m['status'] == 'named' for m in matches)
                            else 'descriptive' if matches else 'unresolved',
                            plane=region['plane'], areas=matches)
-    # Every inset region a player can reach needs a name: the planner's area search lists only named ones.
+    # Every inset region a player can reach needs a name, which the planner's area search lists, and an
+    # anchor, which places it beside the main map.
     required = set(anchors['reachableRegionIds']) | set(annotations.get('routeRequiredRegionIds', []))
+    issues.extend(anchors.get('curatedIssues', []))
     for rid in sorted(required):
         if rid not in labels or labels[rid]['status'] == 'unresolved':
             issues.append(dict(componentId=rid, reason='required-component-unnamed'))
+        if not anchors['regions'].get(rid, {}).get('anchors'):
+            issues.append(dict(componentId=rid, reason='required-component-unanchored'))
     report = dict(schemaVersion=1, catalogueSha256=catalogue_hash,
                   totals=dict(Counter(r['status'] for r in labels.values())),
                   required=len(required), requiredNamed=sum(labels.get(r, {}).get('status') == 'named' for r in required),
                   requiredDescriptive=sum(labels.get(r, {}).get('status') == 'descriptive' for r in required),
+                  requiredAnchored=sum(bool(anchors['regions'].get(r, {}).get('anchors')) for r in required),
                   issues=issues)
     used_evidence = {ref for matches in assigned.values() for match in matches for ref in match['evidence']}
     return dict(schemaVersion=1, catalogueSha256=catalogue_hash,
@@ -197,8 +207,8 @@ def main():
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(expected)
-    print(f"{report['requiredNamed']} named + {report['requiredDescriptive']} descriptive / "
-          f"{report['required']} required components; all insets: {report['totals']}")
+    print(f"{report['requiredNamed']} named + {report['requiredDescriptive']} descriptive, "
+          f"{report['requiredAnchored']} anchored / {report['required']} required components; all insets: {report['totals']}")
 
 
 if __name__ == '__main__':

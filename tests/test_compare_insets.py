@@ -10,7 +10,7 @@ loader.exec_module(module)
 class CompareTest(unittest.TestCase):
     def test_names_are_advisory_but_substantial_geometry_changes_need_review(self):
         previous = dict(planes=[list(range(100)), [], [], []], componentCount=100)
-        self.assertFalse(module.needs_review({**previous, 'namingReviewCount': 50}, previous))
+        self.assertFalse(module.needs_review({**previous, 'reviewCount': 50}, previous))
         self.assertTrue(module.needs_review({**previous, 'componentCount': 111}, previous))
         self.assertTrue(module.needs_review({**previous, 'planes': [list(range(89)), [], [], []]}, previous))
 

@@ -46,14 +46,22 @@ def main():
         pin_repo(repo, pin, None, [reason for reason in reasons if reason[0].startswith('tiles:')], args.run_url)
 
 
-def unnamed(manifest_dir):
-    """Reachable components without a name, with the coordinate label they fall back to."""
+ANCHORING = {'required-component-unanchored', 'curated-anchor-not-into-component'}
+
+
+def review_issues(manifest_dir):
+    """review.json's issues, each with the coordinate label its component falls back to."""
     review_path, labels_path = manifest_dir / 'review.json', manifest_dir / 'labels.json'
     if not review_path.is_file():
         return []
     regions = json.loads(labels_path.read_text())['regions'] if labels_path.is_file() else {}
     return [dict(issue, fallback=regions.get(issue['componentId'], {}).get('name'))
             for issue in json.loads(review_path.read_text())['issues']]
+
+
+def listed(issues):
+    return ''.join(f"\n  - `{i['componentId']}` ({i['reason']})" + (f": shown as \"{i['fallback']}\"" if i.get('fallback') else '')
+                   for i in issues[:20]) + ('\n  - …' if len(issues) > 20 else '')
 
 
 def review_reasons(args, manifest):
@@ -78,17 +86,25 @@ def review_reasons(args, manifest):
                         f"More than 10% of inset areas or covered map squares differ from the pinned bundle "
                         f"(now {manifest['componentCount']} areas). Check the insets in the planner, then mark this "
                         f"PR ready."))
-    if manifest.get('namingReviewCount'):
-        issues = unnamed(Path(args.manifest).parent)
-        listed = ''.join(f"\n  - `{i['componentId']}` ({i['reason']})" + (f": shown as \"{i['fallback']}\"" if i.get('fallback') else '')
-                         for i in issues[:20]) + ('\n  - …' if len(issues) > 20 else '')
-        reasons.append(('naming:' + ','.join(sorted(i['componentId'] for i in issues)),
-                        f"{manifest['namingReviewCount']} reachable areas have no name, so the planner's area "
-                        f"search can't find them.",
-                        "Name them in osrs-tiles `data/inset-labels/annotations.json` (`scripts/label_inset_regions.py "
-                        "--worklist` suggests evidence) and push to `main`: the rebuild refreshes this PR and marks it "
-                        "ready once nothing else needs review. Or mark it ready now to publish the coordinate "
-                        "labels." + listed))
+    if manifest.get('reviewCount'):
+        issues = review_issues(Path(args.manifest).parent)
+        naming = [i for i in issues if i['reason'] not in ANCHORING]
+        anchoring = [i for i in issues if i['reason'] in ANCHORING]
+        if naming:
+            reasons.append(('naming:' + ','.join(sorted(i['componentId'] for i in naming)),
+                            f"{len(naming)} reachable areas have no name, so the planner's area search can't find them.",
+                            "Name them in osrs-tiles `data/inset-labels/annotations.json` (`scripts/label_inset_regions.py "
+                            "--worklist` suggests evidence) and push to `main`: the rebuild refreshes this PR and marks it "
+                            "ready once nothing else needs review. Or mark it ready now to publish the coordinate "
+                            "labels." + listed(naming)))
+        if anchoring:
+            reasons.append(('anchors:' + ','.join(sorted(i['componentId'] for i in anchoring)),
+                            f"{len(anchoring)} reachable areas have no anchor, so the planner can't place them beside "
+                            f"the main map.",
+                            "Give each an `anchor` in osrs-tiles `data/inset-labels/annotations.json`: a point on the "
+                            "surface, or in an area that has an anchor, and a reason (see `docs/tiles.md`). Push to "
+                            "`main`: the rebuild refreshes this PR and marks it ready once nothing else needs review. Or "
+                            "mark it ready now to show them above the map." + listed(anchoring)))
     return reasons
 
 
