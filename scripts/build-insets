@@ -97,11 +97,11 @@ def build(args):
         catalogue['topologySha256'] = digest(raw)
         write(out / 'regions.json', catalogue)
         catalogue_hash = digest((out / 'regions.json').read_bytes())
-        anchors = build_anchors(catalogue, transports)
-        anchors.update(catalogueSha256=catalogue_hash, transportsSha256=transport_hash)
-        write(out / 'anchors.json', anchors)
         sources = json.loads((ROOT / 'data/inset-labels/sources.json').read_text())
         annotations = json.loads((ROOT / 'data/inset-labels/annotations.json').read_text())
+        anchors = build_anchors(catalogue, transports, annotations)
+        anchors.update(catalogueSha256=catalogue_hash, transportsSha256=transport_hash)
+        write(out / 'anchors.json', anchors)
         labels, report = compile_labels(catalogue, anchors, sources, annotations, catalogue_hash)
         # Uncertain associations stay unresolved: compile_labels never guesses a name.
         write(out / 'labels.json', labels)
@@ -118,7 +118,7 @@ def build(args):
         manifest = dict(schemaVersion=2, layout='explv-tms-v1', version=version,
                         tileVersion=pin['version'], cacheIdx255Sha256=cache_hash, inputs=inputs,
                         files=files, planes=[sorted(s) for s in required],
-                        componentCount=len(catalogue['regions']), namingReviewCount=len(report['issues']))
+                        componentCount=len(catalogue['regions']), reviewCount=len(report['issues']))
         write(out / 'manifest.json', manifest)
         if final.exists():
             raise ValueError(f'Incomplete candidate already exists: {final}')

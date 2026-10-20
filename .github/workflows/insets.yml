@@ -89,7 +89,7 @@ jobs:
           test -n "$manifest"
           python3 scripts/compare-insets "$manifest" planner/tiles.json > work/geometry-review
           echo "manifest=$manifest" >> "$GITHUB_OUTPUT"
-          jq '{version,tileVersion,componentCount,namingReviewCount}' "$manifest" >> "$GITHUB_STEP_SUMMARY"
+          jq '{version,tileVersion,componentCount,reviewCount}' "$manifest" >> "$GITHUB_STEP_SUMMARY"
       - name: Publish
         run: nix develop -c scripts/upload-insets "$(dirname '${{ steps.build.outputs.manifest }}')"
       - uses: actions/upload-artifact@v4

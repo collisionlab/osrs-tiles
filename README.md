@@ -347,13 +347,10 @@ publication, daily to detect transport changes in the planner's pinned tooling,
 and when inset code or curated labels change. `scripts/build-insets` extracts
 cache terrain with `InsetTopology`, discovers exact connected masks, builds
 entrance evidence and compiles reviewed names. Every inset component a player
-can reach needs a name, because the planner's area search lists only named
-areas. Reachable means that some chain of transport rows leads there, following
-each row's own direction and counting every file, teleports included, starting
-from the main world or from a row with no source, such as a spell
-(`reachableRegionIds` in `anchors.json`). A changed component or missing name
-uses a coordinate label and appears in `review.json`. Unknown or removed
-evidence never supplies a name.
+can reach needs a name and an anchor; [docs/tiles.md](docs/tiles.md#names-and-anchors)
+has the rules and how to add either. A changed component or missing name uses a
+coordinate label and appears in `review.json`. Unknown or removed evidence never
+supplies a name.
 
 The bundle is metadata only and is cut from the pinned tiles, which cover every
 plane; [docs/tiles.md](docs/tiles.md) describes its files and who reads them.
@@ -366,11 +363,10 @@ latest pointer.
 `scripts/compare-insets` requests review for the first release or >10% change in
 component count or covered map squares, and `scripts/tile-review` for more than
 10% of a style's tiles changed (recomputed from the published indexes on every
-run). Those, the first insets, and a reachable component without a name keep
-the pin PR a **draft**, and its body lists each one under "Action needed" with
-what to do: check and mark it ready, or for names, add them in
-`data/inset-labels/annotations.json` (`scripts/label_inset_regions.py
---worklist` suggests evidence). A refresh with nothing left to check marks the
+run). Those, the first insets, and a reachable component without a name or an
+anchor keep the pin PR a **draft**, and its body lists each one under "Action
+needed" with what to do: check and mark it ready, or add the names and anchors
+in `data/inset-labels/annotations.json`. A refresh with nothing left to check marks the
 PR ready, so CI merges it. A PR a person marked ready stays ready while every
 remaining reason is one it already listed (`review-keys` in the body).
 While a pin PR is open, every run builds for its tiles, not `main`'s, so a

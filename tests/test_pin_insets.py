@@ -20,7 +20,7 @@ class PinTest(unittest.TestCase):
                 pin = root / 'pin.json'
                 manifest = root / 'manifest.json'
                 pin.write_text(json.dumps(dict(base='https://tiles', version=candidate, styles=['tactical'])))
-                manifest.write_text(json.dumps(dict(version='a'*24, tileVersion=candidate, namingReviewCount=0)))
+                manifest.write_text(json.dumps(dict(version='a'*24, tileVersion=candidate, reviewCount=0)))
                 commands = []
                 def run(*command, **kwargs):
                     commands.append(command)
@@ -41,7 +41,7 @@ class PinTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             pin = dict(base='https://tiles', version='2-renderer', styles=['standard', 'tactical'])
-            manifest = dict(version='a'*24, tileVersion=pin['version'], namingReviewCount=0)
+            manifest = dict(version='a'*24, tileVersion=pin['version'], reviewCount=0)
             (root / 'pin.json').write_text(json.dumps(pin))
             (root / 'manifest.json').write_text(json.dumps(manifest))
             repositories, written, commands = [], [], []
@@ -79,16 +79,18 @@ class PinTest(unittest.TestCase):
             self.assertEqual([c[3] for c in commands], ['owner/one', 'owner/two'])
             self.assertTrue(all(c[:3] == ('gh', 'repo', 'clone') for c in commands))
 
-    def pin_with(self, flags, draft, naming=(), previous=''):
+    def pin_with(self, flags, draft, naming=(), previous='', anchoring=()):
         """Refresh an open pin PR; returns the commands run and the body written."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             pin = dict(base='https://tiles', version='2-renderer', styles=['tactical'])
-            manifest = dict(version='a'*24, tileVersion=pin['version'], namingReviewCount=len(naming), componentCount=9)
+            manifest = dict(version='a'*24, tileVersion=pin['version'], reviewCount=len(naming) + len(anchoring), componentCount=9)
             (root / 'pin.json').write_text(json.dumps(pin))
             (root / 'manifest.json').write_text(json.dumps(manifest))
             (root / 'review.json').write_text(json.dumps(dict(issues=[dict(componentId=c, reason='required-component-unnamed')
-                                                                      for c in naming])))
+                                                                      for c in naming]
+                                                              + [dict(componentId=c, reason='required-component-unanchored')
+                                                                 for c in anchoring])))
             (root / 'labels.json').write_text(json.dumps(dict(regions={c: dict(name=f'Unidentified terrain at {c}')
                                                                        for c in naming})))
             commands, bodies = [], []
@@ -123,6 +125,14 @@ class PinTest(unittest.TestCase):
         self.assertIn('**draft**', body)
         self.assertIn('The inset areas changed a lot.', body)
         self.assertIn('1 reachable areas have no name', body)
+        self.assertNotIn('no anchor', body)
+
+    def test_unanchored_areas_get_their_own_action(self):
+        _, body = self.pin_with([], draft=False, naming=['p0-1-2-abc'], anchoring=['p0-3-4-def', 'p0-1-2-abc'])
+        self.assertIn('- [ ] **1 reachable areas have no name', body)
+        self.assertIn('- [ ] **2 reachable areas have no anchor', body)
+        self.assertIn('`p0-3-4-def` (required-component-unanchored)', body)
+        self.assertIn('<!-- review-keys: naming:p0-1-2-abc anchors:p0-1-2-abc,p0-3-4-def -->', body)
         self.assertIn('`p0-1-2-abc` (required-component-unnamed): shown as "Unidentified terrain at p0-1-2-abc"', body)
         self.assertIn('mark it ready', body)
         self.assertIn('Built by https://run.', body)

@@ -1,15 +1,33 @@
 #!/usr/bin/env python3
-"""Precompute geographic inset anchors from explicit, directed transport records."""
+"""Precompute where each inset area hangs off the main map, from transport records and curated anchors.
+
+An anchor is a surface point and the chain of connections from it into an area. Every reachable area
+needs one (label_inset_regions reports those without). In order of preference, anchors come from:
+
+- physical connections (ladders, stairs, doors: `policy` local), followed in either direction;
+- curated anchors in `data/inset-labels/annotations.json`, for areas no transport places, such as
+  ones entered by digging. One starts on the surface or in another area, whose anchors it extends;
+- any other transport with a source tile (a lever, a portal, an NPC), followed in its own direction.
+  Seasonal rows and network hubs (a source tile with more than two destinations in one file, such as a
+  fairy ring) never anchor.
+"""
 import argparse
 import bisect
 import csv
 import hashlib
+import heapq
 import json
 from collections import Counter, defaultdict, deque
 from pathlib import Path
 
 
 LOCAL_FILES = {'transports.tsv', 'agility_shortcuts.tsv'}
+# Never anchors: these rows exist only in leagues and other seasonal worlds.
+SEASONAL_FILES = {'seasonal_transports.tsv'}
+# A source tile with more destinations than this in one file is a network station, not an entrance.
+HUB_DESTINATIONS = 2
+# An endpoint off every area's terrain joins the only inset area within this many tiles.
+SNAP_TILES = 2
 PHYSICAL_ACTIONS = {
     'ascend', 'balance', 'bottom-floor', 'cellar', 'chop-down', 'climb',
     'climb-down', 'climb-into', 'climb-off', 'climb-over', 'climb-through',
@@ -104,17 +122,34 @@ class RegionIndex:
                 raise ValueError('Region masks overlap on the same plane')
         self.surface = catalogue['surfaceRects']
 
+    def region_at(self, x, y, plane):
+        intervals = self.rows.get((plane, y), [])
+        index = bisect.bisect_right(intervals, (x, 16384, '\uffff')) - 1
+        return intervals[index][2] if index >= 0 and x < intervals[index][1] else None
+
+    def nearby_insets(self, x, y, plane):
+        """Inset areas with terrain within SNAP_TILES of a point."""
+        found = set()
+        for row in range(y - SNAP_TILES, y + SNAP_TILES + 1):
+            for start, end, region_id in self.rows.get((plane, row), []):
+                if start <= x + SNAP_TILES and end > x - SNAP_TILES and self.regions[region_id]['classification'] == 'inset':
+                    found.add(region_id)
+        return found
+
     def endpoint(self, point):
         if point is None:
             return None
         x, y, plane = point
-        intervals = self.rows.get((plane, y), [])
-        index = bisect.bisect_right(intervals, (x, 16384, '\uffff')) - 1
-        region_id = intervals[index][2] if index >= 0 and x < intervals[index][1] else None
+        region_id = self.region_at(x, y, plane)
         on_surface = any(rx <= x < rx + w and ry <= y < ry + h for _, rx, ry, w, h in self.surface)
+        membership = 'mask' if region_id else 'surface-footprint' if on_surface else 'unmatched'
+        if membership == 'unmatched':
+            # Stairs often land a tile or two off the floor they lead to. Snap only when that is unambiguous.
+            nearby = self.nearby_insets(x, y, plane)
+            if len(nearby) == 1:
+                region_id, membership = nearby.pop(), 'snapped'
         kind = 'surface' if on_surface else 'inset' if region_id and self.regions[region_id]['classification'] == 'inset' else 'unknown'
-        return dict(point=point, regionId=region_id, kind=kind,
-                    membership='mask' if region_id else 'surface-footprint' if on_surface else 'unmatched')
+        return dict(point=point, regionId=region_id, kind=kind, membership=membership)
 
 
 def reachable(index, connections):
@@ -132,6 +167,8 @@ def reachable(index, connections):
     reached = set()
     for connection in connections.values():
         source, target = connection['source'], connection['target']
+        if connection['policy'] == 'curated':
+            continue  # placement, not a way in
         if not target or not target['regionId'] or index.regions[target['regionId']]['classification'] != 'inset':
             continue
         if entered(source):
@@ -147,10 +184,45 @@ def reachable(index, connections):
     return sorted(reached)
 
 
-def build_anchors(catalogue, transports):
+def curated_connections(index, curated):
+    """Connections for annotations.json's anchors: from a surface point, or a point in another area, to the area's seed."""
+    connections, issues = {}, []
+    for entry in curated:
+        source, target = index.endpoint(entry['point']), index.endpoint(entry['seed'])
+        if (source['kind'] not in ('surface', 'inset') or source['regionId'] == entry['componentId']
+                or target['regionId'] != entry['componentId'] or target['kind'] != 'inset'):
+            issues.append(dict(area=entry['area'], componentId=entry['componentId'], point=entry['point'],
+                               reason='curated-anchor-not-into-component'))
+            continue
+        connection_id = 'a-' + hashlib.sha256(json.dumps([entry['area'], entry['componentId']]).encode()).hexdigest()[:16]
+        connections[connection_id] = dict(id=connection_id, source=source, target=target, action='', label=entry['reason'],
+                                          conditions={}, duration='', policy='curated', reason='annotations.json',
+                                          sources=[dict(file='annotations.json', area=entry['area'])])
+    return connections, issues
+
+
+def curated_anchors(annotations):
+    """The `anchor` of every component association in annotations.json."""
+    return [dict(area=area['key'], componentId=association['componentId'], seed=association['seed'],
+                 point=association['anchor']['point'], reason=association['anchor']['reason'])
+            for area in (annotations or {}).get('areas', []) for association in area['components']
+            if association.get('anchor')]
+
+
+def hubs(transports):
+    """(file, source point) pairs with more than HUB_DESTINATIONS destinations: network stations."""
+    targets = defaultdict(set)
+    for row in transports:
+        if row['source'] and row['target']:
+            targets[row['file'], tuple(row['source'])].add(tuple(row['target']))
+    return {key for key, points in targets.items() if len(points) > HUB_DESTINATIONS}
+
+
+def build_anchors(catalogue, transports, annotations=None):
     index = RegionIndex(catalogue)
     connections = {}
     totals = Counter()
+    hub_sources = hubs(transports)
     for row in transports:
         totals['transportRows'] += 1
         source, target = index.endpoint(row['source']), index.endpoint(row['target'])
@@ -171,11 +243,18 @@ def build_anchors(catalogue, transports):
             continue
         if kind == 'local' and any(e and e['kind'] == 'unknown' for e in (source, target)):
             kind, reason = 'review', 'endpoint-not-classified-as-inset-or-surface'
+        # Whether this row places its target when nothing physical does (see the module docstring).
+        directed = (kind != 'local' and source is not None and row['file'] not in SEASONAL_FILES
+                    and (row['file'], tuple(row['source'])) not in hub_sources)
         connections[connection_id] = dict(id=connection_id, source=source, target=target,
             action=row['action'], label=row['label'], conditions=row['conditions'], duration=row['duration'],
-            policy=kind, reason=reason, sources=[dict(file=row['file'], line=row['line'])])
+            policy=kind, reason=reason, anchors='directed' if directed else 'undirected' if kind == 'local' else 'no',
+            sources=[dict(file=row['file'], line=row['line'])])
+    curated, curated_issues = curated_connections(index, curated_anchors(annotations))
+    connections.update(curated)
     connections = dict(sorted(connections.items()))
     by_region = defaultdict(list)
+    # Edges carry how many non-physical connections they cost: anchors use as few as they can.
     graph = defaultdict(list)
     seeds = defaultdict(list)
     for connection in connections.values():
@@ -183,36 +262,55 @@ def build_anchors(catalogue, transports):
         for endpoint in (source, target):
             if endpoint and endpoint['kind'] == 'inset':
                 by_region[endpoint['regionId']].append(connection['id'])
-        if connection['policy'] != 'local':
+        if connection['policy'] == 'curated':
+            if source['kind'] == 'surface':
+                seeds[tuple(source['point'])].append((target['regionId'], connection['id'], False, 0))
+            else:
+                graph[source['regionId']].append((target['regionId'], connection['id'], False, 0))
             continue
+        if (connection['anchors'] == 'no' or not source or not target
+                or source['kind'] == 'unknown' or target['kind'] == 'unknown'):
+            continue
+        cost = 0 if connection['anchors'] == 'undirected' else 1
         if source['kind'] == target['kind'] == 'inset':
-            graph[source['regionId']].append((target['regionId'], connection['id'], False))
-            graph[target['regionId']].append((source['regionId'], connection['id'], True))
-        elif {source['kind'], target['kind']} == {'surface', 'inset'}:
-            surface, inset = (source, target) if source['kind'] == 'surface' else (target, source)
-            seeds[tuple(surface['point'])].append((inset['regionId'], connection['id'], source['kind'] == 'inset'))
+            graph[source['regionId']].append((target['regionId'], connection['id'], False, cost))
+            if not cost:
+                graph[target['regionId']].append((source['regionId'], connection['id'], True, cost))
+        elif source['kind'] == 'surface' and target['kind'] == 'inset':
+            seeds[tuple(source['point'])].append((target['regionId'], connection['id'], False, cost))
+        elif source['kind'] == 'inset' and target['kind'] == 'surface' and not cost:
+            seeds[tuple(target['point'])].append((source['regionId'], connection['id'], True, cost))
     region_anchors = defaultdict(list)
     for point, entries in sorted(seeds.items()):
-        # Undirected traversal discovers geographic associations, never account-usable routes.
-        paths = {}
-        queue = deque()
-        for region_id, connection_id, reversed_edge in sorted(entries, key=lambda e: (e[0], e[2], e[1])):
-            if region_id not in paths:
-                paths[region_id] = [dict(connectionId=connection_id, reversed=reversed_edge)]
-                queue.append(region_id)
-        while queue:
-            current = queue.popleft()
-            for neighbour, connection_id, reversed_edge in sorted(graph[current], key=lambda e: (e[0], e[2], e[1])):
-                if neighbour not in paths:
-                    paths[neighbour] = paths[current] + [dict(connectionId=connection_id, reversed=reversed_edge)]
-                    queue.append(neighbour)
-        for region_id, path in paths.items():
-            region_anchors[region_id].append(dict(point=list(point), hops=len(path), path=path))
+        # Geographic associations, never account-usable routes: physical connections count both ways.
+        # Paths are cheapest first by (non-physical connections, hops).
+        best = {}
+        # Ties go to the path whose connections sort first by (reversed, id), as before costs existed.
+        heap = [((cost, 1), region_id, ((reversed_edge, connection_id),))
+                for region_id, connection_id, reversed_edge, cost in entries]
+        heapq.heapify(heap)
+        while heap:
+            key, current, path = heapq.heappop(heap)
+            if current in best:
+                continue
+            best[current] = (key, path)
+            for neighbour, connection_id, reversed_edge, cost in graph[current]:
+                if neighbour not in best:
+                    heapq.heappush(heap, ((key[0] + cost, key[1] + 1), neighbour, path + ((reversed_edge, connection_id),)))
+        for region_id, ((indirect, hops), path) in best.items():
+            region_anchors[region_id].append(dict(point=list(point), hops=hops, indirectConnections=indirect,
+                                                  curated=any(connections[c]['policy'] == 'curated' for _, c in path),
+                                                  path=[dict(connectionId=c, reversed=r) for r, c in path]))
     regions = {}
     for region_id, region in sorted(index.regions.items()):
         if region['classification'] != 'inset':
             continue
-        anchors = sorted(region_anchors[region_id], key=lambda a: (a['hops'], a['point'], [s['connectionId'] for s in a['path']]))
+        anchors = region_anchors[region_id]
+        if anchors:
+            # Only the anchors that need the fewest non-physical connections, curated ones first on a tie.
+            fewest = min(a['indirectConnections'] for a in anchors)
+            anchors = [a for a in anchors if a['indirectConnections'] == fewest]
+        anchors = sorted(anchors, key=lambda a: (a['hops'], not a['curated'], a['point'], [s['connectionId'] for s in a['path']]))
         regions[region_id] = dict(status='direct' if anchors and anchors[0]['hops'] == 1 else 'indirect' if anchors else 'unresolved',
                                  defaultAnchor=0 if anchors else None, anchors=anchors,
                                  connectionIds=sorted(set(by_region[region_id])))
@@ -224,9 +322,13 @@ def build_anchors(catalogue, transports):
     totals['anchoredReferenceEndpoints'] = sum(
         len(c['regionIds']) == 1 and regions.get(c['regionIds'][0], {}).get('status') in ('direct', 'indirect')
         for c in catalogue.get('checks', []))
+    totals['curatedAnchors'] = len(curated)
     return dict(schemaVersion=1, topologySha256=catalogue['topologySha256'],
-                policy='physical actions in transports/agility_shortcuts; no teleport or travel network anchoring; exact mask membership',
-                traversal='undirected geography; stored transport directions and conditions remain authoritative for travel',
+                policy='physical actions in transports/agility_shortcuts, then curated anchors, then other sourced rows '
+                       'except seasonal ones and network hubs; mask membership, or the only inset area within 2 tiles',
+                traversal='physical connections undirected, others in their own direction; stored transport '
+                          'directions and conditions remain authoritative for travel',
+                curatedIssues=curated_issues,
                 insetRegionIds=[region_id for region_id, record in regions.items() if record['anchors']],
                 reachability='directed; every transport row; from the main world or a sourceless row',
                 reachableRegionIds=reachable_ids,
@@ -237,11 +339,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('catalogue', type=Path, nargs='?', default=Path('build/inset-metadata/regions.json'))
     parser.add_argument('--transports-dir', type=Path, default=Path('shortest-path/src/main/resources/transports'))
+    parser.add_argument('--annotations', type=Path, default=Path('data/inset-labels/annotations.json'))
     parser.add_argument('--output', type=Path, default=Path('build/inset-metadata/anchors.json'))
     args = parser.parse_args()
     raw = args.catalogue.read_bytes()
     transports, digest = read_transports(args.transports_dir)
-    result = build_anchors(json.loads(raw), transports)
+    result = build_anchors(json.loads(raw), transports, json.loads(args.annotations.read_text()))
     result['catalogueSha256'] = hashlib.sha256(raw).hexdigest()
     result['transportsSha256'] = digest
     args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -22,8 +22,9 @@ def fixture():
         dict(id='c', plane=0, bounds=[200, 200, 210, 210], classification='inset', tileCount=100,
              mask=[[200, 200, 10, 10]]),
     ])
+    placed = dict(anchors=[dict(point=[5, 5, 0], hops=1, path=[])], defaultAnchor=0, status='direct')
     anchors = dict(schemaVersion=1, catalogueSha256='hash', insetRegionIds=['a', 'b'], reachableRegionIds=['a', 'b'],
-                   regions={}, connections={})
+                   regions=dict(a=placed, b=placed, c=placed), connections={})
     sources = dict(schemaVersion=1, records=[dict(id='pin', name='A dungeon', point=[105, 105, 0], source='wiki:rev1')])
     areas = [dict(key='dungeon', name='A dungeon', status='named', reason='reviewed', aliases=['Old name'], components=[
         dict(componentId='a', seed=[100, 101, 0], evidence=['pin'], reason='Pin in void; independently reviewed seed'),
@@ -72,6 +73,20 @@ class LabelTest(unittest.TestCase):
         anchors['reachableRegionIds'] = ['a']
         _, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
         self.assertEqual((report['issues'], report['required']), ([], 1))
+
+    def test_every_reachable_component_needs_an_anchor(self):
+        cat, anchors, sources, authored = fixture()
+        anchors['regions']['b'] = dict(anchors=[], defaultAnchor=None, status='unresolved')
+        anchors['curatedIssues'] = [dict(area='dungeon', componentId='a', point=[1, 1, 0],
+                                         reason='curated-anchor-not-into-component')]
+        _, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
+        self.assertEqual([i['reason'] for i in report['issues']],
+                         ['curated-anchor-not-into-component', 'required-component-unanchored'])
+        self.assertEqual(report['issues'][1]['componentId'], 'b')
+        self.assertEqual((report['requiredAnchored'], report['required']), (1, 2))
+        authored['areas'][0]['components'][0]['anchor'] = dict(point=[1, 1], reason='Dug into')
+        with self.assertRaisesRegex(ValueError, 'anchor needs a point and a reason'):
+            labels.compile_labels(cat, anchors, sources, authored, 'hash')
 
     def test_candidates_do_not_promote_nearest_labels_or_cross_planes(self):
         cat, anchors, sources, authored = fixture()
@@ -128,7 +143,7 @@ class LabelTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             snapshot.mejrs_records(b'bad,101,1,A dungeon\n')
 
-    def test_reviewed_names_cover_every_required_component(self):
+    def test_reviewed_names_and_anchors_cover_every_required_component(self):
         base = ROOT / 'tests/fixtures'
         raw = (base / 'regions.json').read_bytes()
         catalogue = json.loads(raw)
@@ -150,6 +165,8 @@ class LabelTest(unittest.TestCase):
         self.assertEqual(output['regions']['p0-2528-6277-903188b249']['name'], 'Lassar Undercity')
         self.assertEqual(output['regions']['p0-4033-4356-3931b69953']['name'], 'Ancient Guthixian Temple')
         self.assertEqual(output['regions']['p0-2137-4828-4e2af7ffc0']['name'], 'Cosmic Altar')
+        self.assertEqual(output['regions']['p0-3153-12354-1cfa6b96c1']['name'], 'Iorwerth Dungeon')
+        self.assertEqual(report['requiredAnchored'], report['required'])
         self.assertEqual(report['required'], len(anchors['reachableRegionIds']) + 1)
 
 

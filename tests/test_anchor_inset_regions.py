@@ -49,17 +49,59 @@ class AnchorTest(unittest.TestCase):
         assert connection['target']['point'] == [10, 10, 0]
         assert connection['conditions'] == {'Quests': 'Example quest'}
 
-    def test_teleports_travel_networks_and_unknown_actions_do_not_anchor(self):
-        rows = [transport([10, 10, 0], [100, 100, 0], 'Enter Portal 1'),
-                transport([10, 10, 0], [100, 100, 0], 'Climb-down Ladder 1', file='minecarts.tsv'),
-                transport(None, [100, 100, 0], 'Teleport', file='teleportation_spells.tsv'),
-                transport([10, 10, 0], [100, 100, 0], 'Travel Stranger 1')]
+    def test_sourced_transports_anchor_in_their_own_direction_but_sourceless_seasonal_and_hubs_do_not(self):
+        rows = [transport([10, 10, 0], [100, 100, 0], 'Enter Portal 1', file='teleportation_portals.tsv'),
+                transport([10, 10, 0], [100, 100, 1], 'Attract Light creature 1'),
+                transport(None, [200, 200, 0], 'Teleport', file='teleportation_spells.tsv'),
+                transport([20, 20, 0], [200, 200, 0], 'Teleport Wizard', file='seasonal_transports.tsv')]
+        rows += [transport([30, 30, 0], [200, 200, 0], 'A B C', file='fairy_rings.tsv'),
+                 transport([30, 30, 0], [40, 40, 0], 'A B D', file='fairy_rings.tsv'),
+                 transport([30, 30, 0], [41, 41, 0], 'A B E', file='fairy_rings.tsv')]
         result = anchors.build_anchors(catalogue(), rows)
+        assert result['regions']['a']['anchors'][0]['point'] == [10, 10, 0]
+        assert result['regions']['a']['anchors'][0]['indirectConnections'] == 1
+        assert result['regions']['b']['status'] == 'direct'
+        assert result['regions']['c']['status'] == 'unresolved'
+        assert result['insetRegionIds'] == ['a', 'b']
+        # Only a physical connection counts backwards: an exit portal says nothing about where an area is.
+        exit_only = anchors.build_anchors(catalogue(), [transport([100, 100, 0], [10, 10, 0], 'Exit Portal 1')])
+        assert exit_only['regions']['a']['status'] == 'unresolved'
+
+    def test_a_physical_entrance_beats_any_chain_through_a_transport(self):
+        rows = [transport([10, 10, 0], [100, 100, 0], 'Enter Portal 1', file='teleportation_portals.tsv'),
+                transport([20, 20, 0], [200, 200, 0]),
+                transport([200, 200, 0], [201, 201, 0]),
+                transport([201, 201, 0], [100, 101, 0])]
+        region = anchors.build_anchors(catalogue(), rows)['regions']['a']
+        assert [a['point'] for a in region['anchors']] == [[20, 20, 0]]
+        assert (region['anchors'][0]['hops'], region['anchors'][0]['indirectConnections']) == (2, 0)
+
+    def test_curated_anchors_place_areas_from_the_surface_or_another_area(self):
+        annotations = dict(areas=[
+            dict(key='a', components=[dict(componentId='a', seed=[101, 101, 0],
+                                           anchor=dict(point=[5, 5, 0], reason='Dug into'))]),
+            dict(key='c', components=[dict(componentId='c', seed=[201, 201, 0],
+                                           anchor=dict(point=[101, 101, 0], reason='Through a rift'))])])
+        rows = [transport([100, 100, 0], [100, 100, 1])]
+        result = anchors.build_anchors(catalogue(), rows, annotations)
+        a, b, c = (result['regions'][r]['anchors'][0] for r in 'abc')
+        assert (a['point'], a['hops'], a['curated']) == ([5, 5, 0], 1, True)
+        assert (b['point'], b['hops']) == ([5, 5, 0], 2)
+        assert (c['point'], c['hops']) == ([5, 5, 0], 2)
+        connection = result['connections'][c['path'][-1]['connectionId']]
+        assert (connection['policy'], connection['target']['point']) == ('curated', [201, 201, 0])
+        assert result['reachableRegionIds'] == []  # placement, not a way in
+        assert result['summary']['curatedAnchors'] == 2
+        # A curated anchor wins a tie with a physical one, and the shorter one otherwise.
+        rows.append(transport([10, 10, 0], [100, 100, 0]))
+        assert anchors.build_anchors(catalogue(), rows, annotations)['regions']['a']['anchors'][0]['point'] == [5, 5, 0]
+
+    def test_a_curated_anchor_that_misses_its_area_needs_review(self):
+        annotations = dict(areas=[dict(key='a', components=[dict(componentId='a', seed=[200, 200, 0],
+                                                                 anchor=dict(point=[5, 5, 0], reason='Dug into'))])])
+        result = anchors.build_anchors(catalogue(), [], annotations)
         assert result['regions']['a']['status'] == 'unresolved'
-        assert result['insetRegionIds'] == []
-        assert len(result['regions']['a']['connectionIds']) == 4
-        assert result['summary']['non-localConnections'] == 3
-        assert result['summary']['reviewConnections'] == 1
+        assert [i['reason'] for i in result['curatedIssues']] == ['curated-anchor-not-into-component']
 
     def test_reachability_follows_every_row_in_its_own_direction(self):
         rows = [transport(None, [200, 200, 0], 'Teleport', file='teleportation_spells.tsv'),
@@ -72,15 +114,20 @@ class AnchorTest(unittest.TestCase):
         rows.append(transport([10, 10, 0], [100, 100, 0], 'Enter Portal 2'))
         assert anchors.build_anchors(catalogue(), rows)['reachableRegionIds'] == ['a', 'b', 'c']
 
-    def test_hole_endpoint_does_not_snap_or_anchor_neighbouring_component(self):
+    def test_an_endpoint_off_the_terrain_snaps_only_to_the_one_area_nearby(self):
         data = catalogue()
         data['regions'][1]['mask'] = [[100, 100, 1, 4], [101, 103, 3, 1]]
         result = anchors.build_anchors(data, [transport([10, 10, 0], [102, 102, 0])])
+        assert result['regions']['a']['status'] == 'direct'
+        connection = next(iter(result['connections'].values()))
+        assert (connection['target']['regionId'], connection['target']['membership']) == ('a', 'snapped')
+        assert connection['policy'] == 'local'
+        data['regions'].append(dict(id='d', plane=0, bounds=[104, 102, 105, 103], classification='inset', mask=[[104, 102, 1, 1]]))
+        result = anchors.build_anchors(data, [transport([10, 10, 0], [102, 102, 0])])
         assert result['regions']['a']['status'] == 'unresolved'
         connection = next(iter(result['connections'].values()))
-        assert connection['target']['kind'] == 'unknown'
-        assert connection['policy'] == 'review'
-        assert connection['target']['regionId'] is None
+        assert (connection['target']['kind'], connection['policy']) == ('unknown', 'review')
+        assert anchors.RegionIndex(data).endpoint([110, 110, 0])['membership'] == 'unmatched'
 
     def test_surface_footprint_resolves_missing_surface_terrain_without_treating_mixed_as_world(self):
         data = catalogue()
