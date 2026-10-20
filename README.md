@@ -9,38 +9,12 @@ Status and history of the styles are in [HANDOFF.md](HANDOFF.md).
 
 ## Published tiles
 
-`Tiles` writes the whole map in the route planner's (Explv's) layout, and
-the `publish` workflow serves it from `tiles.collisionlab.world`:
-
-```text
-https://tiles.collisionlab.world/<style>/<version>/{z}/{x}/{y}.png    z3-8, TMS rows
-https://tiles.collisionlab.world/<style>/<version>/manifest.json      cache, renderer, extent, missing keys
-https://tiles.collisionlab.world/<style>/<version>/index.json         sha256 per tile
-```
-
-Styles are `standard` (RuneLite's rendering, matching Explv's tiles) and
-`tactical` (no icons). A version is `<openrs2 cache id>-<renderer commit>`,
-where the renderer commit is the last one touching renderer sources (excluding
-the inset extractor), the Gradle files
-or the flake. Versions never change once uploaded. There is no "latest":
-osrs-planner's `tiles.json` pins the version it shows.
-
-The workflow runs on Thursdays (after Wednesday's game update), on renderer
-changes to `main`, and by hand with an optional cache id. When the version
-is new it:
-
-1. re-renders `examples/lumbridge` from openrs2 cache 2727 and requires
-   every hash to match (`scripts/check-golden`, also run on every PR);
-2. renders both styles from the cache;
-3. compares them with the pinned version (`scripts/compare-version`): newly
-   missing decryption keys fail the run, and more than 10% of a style's tiles
-   changed marks the pin for review;
-4. uploads with rclone, each style's `manifest.json` last
-   (`scripts/upload`);
-5. records a tile candidate artifact. The `insets` sidecar builds compatible
-   metadata and opens one tile/inset pin PR in osrs-planner. Routine validated
-   pairs merge after planner checks; the initial pair, substantial changes and
-   reachable areas without names wait in draft for review.
+`Tiles` renders every plane of the whole map in the route planner's (Explv's)
+layout, and the `publish` workflow serves it from `tiles.collisionlab.world`
+under `<style>/<version>/`, upper planes under `p1/`–`p3/`. The `insets`
+workflow then builds metadata over it and opens the pin PRs. The layout, what
+each file holds, who reads it and when each is built are in
+[docs/tiles.md](docs/tiles.md).
 
 Change a style's pixels on purpose and you regenerate the examples in the
 same commit, or the golden check fails.
@@ -381,18 +355,13 @@ from the main world or from a row with no source, such as a spell
 uses a coordinate label and appears in `review.json`. Unknown or removed
 evidence never supplies a name.
 
-Native imagery uses the existing `explv-tms-v1` layout. Plane 0 reuses published
-tiles; missing native squares and upper planes are rendered as supplements.
-The renderer's `--squares FILE` takes a JSON array of packed map square IDs.
-Extraction and supplemental renders are cached by their actual inputs, so a
-label/transport-only build does not render terrain again.
-
-An immutable inset release is served at `/insets/<version>/`: `regions.json`,
-`labels.json`, `anchors.json`, `review.json`, optional `planes/<plane>/` tile
-pyramids, and a manifest written last. Its identity includes cache/key hashes,
-transports, generator sources, curated evidence and the compatible tile pin.
-The planner pins `{version, tileVersion}` under `tiles.json.insets`. Runtime
-never follows a latest pointer. Existing tile URLs stay unchanged.
+The bundle is metadata only and is cut from the pinned tiles, which cover every
+plane; [docs/tiles.md](docs/tiles.md) describes its files and who reads them.
+Its identity includes cache/key hashes, transports, generator sources, curated
+evidence and the tile version, and the build checks that every style of those
+tiles has a tile for each map square an area covers. The planner pins
+`{version, tileVersion}` under `tiles.json.insets`. Runtime never follows a
+latest pointer.
 
 `scripts/compare-insets` requests review for the first release or >10% change in
 component count or covered map squares, and `scripts/tile-review` for more than
