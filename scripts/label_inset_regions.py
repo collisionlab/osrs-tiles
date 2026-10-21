@@ -79,8 +79,9 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
             anchor = association.get('anchor')
             if anchor is not None and (not isinstance(anchor.get('reason'), str) or not anchor['reason'].strip()
                                        or not isinstance(anchor.get('point'), list) or len(anchor['point']) != 3
-                                       or any(type(n) is not int for n in anchor['point'])):
-                raise ValueError(f'{key}/{rid}: an anchor needs a point and a reason')
+                                       or any(type(n) is not int for n in anchor['point'])
+                                       or type(anchor.get('entrance', False)) is not bool):
+                raise ValueError(f'{key}/{rid}: an anchor needs a point and a reason, and `entrance` is true or false')
             refs = association.get('evidence', [])
             if not refs or not association.get('reason'):
                 raise ValueError(f'{key}/{rid}: missing association evidence/reason')

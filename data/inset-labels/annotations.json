@@ -399,7 +399,8 @@
               4831,
               0
             ],
-            "reason": "Reached only by fairy ring (ALR); it adjoins the Abyss, which the Mage of Zamorak teleports into."
+            "reason": "Reached only by fairy ring (ALR); it adjoins the Abyss, which the Mage of Zamorak teleports into.",
+            "entrance": false
           }
         }
       ]
@@ -429,7 +430,8 @@
               4806,
               0
             ],
-            "reason": "Entered through a one-way entrance in the southern part of the Abyss outer ring (wiki: Abyssal Nexus); the transport data has only the fairy ring."
+            "reason": "Entered through a one-way entrance in the southern part of the Abyss outer ring (wiki: Abyssal Nexus); the transport data has only the fairy ring.",
+            "entrance": true
           }
         }
       ]
@@ -601,7 +603,8 @@
               2971,
               0
             ],
-            "reason": "The vault door north-east of Nardah is its only entrance (wiki: Ancient Vault); the transport data has only the Ring of shadows teleport."
+            "reason": "The vault door north-east of Nardah is its only entrance (wiki: Ancient Vault); the transport data has only the Ring of shadows teleport.",
+            "entrance": true
           }
         }
       ]
@@ -675,7 +678,8 @@
               3150,
               0
             ],
-            "reason": "The trapdoor in Port Sarim leads down to it, but lands on tiles with no terrain, so no transport chain connects them."
+            "reason": "The trapdoor in Port Sarim leads down to it, but lands on tiles with no terrain, so no transport chain connects them.",
+            "entrance": true
           }
         },
         {
@@ -718,7 +722,8 @@
               3291,
               0
             ],
-            "reason": "Entered from a Barrows crypt (dug into from the mounds); neither is a transport row."
+            "reason": "Entered from a Barrows crypt (dug into from the mounds); neither is a transport row.",
+            "entrance": true
           }
         }
       ]
@@ -1391,7 +1396,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]
@@ -2009,7 +2015,8 @@
               3519,
               0
             ],
-            "reason": "The Ectofuntus trapdoor leads down to it, but the stairs between pass through floors with no terrain, so no transport chain connects them."
+            "reason": "The Ectofuntus trapdoor leads down to it, but the stairs between pass through floors with no terrain, so no transport chain connects them.",
+            "entrance": true
           }
         }
       ]
@@ -2263,7 +2270,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]
@@ -2339,7 +2347,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]
@@ -2370,7 +2379,8 @@
               3375,
               0
             ],
-            "reason": "Entered by digging on the molehills in Falador Park, which is not a transport row."
+            "reason": "Entered by digging on the molehills in Falador Park, which is not a transport row.",
+            "entrance": true
           }
         }
       ]
@@ -2446,7 +2456,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring (BJR) in the transport data, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring (BJR) in the transport data, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         },
         {
@@ -2603,7 +2614,8 @@
               10343,
               0
             ],
-            "reason": "Entered through the Salt Mine under Weiss (wiki: Ghorrock Dungeon); the transport data has only teleports."
+            "reason": "Entered through the Salt Mine under Weiss (wiki: Ghorrock Dungeon); the transport data has only teleports.",
+            "entrance": true
           }
         }
       ]
@@ -2790,7 +2802,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]
@@ -2997,7 +3010,8 @@
               6045,
               0
             ],
-            "reason": "Entered from Prifddinas (source s-3c1d5365beb76fc7); the transport data has no row for that entrance, only league teleports."
+            "reason": "Entered from Prifddinas (source s-3c1d5365beb76fc7); the transport data has no row for that entrance, only league teleports.",
+            "entrance": true
           }
         }
       ]
@@ -3744,7 +3758,8 @@
               5814,
               0
             ],
-            "reason": "Entered down the Bottomless Pit north of the Camdozaal Mines (wiki: Lassar Undercity); the transport data has only the Ring of shadows teleport."
+            "reason": "Entered down the Bottomless Pit north of the Camdozaal Mines (wiki: Lassar Undercity); the transport data has only the Ring of shadows teleport.",
+            "entrance": true
           }
         }
       ]
@@ -3840,7 +3855,8 @@
               3641,
               0
             ],
-            "reason": "Under the Lighthouse (source s-f030e36ebc6b2bac), entered through its basement; the transport data has no row into it."
+            "reason": "Under the Lighthouse (source s-f030e36ebc6b2bac), entered through its basement; the transport data has no row into it.",
+            "entrance": true
           }
         }
       ]
@@ -3958,7 +3974,8 @@
               9754,
               0
             ],
-            "reason": "Part of the Meiyerditch Laboratories (wiki), entered through them; the transport data has only a league teleport."
+            "reason": "Part of the Meiyerditch Laboratories (wiki), entered through them; the transport data has only a league teleport.",
+            "entrance": false
           }
         }
       ]
@@ -5062,7 +5079,8 @@
               2851,
               0
             ],
-            "reason": "The Soul Wars lobby on the Isle of Souls; the transport data has only the minigame teleport."
+            "reason": "The Soul Wars lobby on the Isle of Souls; the transport data has only the minigame teleport.",
+            "entrance": false
           }
         }
       ]
@@ -6172,7 +6190,8 @@
               9470,
               0
             ],
-            "reason": "Entered through a rift in the Temple of the Eye (wiki: The Scar); the transport data has only the Ring of shadows teleport."
+            "reason": "Entered through a rift in the Temple of the Eye (wiki: The Scar); the transport data has only the Ring of shadows teleport.",
+            "entrance": true
           }
         }
       ]
@@ -6290,7 +6309,8 @@
               3035,
               0
             ],
-            "reason": "Lies beneath the Crypt of Tonali (wiki: Tonali Cavern); the transport data has only league teleports."
+            "reason": "Lies beneath the Crypt of Tonali (wiki: Tonali Cavern); the transport data has only league teleports.",
+            "entrance": true
           }
         }
       ]
@@ -7365,7 +7385,8 @@
               9341,
               0
             ],
-            "reason": "Reached from the Shaman Caves winch (wiki: Viyeldi caves); the transport data has only a league teleport."
+            "reason": "Reached from the Shaman Caves winch (wiki: Viyeldi caves); the transport data has only a league teleport.",
+            "entrance": true
           }
         }
       ]
@@ -7485,7 +7506,8 @@
               3756,
               0
             ],
-            "reason": "On Waterbirth Island, whose dungeon the transport data does not connect; it has only a league teleport."
+            "reason": "On Waterbirth Island, whose dungeon the transport data does not connect; it has only a league teleport.",
+            "entrance": false
           }
         }
       ]
@@ -7963,7 +7985,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]

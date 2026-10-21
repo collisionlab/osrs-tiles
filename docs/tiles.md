@@ -74,7 +74,7 @@ planner cuts each area's pixels from the pinned tiles of its plane.
 | `manifest.json` | `schemaVersion` 2; `version`, `tileVersion` (the tiles it was built and checked against), cache hash, `files` (sha256 of each file below), `planes` (the map squares the areas cover, per plane), `inputs`, `componentCount`, `reviewCount` (the issues in `review.json`). Uploaded last | planner (checks it matches the pinned tiles, and the hashes); `compare-insets`; pin scripts |
 | `regions.json` | every connected area of visible terrain, per plane: `id`, `plane`, `bounds`, `mask` (rectangles), `classification` (`inset`, `main-world`, `mixed`), `tileCount`; and `surfaceRects`, the main map's frame | planner: which area each route tile is in, clipping and outlining insets, which tiles to cut, placement and click hit-testing |
 | `labels.json` | `regions[id]` = `{name, plane, status, areas}` (status `named`, `descriptive` or `unresolved`) and `evidence` for each name | planner: inset headers, door markers and the AREA search (only labels that aren't `unresolved`) |
-| `anchors.json` | `connections` (transport rows matched to areas, and curated anchors); `regions[id].anchors` and `defaultAnchor` (where the area hangs off the main map: a surface point and the chain of connections from it); `reachableRegionIds` (areas some chain of transports reaches); `curatedIssues` | planner, fetched when first needed: placement, entrances and door markers. The labeller and the pin scripts use the rest |
+| `anchors.json` | `connections` (transport rows matched to areas, and curated anchors); `regions[id].anchors` and `defaultAnchor` (where the area hangs off the main map: a surface point, the chain of connections from it, and whether that point is an `entrance`); `reachableRegionIds` (areas some chain of transports reaches); `curatedIssues` | planner, fetched when first needed: placement, entrances and door markers. The labeller and the pin scripts use the rest |
 | `review.json` | reachable areas without a name or an anchor, and curated decisions that no longer fit the terrain; `requiredNamed`, `requiredAnchored` | `pin-insets` (the pin PR's "Action needed"), the planner's `scripts/pin-status` |
 
 The version is a hash of every input: cache and key hashes, tile version and manifest, the pinned
@@ -133,11 +133,20 @@ only when no physical or curated one exists. A transport endpoint off every area
 often land a tile or two off the floor they lead to) joins the only area with terrain within two
 tiles, and stays unmatched when there are none or several.
 
+An anchor is an **entrance** when its surface point is where a player goes in: its first connection
+leaves the main map and every later one is physical, or a curated anchor marked as an entrance. The
+planner draws the line from the surface, and marks a door there, only for entrances. Other anchors
+only place the area: the areas hung off Zanaris, or the altars, which the transport data reaches
+only by teleporting on from inside the Abyss.
+
 To add a curated anchor, give the area's component an `anchor` in `annotations.json`:
 
 ```json
-"anchor": {"point": [3654, 3519, 0], "reason": "The Ectofuntus trapdoor leads down to it, ..."}
+"anchor": {"point": [3654, 3519, 0], "reason": "The Ectofuntus trapdoor leads down to it, ...", "entrance": true}
 ```
+
+`entrance` is true when `point` is the way in, such as a trapdoor or a dig spot, and false when it
+only says where the area belongs, such as "on Waterbirth Island".
 
 `point` is on the main map, or inside another area, which the anchor then extends: the Viyeldi
 caves start in the Shaman Caves, so they hang off the Shaman Caves' entrance in the Kharazi Jungle.
