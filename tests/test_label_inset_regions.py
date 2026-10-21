@@ -40,7 +40,9 @@ class LabelTest(unittest.TestCase):
         extra.update(key='subarea', name='A subarea', components=extra['components'][:1])
         authored['areas'].append(extra)
         output, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
-        self.assertEqual(report['issues'], [])
+        # Both names show, but two areas on one component need a cut.
+        self.assertEqual(report['issues'], [dict(componentId='a', areas=['dungeon', 'subarea'],
+                                                 reason='component-has-several-areas')])
         self.assertEqual(output['regions']['a']['name'], 'A dungeon / A subarea')
         self.assertEqual(output['regions']['b']['name'], 'A dungeon')
         self.assertEqual(output['regions']['c']['status'], 'unresolved')

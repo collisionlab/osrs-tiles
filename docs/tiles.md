@@ -102,7 +102,8 @@ around the Fire Altar, so neighbouring areas in the cache would join into one in
 ```
 
 Squares in one cut stay joined to each other. A cut whose squares no longer have terrain is a
-`review.json` issue.
+`review.json` issue, and so is an area that carries two names: it shows as one inset, so it needs a
+cut.
 
 ## Names and anchors
 

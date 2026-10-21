@@ -108,6 +108,11 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
     required = set(anchors['reachableRegionIds']) | set(annotations.get('routeRequiredRegionIds', []))
     issues.extend(anchors.get('curatedIssues', []))
     issues.extend(catalogue.get('cutIssues', []))
+    # One inset shows one area: two areas on one component is terrain that needs a cut (annotations.json `cuts`).
+    for rid, label in labels.items():
+        keys = list(dict.fromkeys(m['areaKey'] for m in label['areas']))
+        if len(keys) > 1:
+            issues.append(dict(componentId=rid, areas=keys, reason='component-has-several-areas'))
     for rid in sorted(required):
         if rid not in labels or labels[rid]['status'] == 'unresolved':
             issues.append(dict(componentId=rid, reason='required-component-unnamed'))
