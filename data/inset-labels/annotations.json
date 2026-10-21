@@ -124,6 +124,28 @@
         ]
       ],
       "reason": "The Crandor and Karamja Dungeon; a strip of terrain along its eastern edge joins it to the western part of the Asgarnian Ice Dungeon."
+    },
+    {
+      "plane": 0,
+      "squares": [
+        [
+          32,
+          75
+        ]
+      ],
+      "reason": "The Cosmic Entity's Plane fills its map square; dark filler joins it to the sea squares to the west and an island beyond them."
+    },
+    {
+      "plane": 0,
+      "rects": [
+        [
+          1856,
+          7048,
+          8,
+          8
+        ]
+      ],
+      "reason": "The player-owned house is an instance built from room templates, and the transport data models it as one tile, (1858, 7051): every house portal and teleport starts or lands there. Show only the template room holding that tile, not the whole template strip."
     }
   ],
   "areas": [
@@ -1376,7 +1398,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-1600-4736-ea8b5d4447",
+          "componentId": "p0-2048-4800-249764b986",
           "seed": [
             2075,
             4848,
@@ -4421,7 +4443,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-1856-7040-65925be2aa",
+          "componentId": "p0-1856-7048-bbfe855400",
           "seed": [
             1858,
             7051,
