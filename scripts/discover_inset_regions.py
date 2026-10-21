@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Label terrain spans with four-neighbour connectivity; retain exact clipping geometry.
 
-Curated cuts (annotations.json `cuts`) keep a set of map squares apart from the terrain around it. Some
-areas fill their map squares edge to edge with filler terrain, such as the lava around the Fire Altar,
-so neighbouring areas would otherwise join into one.
+Curated cuts (annotations.json `cuts`) keep a set of map squares or tile rectangles apart from the
+terrain around them. Some areas fill their map squares edge to edge with filler terrain, such as the
+lava around the Fire Altar, so neighbouring areas would otherwise join into one.
 """
 import argparse
 import hashlib
@@ -45,31 +45,48 @@ def rectangles(spans):
 
 
 def cut_domains(cuts):
-    """(plane, square x, square y) -> index of the cut that holds that map square."""
-    domains = {}
+    """plane -> [(x1, y1, x2, y2, cut index)]: the tile rectangles each cut keeps apart.
+
+    A cut lists map `squares` ([x, y], 64 tiles each), tile `rects` ([x, y, width, height]), or both.
+    """
+    domains = defaultdict(list)
     for index, cut in enumerate(cuts):
-        squares, plane = cut.get('squares'), cut.get('plane')
-        if (type(plane) is not int or not 0 <= plane < 4 or not squares
+        plane, squares, rects = cut.get('plane'), cut.get('squares', []), cut.get('rects', [])
+        if (type(plane) is not int or not 0 <= plane < 4 or not (squares or rects)
                 or not isinstance(cut.get('reason'), str) or not cut['reason'].strip()):
-            raise ValueError(f'A cut needs a plane, squares and a reason: {cut}')
+            raise ValueError(f'A cut needs a plane, squares or rects, and a reason: {cut}')
+        boxes = []
         for square in squares:
             if (not isinstance(square, list) or len(square) != 2 or any(type(n) is not int for n in square)
                     or not all(0 <= n < 256 for n in square)):
                 raise ValueError(f'Invalid cut square: {square}')
-            key = (plane, *square)
-            if key in domains:
-                raise ValueError(f'Map square {square} on plane {plane} is in two cuts')
-            domains[key] = index
+            boxes.append((square[0] * 64, square[1] * 64, square[0] * 64 + 64, square[1] * 64 + 64))
+        for rect in rects:
+            if (not isinstance(rect, list) or len(rect) != 4 or any(type(n) is not int for n in rect)
+                    or rect[2] <= 0 or rect[3] <= 0 or not (0 <= rect[0] and rect[0] + rect[2] <= 16384
+                                                           and 0 <= rect[1] and rect[1] + rect[3] <= 16384)):
+                raise ValueError(f'Invalid cut rect: {rect}')
+            boxes.append((rect[0], rect[1], rect[0] + rect[2], rect[1] + rect[3]))
+        for box in boxes:
+            if any(box[0] < b[2] and b[0] < box[2] and box[1] < b[3] and b[1] < box[3] for b in domains[plane]):
+                raise ValueError(f'Cuts overlap on plane {plane}: {cut}')
+            domains[plane].append((*box, index))
     return domains
 
 
+def domain_at(boxes, x, y):
+    return next((b[4] for b in boxes if b[0] <= x < b[2] and b[1] <= y < b[3]), -1)
+
+
 def split_at_cuts(plane, y, intervals, domains):
-    """Split a row's spans wherever they cross from one cut's squares to another's (or to none)."""
+    """Split a row's spans wherever they cross from one cut's tiles to another's (or to none)."""
+    boxes = [b for b in domains.get(plane, ()) if b[1] <= y < b[3]]
+    edges = sorted({edge for b in boxes for edge in (b[0], b[2])})
     result = []
     for x1, x2 in intervals:
         start = x1
-        for edge in range((x1 // 64 + 1) * 64, x2, 64):
-            if domains.get((plane, edge // 64 - 1, y // 64), -1) != domains.get((plane, edge // 64, y // 64), -1):
+        for edge in edges:
+            if start < edge < x2 and domain_at(boxes, edge - 1, y) != domain_at(boxes, edge, y):
                 result.append([start, edge])
                 start = edge
         result.append([start, x2])
@@ -116,7 +133,7 @@ def discover(topology, examples=(), cuts=()):
             previous = []
         left = 0
         for x1, x2 in split_at_cuts(key[0], key[1], merge(intervals), domains):
-            domain = domains.get((key[0], x1 // 64, key[1] // 64), -1)
+            domain = domain_at(domains.get(key[0], ()), x1, key[1])
             index = len(runs)
             parents.append(index)
             runs.append((key[0], key[1], x1, x2))
@@ -165,12 +182,16 @@ def discover(topology, examples=(), cuts=()):
                             classification=classification, surfaceTiles=surface_count,
                             touchesUnknown=unknown, examples=[]))
     regions.sort(key=lambda r: (-r['tileCount'], r['id']))
-    # A cut whose squares have no terrain no longer separates anything: the terrain moved.
-    terrain_squares = {(p, sx, y // 64) for (p, y), intervals in rows.items() for a, b in intervals
-                       for sx in range(a // 64, (b - 1) // 64 + 1)}
-    cut_issues = [dict(cut=index, plane=cut['plane'], squares=missing, reason='cut-square-without-terrain')
-                  for index, cut in enumerate(cuts)
-                  for missing in [[s for s in cut['squares'] if (cut['plane'], *s) not in terrain_squares]] if missing]
+    # A cut part with no terrain no longer separates anything: the terrain moved.
+    def has_terrain(plane, x1, y1, x2, y2):
+        return any(a < x2 and x1 < b for y in range(y1, y2) for a, b in rows.get((plane, y), ()))
+    cut_issues = []
+    for index, cut in enumerate(cuts):
+        squares = [s for s in cut.get('squares', []) if not has_terrain(cut['plane'], s[0] * 64, s[1] * 64, s[0] * 64 + 64, s[1] * 64 + 64)]
+        rects = [r for r in cut.get('rects', []) if not has_terrain(cut['plane'], r[0], r[1], r[0] + r[2], r[1] + r[3])]
+        if squares or rects:
+            cut_issues.append(dict(cut=index, plane=cut['plane'], reason='cut-without-terrain',
+                                   **({'squares': squares} if squares else {}), **({'rects': rects} if rects else {})))
     checks = []
     for example in examples:
         x, y, p = example['route'][example['detachedEndpoint']]

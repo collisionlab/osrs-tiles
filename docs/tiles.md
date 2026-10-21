@@ -101,8 +101,9 @@ around the Fire Altar, so neighbouring areas in the cache would join into one in
 "cuts": [{"plane": 0, "squares": [[40, 75]], "reason": "The Fire Altar's square is lava to its edges, ..."}]
 ```
 
-Squares in one cut stay joined to each other. A cut whose squares no longer have terrain is a
-`review.json` issue, and so is an area that carries two names: it shows as one inset, so it needs a
+Squares in one cut stay joined to each other. A cut can give tile `rects` (`[x, y, width, height]`)
+instead of, or as well as, squares: the player-owned house keeps only the template room the
+transport data lands in. A cut part that no longer has terrain is a `review.json` issue, and so is an area that carries two names: it shows as one inset, so it needs a
 cut.
 
 ## Names and anchors

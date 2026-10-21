@@ -81,13 +81,25 @@ class DiscoveryTest(unittest.TestCase):
         assert len(run(spans, [dict(cut, plane=1)])) == 1
 
 
+    def test_rect_cuts_keep_part_of_a_map_square_apart(self):
+        spans = [[0, y, 64, 128] for y in range(64, 128)]
+        cut = dict(plane=0, rects=[[72, 80, 8, 8]], reason='One room of a template.')
+        assert sorted(r['tileCount'] for r in run(spans, [cut])) == [64, 4096 - 64]
+        room = next(r for r in run(spans, [cut]) if r['tileCount'] == 64)
+        assert room['bounds'] == [72, 80, 80, 88]
+        with self.assertRaises(ValueError):
+            run(spans, [cut, dict(plane=0, squares=[[1, 1]], reason='Overlaps the room.')])
+
+
     def test_cuts_without_terrain_are_reported_and_malformed_cuts_fail(self):
         topology = dict(schemaVersion=1, spans=[[0, 1, 1, 5]], loadedMapSquares=[0],
                         surfaceRects=[[0, 50, 50, 10, 10]], mapIndexRevision=1)
         result = discovery.discover(topology, cuts=[dict(plane=0, squares=[[0, 0], [9, 9]], reason='r')])
-        assert result['cutIssues'] == [dict(cut=0, plane=0, squares=[[9, 9]], reason='cut-square-without-terrain')]
+        assert result['cutIssues'] == [dict(cut=0, plane=0, squares=[[9, 9]], reason='cut-without-terrain')]
+        result = discovery.discover(topology, cuts=[dict(plane=0, rects=[[1, 1, 2, 2], [40, 40, 2, 2]], reason='r')])
+        assert result['cutIssues'] == [dict(cut=0, plane=0, rects=[[40, 40, 2, 2]], reason='cut-without-terrain')]
         for bad in (dict(plane=0, squares=[[0, 0]]), dict(plane=4, squares=[[0, 0]], reason='r'),
-                    dict(plane=0, squares=[[0]], reason='r')):
+                    dict(plane=0, squares=[[0]], reason='r'), dict(plane=0, rects=[[0, 0, 0, 1]], reason='r')):
             with self.assertRaises(ValueError):
                 discovery.discover(topology, cuts=[bad])
         with self.assertRaises(ValueError):
