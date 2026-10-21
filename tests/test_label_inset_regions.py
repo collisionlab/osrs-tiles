@@ -166,7 +166,11 @@ class LabelTest(unittest.TestCase):
         self.assertEqual(output['regions']['p3-3400-9927-cfe6848db0']['name'], 'Slayer Tower basement')
         self.assertEqual(output['regions']['p0-2387-9767-3351540754']['name'], 'Stronghold Slayer Cave')
         self.assertEqual(output['regions']['p0-2820-9730-a3a71dd2a5']['name'], 'Entrana Dungeon')
-        self.assertIn('Asgarnian Ice Dungeon', output['regions']['p0-2826-9539-fda078c74d']['name'])
+        # Cuts keep areas that fill their map squares apart.
+        self.assertEqual(output['regions']['p0-2826-9539-29b59396ab']['name'], 'Crandor and Karamja Dungeon')
+        self.assertEqual(output['regions']['p0-2880-9549-f7e27c8a1b']['name'], 'Asgarnian Ice Dungeon')
+        self.assertEqual(output['regions']['p0-2816-4800-39ba9f1de3']['name'], 'Air Altar')
+        self.assertEqual(output['regions']['p0-2576-4608-d8353ffb01']['name'], 'Fisher Realm')
         # Reached only by teleports, an unrecognised action, or a one-way chain.
         self.assertEqual(output['regions']['p0-2528-6277-903188b249']['name'], 'Lassar Undercity')
         self.assertEqual(output['regions']['p0-4033-4356-3931b69953']['name'], 'Ancient Guthixian Temple')
