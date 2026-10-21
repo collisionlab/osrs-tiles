@@ -40,7 +40,9 @@ class LabelTest(unittest.TestCase):
         extra.update(key='subarea', name='A subarea', components=extra['components'][:1])
         authored['areas'].append(extra)
         output, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
-        self.assertEqual(report['issues'], [])
+        # Both names show, but two areas on one component need a cut.
+        self.assertEqual(report['issues'], [dict(componentId='a', areas=['dungeon', 'subarea'],
+                                                 reason='component-has-several-areas')])
         self.assertEqual(output['regions']['a']['name'], 'A dungeon / A subarea')
         self.assertEqual(output['regions']['b']['name'], 'A dungeon')
         self.assertEqual(output['regions']['c']['status'], 'unresolved')
@@ -63,6 +65,12 @@ class LabelTest(unittest.TestCase):
             self.assertTrue(report['issues'], change)
             if change == 'removed-source':
                 self.assertEqual(result['regions']['a']['status'], 'unresolved')
+
+    def test_cuts_without_terrain_need_review(self):
+        cat, anchors, sources, authored = fixture()
+        cat['cutIssues'] = [dict(cut=0, plane=0, squares=[[9, 9]], reason='cut-square-without-terrain')]
+        _, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
+        self.assertEqual(report['issues'], cat['cutIssues'])
 
     def test_every_reachable_component_needs_a_name(self):
         cat, anchors, sources, authored = fixture()
@@ -160,7 +168,11 @@ class LabelTest(unittest.TestCase):
         self.assertEqual(output['regions']['p3-3400-9927-cfe6848db0']['name'], 'Slayer Tower basement')
         self.assertEqual(output['regions']['p0-2387-9767-3351540754']['name'], 'Stronghold Slayer Cave')
         self.assertEqual(output['regions']['p0-2820-9730-a3a71dd2a5']['name'], 'Entrana Dungeon')
-        self.assertIn('Asgarnian Ice Dungeon', output['regions']['p0-2826-9539-fda078c74d']['name'])
+        # Cuts keep areas that fill their map squares apart.
+        self.assertEqual(output['regions']['p0-2826-9539-29b59396ab']['name'], 'Crandor and Karamja Dungeon')
+        self.assertEqual(output['regions']['p0-2880-9549-f7e27c8a1b']['name'], 'Asgarnian Ice Dungeon')
+        self.assertEqual(output['regions']['p0-2816-4800-39ba9f1de3']['name'], 'Air Altar')
+        self.assertEqual(output['regions']['p0-2576-4608-d8353ffb01']['name'], 'Fisher Realm')
         # Reached only by teleports, an unrecognised action, or a one-way chain.
         self.assertEqual(output['regions']['p0-2528-6277-903188b249']['name'], 'Lassar Undercity')
         self.assertEqual(output['regions']['p0-4033-4356-3931b69953']['name'], 'Ancient Guthixian Temple')

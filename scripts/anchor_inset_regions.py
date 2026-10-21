@@ -10,6 +10,12 @@ needs one (label_inset_regions reports those without). In order of preference, a
 - any other transport with a source tile (a lever, a portal, an NPC), followed in its own direction.
   Seasonal rows and network hubs (a source tile with more than two destinations in one file, such as a
   fairy ring) never anchor.
+
+An anchor is an `entrance` when its surface point is where a player goes in: its first connection
+leaves the main map, and every later one is physical, or a curated anchor marked `"entrance": true`
+(a dig spot, a trapdoor the data lacks). The planner draws the line from the surface point, and marks
+it as a door, only for entrances; the rest, such as areas hung off Zanaris or chains that teleport on
+from inside another area, only place the area.
 """
 import argparse
 import bisect
@@ -197,16 +203,27 @@ def curated_connections(index, curated):
         connection_id = 'a-' + hashlib.sha256(json.dumps([entry['area'], entry['componentId']]).encode()).hexdigest()[:16]
         connections[connection_id] = dict(id=connection_id, source=source, target=target, action='', label=entry['reason'],
                                           conditions={}, duration='', policy='curated', reason='annotations.json',
-                                          sources=[dict(file='annotations.json', area=entry['area'])])
+                                          entrance=entry['entrance'], sources=[dict(file='annotations.json', area=entry['area'])])
     return connections, issues
 
 
 def curated_anchors(annotations):
     """The `anchor` of every component association in annotations.json."""
     return [dict(area=area['key'], componentId=association['componentId'], seed=association['seed'],
-                 point=association['anchor']['point'], reason=association['anchor']['reason'])
+                 point=association['anchor']['point'], reason=association['anchor']['reason'],
+                 entrance=association['anchor'].get('entrance') is True)
             for area in (annotations or {}).get('areas', []) for association in area['components']
             if association.get('anchor')]
+
+
+def is_entrance(path, connections):
+    """Whether an anchor's surface point is a way in: see the module docstring."""
+    for index, (_, connection_id) in enumerate(path):
+        connection = connections[connection_id]
+        if not (connection['policy'] == 'local' or (connection['policy'] == 'curated' and connection['entrance'])
+                or (index == 0 and connection['policy'] != 'curated')):
+            return False
+    return True
 
 
 def hubs(transports):
@@ -300,6 +317,7 @@ def build_anchors(catalogue, transports, annotations=None):
         for region_id, ((indirect, hops), path) in best.items():
             region_anchors[region_id].append(dict(point=list(point), hops=hops, indirectConnections=indirect,
                                                   curated=any(connections[c]['policy'] == 'curated' for _, c in path),
+                                                  entrance=is_entrance(path, connections),
                                                   path=[dict(connectionId=c, reversed=r) for r, c in path]))
     regions = {}
     for region_id, region in sorted(index.regions.items()):

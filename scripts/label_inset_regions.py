@@ -79,8 +79,9 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
             anchor = association.get('anchor')
             if anchor is not None and (not isinstance(anchor.get('reason'), str) or not anchor['reason'].strip()
                                        or not isinstance(anchor.get('point'), list) or len(anchor['point']) != 3
-                                       or any(type(n) is not int for n in anchor['point'])):
-                raise ValueError(f'{key}/{rid}: an anchor needs a point and a reason')
+                                       or any(type(n) is not int for n in anchor['point'])
+                                       or type(anchor.get('entrance', False)) is not bool):
+                raise ValueError(f'{key}/{rid}: an anchor needs a point and a reason, and `entrance` is true or false')
             refs = association.get('evidence', [])
             if not refs or not association.get('reason'):
                 raise ValueError(f'{key}/{rid}: missing association evidence/reason')
@@ -107,6 +108,12 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
     # anchor, which places it beside the main map.
     required = set(anchors['reachableRegionIds']) | set(annotations.get('routeRequiredRegionIds', []))
     issues.extend(anchors.get('curatedIssues', []))
+    issues.extend(catalogue.get('cutIssues', []))
+    # One inset shows one area: two areas on one component is terrain that needs a cut (annotations.json `cuts`).
+    for rid, label in labels.items():
+        keys = list(dict.fromkeys(m['areaKey'] for m in label['areas']))
+        if len(keys) > 1:
+            issues.append(dict(componentId=rid, areas=keys, reason='component-has-several-areas'))
     for rid in sorted(required):
         if rid not in labels or labels[rid]['status'] == 'unresolved':
             issues.append(dict(componentId=rid, reason='required-component-unnamed'))

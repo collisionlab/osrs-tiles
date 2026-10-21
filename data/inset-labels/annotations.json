@@ -1,10 +1,130 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-20",
+  "reviewed": "2026-10-21",
   "scope": "Every inset component reachable through the transport data (directed, all transport files) plus two components used by saved routes; components reviewed earlier for surface connection keep their names.",
   "routeRequiredRegionIds": [
     "p0-2500-10007-9be7a9c161",
     "p0-2639-4493-ae82ff9b66"
+  ],
+  "cuts": [
+    {
+      "plane": 0,
+      "squares": [
+        [
+          40,
+          75
+        ]
+      ],
+      "reason": "The Fire Altar's map square is lava to its edges, which touches the Fisher Realm's terrain below it."
+    },
+    {
+      "plane": 0,
+      "squares": [
+        [
+          42,
+          75
+        ]
+      ],
+      "reason": "The Water Altar's map square is water to its edges, which touches the Fisher Realm below and the Mind Altar beside it."
+    },
+    {
+      "plane": 0,
+      "squares": [
+        [
+          43,
+          75
+        ]
+      ],
+      "reason": "The Mind Altar's map square is filled to its edges, which touches the Water and Air altars beside it and the Fisher Realm below."
+    },
+    {
+      "plane": 0,
+      "squares": [
+        [
+          44,
+          75
+        ]
+      ],
+      "reason": "The Air Altar's map square is grass to its edges, which touches the Mind Altar beside it."
+    },
+    {
+      "plane": 0,
+      "squares": [
+        [
+          40,
+          72
+        ],
+        [
+          41,
+          72
+        ],
+        [
+          42,
+          72
+        ],
+        [
+          43,
+          72
+        ],
+        [
+          40,
+          73
+        ],
+        [
+          41,
+          73
+        ],
+        [
+          42,
+          73
+        ],
+        [
+          43,
+          73
+        ],
+        [
+          40,
+          74
+        ],
+        [
+          41,
+          74
+        ],
+        [
+          42,
+          74
+        ],
+        [
+          43,
+          74
+        ]
+      ],
+      "reason": "The Fisher Realm's map squares are grass to their edges, which touch the altars above them and unrelated terrain to the south and west."
+    },
+    {
+      "plane": 0,
+      "squares": [
+        [
+          47,
+          75
+        ]
+      ],
+      "reason": "The Abyss outer ring fills its map square; filler along its southern edge joins it to the Abyssal Nexus below."
+    },
+    {
+      "plane": 0,
+      "squares": [
+        [
+          44,
+          149
+        ],
+        [
+          44,
+          150
+        ]
+      ],
+      "reason": "The Crandor and Karamja Dungeon; a strip of terrain along its eastern edge joins it to the western part of the Asgarnian Ice Dungeon."
+    }
   ],
   "areas": [
     {
@@ -243,7 +363,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-2950-4737-fbc16cd317",
+          "componentId": "p0-3010-4800-dd121bc57b",
           "seed": [
             3035,
             4852,
@@ -279,7 +399,8 @@
               4831,
               0
             ],
-            "reason": "Reached only by fairy ring (ALR); it adjoins the Abyss, which the Mage of Zamorak teleports into."
+            "reason": "Reached only by fairy ring (ALR); it adjoins the Abyss, which the Mage of Zamorak teleports into.",
+            "entrance": false
           }
         }
       ]
@@ -291,7 +412,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-2950-4737-fbc16cd317",
+          "componentId": "p0-2950-4737-b5534f0480",
           "seed": [
             3037,
             4763,
@@ -302,7 +423,16 @@
             "c-13f926e5042af23c",
             "c-5ec54c4ddcd9709f"
           ],
-          "reason": "Transport rows landing here and source places inside it."
+          "reason": "Transport rows landing here and source places inside it.",
+          "anchor": {
+            "point": [
+              3039,
+              4806,
+              0
+            ],
+            "reason": "Entered through a one-way entrance in the southern part of the Abyss outer ring (wiki: Abyssal Nexus); the transport data has only the fairy ring.",
+            "entrance": true
+          }
         }
       ]
     },
@@ -313,7 +443,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-2415-4544-5efbfa8466",
+          "componentId": "p0-2816-4800-39ba9f1de3",
           "seed": [
             2846,
             4836,
@@ -473,7 +603,8 @@
               2971,
               0
             ],
-            "reason": "The vault door north-east of Nardah is its only entrance (wiki: Ancient Vault); the transport data has only the Ring of shadows teleport."
+            "reason": "The vault door north-east of Nardah is its only entrance (wiki: Ancient Vault); the transport data has only the Ring of shadows teleport.",
+            "entrance": true
           }
         }
       ]
@@ -538,21 +669,21 @@
           "evidence": [
             "s-5bc449f29d374a36",
             "s-7177394f70f338f5",
-            "c-701e30e770bccbae",
             "c-5e3df373e1e11361"
           ],
-          "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
-        }
-      ]
-    },
-    {
-      "key": "asgarnian-ice-dungeon-shared",
-      "name": "Asgarnian Ice Dungeon",
-      "status": "named",
-      "reason": "Named subarea of the shared component.",
-      "components": [
+          "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles.",
+          "anchor": {
+            "point": [
+              3009,
+              3150,
+              0
+            ],
+            "reason": "The trapdoor in Port Sarim leads down to it, but lands on tiles with no terrain, so no transport chain connects them.",
+            "entrance": true
+          }
+        },
         {
-          "componentId": "p0-2826-9539-fda078c74d",
+          "componentId": "p0-2880-9549-f7e27c8a1b",
           "seed": [
             2925,
             9565,
@@ -561,9 +692,9 @@
           "evidence": [
             "s-5bc449f29d374a36",
             "s-7177394f70f338f5",
-            "c-701e30e770bccbae"
+            "c-5e3df373e1e11361"
           ],
-          "reason": "Both Crandor/Karamja and Asgarnian Ice Dungeon evidence lie against the same continuous terrain mask. Retain both names."
+          "reason": "The western part of the dungeon, joined to the rest by the ice cavern and the tunnel."
         }
       ]
     },
@@ -591,7 +722,8 @@
               3291,
               0
             ],
-            "reason": "Entered from a Barrows crypt (dug into from the mounds); neither is a transport row."
+            "reason": "Entered from a Barrows crypt (dug into from the mounds); neither is a transport row.",
+            "entrance": true
           }
         }
       ]
@@ -1264,7 +1396,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]
@@ -1315,10 +1448,10 @@
       "reason": "Static agent review of source coordinates and explicit entrance/room transport evidence; not in-game verification.",
       "components": [
         {
-          "componentId": "p0-2826-9539-fda078c74d",
+          "componentId": "p0-2826-9539-29b59396ab",
           "seed": [
-            2925,
-            9565,
+            2833,
+            9658,
             0
           ],
           "evidence": [
@@ -1327,7 +1460,7 @@
             "s-52d8e99e7777729a",
             "c-701e30e770bccbae"
           ],
-          "reason": "Both Crandor/Karamja and Asgarnian Ice Dungeon evidence lie against the same continuous terrain mask. Retain both names."
+          "reason": "The hole on Karamja leads into it (connection c-701e30e770bccbae), and source places lie inside it."
         }
       ]
     },
@@ -1882,7 +2015,8 @@
               3519,
               0
             ],
-            "reason": "The Ectofuntus trapdoor leads down to it, but the stairs between pass through floors with no terrain, so no transport chain connects them."
+            "reason": "The Ectofuntus trapdoor leads down to it, but the stairs between pass through floors with no terrain, so no transport chain connects them.",
+            "entrance": true
           }
         }
       ]
@@ -2136,7 +2270,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]
@@ -2212,7 +2347,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]
@@ -2243,7 +2379,8 @@
               3375,
               0
             ],
-            "reason": "Entered by digging on the molehills in Falador Park, which is not a transport row."
+            "reason": "Entered by digging on the molehills in Falador Park, which is not a transport row.",
+            "entrance": true
           }
         }
       ]
@@ -2278,7 +2415,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-2415-4544-5efbfa8466",
+          "componentId": "p0-2560-4800-030b158901",
           "seed": [
             2587,
             4836,
@@ -2299,7 +2436,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-2415-4544-5efbfa8466",
+          "componentId": "p0-2576-4608-d8353ffb01",
           "seed": [
             2650,
             4730,
@@ -2312,7 +2449,16 @@
             "c-4d48a014badfec0b",
             "c-fdd2fec5a0d4966d"
           ],
-          "reason": "Transport rows landing here and source places inside it."
+          "reason": "Transport rows landing here and source places inside it.",
+          "anchor": {
+            "point": [
+              2422,
+              4431,
+              0
+            ],
+            "reason": "Reached only by fairy ring (BJR) in the transport data, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
+          }
         },
         {
           "componentId": "p1-2628-4675-2eb8577998",
@@ -2468,7 +2614,8 @@
               10343,
               0
             ],
-            "reason": "Entered through the Salt Mine under Weiss (wiki: Ghorrock Dungeon); the transport data has only teleports."
+            "reason": "Entered through the Salt Mine under Weiss (wiki: Ghorrock Dungeon); the transport data has only teleports.",
+            "entrance": true
           }
         }
       ]
@@ -2655,7 +2802,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]
@@ -2862,7 +3010,8 @@
               6045,
               0
             ],
-            "reason": "Entered from Prifddinas (source s-3c1d5365beb76fc7); the transport data has no row for that entrance, only league teleports."
+            "reason": "Entered from Prifddinas (source s-3c1d5365beb76fc7); the transport data has no row for that entrance, only league teleports.",
+            "entrance": true
           }
         }
       ]
@@ -3609,7 +3758,8 @@
               5814,
               0
             ],
-            "reason": "Entered down the Bottomless Pit north of the Camdozaal Mines (wiki: Lassar Undercity); the transport data has only the Ring of shadows teleport."
+            "reason": "Entered down the Bottomless Pit north of the Camdozaal Mines (wiki: Lassar Undercity); the transport data has only the Ring of shadows teleport.",
+            "entrance": true
           }
         }
       ]
@@ -3705,7 +3855,8 @@
               3641,
               0
             ],
-            "reason": "Under the Lighthouse (source s-f030e36ebc6b2bac), entered through its basement; the transport data has no row into it."
+            "reason": "Under the Lighthouse (source s-f030e36ebc6b2bac), entered through its basement; the transport data has no row into it.",
+            "entrance": true
           }
         }
       ]
@@ -3823,7 +3974,8 @@
               9754,
               0
             ],
-            "reason": "Part of the Meiyerditch Laboratories (wiki), entered through them; the transport data has only a league teleport."
+            "reason": "Part of the Meiyerditch Laboratories (wiki), entered through them; the transport data has only a league teleport.",
+            "entrance": false
           }
         }
       ]
@@ -3835,7 +3987,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-2415-4544-5efbfa8466",
+          "componentId": "p0-2752-4800-f37c78cf57",
           "seed": [
             2784,
             4843,
@@ -4927,7 +5079,8 @@
               2851,
               0
             ],
-            "reason": "The Soul Wars lobby on the Isle of Souls; the transport data has only the minigame teleport."
+            "reason": "The Soul Wars lobby on the Isle of Souls; the transport data has only the minigame teleport.",
+            "entrance": false
           }
         }
       ]
@@ -6037,7 +6190,8 @@
               9470,
               0
             ],
-            "reason": "Entered through a rift in the Temple of the Eye (wiki: The Scar); the transport data has only the Ring of shadows teleport."
+            "reason": "Entered through a rift in the Temple of the Eye (wiki: The Scar); the transport data has only the Ring of shadows teleport.",
+            "entrance": true
           }
         }
       ]
@@ -6155,7 +6309,8 @@
               3035,
               0
             ],
-            "reason": "Lies beneath the Crypt of Tonali (wiki: Tonali Cavern); the transport data has only league teleports."
+            "reason": "Lies beneath the Crypt of Tonali (wiki: Tonali Cavern); the transport data has only league teleports.",
+            "entrance": true
           }
         }
       ]
@@ -7230,7 +7385,8 @@
               9341,
               0
             ],
-            "reason": "Reached from the Shaman Caves winch (wiki: Viyeldi caves); the transport data has only a league teleport."
+            "reason": "Reached from the Shaman Caves winch (wiki: Viyeldi caves); the transport data has only a league teleport.",
+            "entrance": true
           }
         }
       ]
@@ -7291,7 +7447,7 @@
       "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
       "components": [
         {
-          "componentId": "p0-2415-4544-5efbfa8466",
+          "componentId": "p0-2688-4800-ec859a4365",
           "seed": [
             2714,
             4838,
@@ -7350,7 +7506,8 @@
               3756,
               0
             ],
-            "reason": "On Waterbirth Island, whose dungeon the transport data does not connect; it has only a league teleport."
+            "reason": "On Waterbirth Island, whose dungeon the transport data does not connect; it has only a league teleport.",
+            "entrance": false
           }
         }
       ]
@@ -7828,7 +7985,8 @@
               4431,
               0
             ],
-            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home."
+            "reason": "Reached only by fairy ring, so it hangs off Zanaris, the fairy ring network's home.",
+            "entrance": false
           }
         }
       ]

@@ -96,6 +96,21 @@ class AnchorTest(unittest.TestCase):
         rows.append(transport([10, 10, 0], [100, 100, 0]))
         assert anchors.build_anchors(catalogue(), rows, annotations)['regions']['a']['anchors'][0]['point'] == [5, 5, 0]
 
+    def test_only_ways_in_are_entrances(self):
+        # A walked chain from the surface is an entrance, whatever its first step.
+        rows = [transport([5, 5, 0], [100, 100, 0], 'Enter Portal 1'), transport([100, 100, 0], [100, 100, 1])]
+        result = anchors.build_anchors(catalogue(), rows)
+        assert [result['regions'][r]['anchors'][0]['entrance'] for r in 'ab'] == [True, True]
+        # Teleporting on from inside another area is not.
+        rows.append(transport([101, 101, 0], [200, 200, 0], 'Exit-through Rift 1'))
+        assert anchors.build_anchors(catalogue(), rows)['regions']['c']['anchors'][0]['entrance'] is False
+        # A curated anchor is an entrance only when it says so, and so are the areas walked into from it.
+        for flag in (True, False):
+            annotations = dict(areas=[dict(key='a', components=[dict(componentId='a', seed=[101, 101, 0],
+                anchor=dict(point=[5, 5, 0], reason='Dug into', entrance=flag))])])
+            result = anchors.build_anchors(catalogue(), [transport([100, 100, 0], [100, 100, 1])], annotations)
+            assert [result['regions'][r]['anchors'][0]['entrance'] for r in 'ab'] == [flag, flag]
+
     def test_a_curated_anchor_that_misses_its_area_needs_review(self):
         annotations = dict(areas=[dict(key='a', components=[dict(componentId='a', seed=[200, 200, 0],
                                                                  anchor=dict(point=[5, 5, 0], reason='Dug into'))])])

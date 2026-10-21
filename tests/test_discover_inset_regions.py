@@ -8,9 +8,9 @@ discovery = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(discovery)
 
 
-def run(spans):
+def run(spans, cuts=()):
     return discovery.discover(dict(schemaVersion=1, spans=spans, loadedMapSquares=[0],
-                                  surfaceRects=[[0, 50, 50, 10, 10]], mapIndexRevision=1))['regions']
+                                  surfaceRects=[[0, 50, 50, 10, 10]], mapIndexRevision=1), cuts=cuts)['regions']
 
 
 def tiles(region):
@@ -65,6 +65,33 @@ class DiscoveryTest(unittest.TestCase):
         assert result['checks'][0]['status'] == 'matched'
         matched = next(r for r in result['regions'] if r['examples'])
         assert matched['tileCount'] == 1
+
+
+    def test_cuts_keep_their_map_squares_apart(self):
+        # Two filled squares side by side, with a third above the first: one area until cut.
+        spans = [[0, y, 64, 192] for y in range(64, 128)] + [[0, y, 64, 128] for y in range(128, 192)]
+        assert len(run(spans)) == 1
+        cut = dict(plane=0, squares=[[2, 1]], reason='Filler to the square edge.')
+        regions = run(spans, [cut])
+        assert sorted(r['tileCount'] for r in regions) == [4096, 8192]
+        assert {(r['bounds'][0], r['bounds'][1]) for r in regions} == {(64, 64), (128, 64)}
+        # Squares in one cut stay together; the cut applies to its own plane only.
+        together = dict(plane=0, squares=[[1, 1], [1, 2]], reason='One area.')
+        assert sorted(r['tileCount'] for r in run(spans, [together])) == [4096, 8192]
+        assert len(run(spans, [dict(cut, plane=1)])) == 1
+
+
+    def test_cuts_without_terrain_are_reported_and_malformed_cuts_fail(self):
+        topology = dict(schemaVersion=1, spans=[[0, 1, 1, 5]], loadedMapSquares=[0],
+                        surfaceRects=[[0, 50, 50, 10, 10]], mapIndexRevision=1)
+        result = discovery.discover(topology, cuts=[dict(plane=0, squares=[[0, 0], [9, 9]], reason='r')])
+        assert result['cutIssues'] == [dict(cut=0, plane=0, squares=[[9, 9]], reason='cut-square-without-terrain')]
+        for bad in (dict(plane=0, squares=[[0, 0]]), dict(plane=4, squares=[[0, 0]], reason='r'),
+                    dict(plane=0, squares=[[0]], reason='r')):
+            with self.assertRaises(ValueError):
+                discovery.discover(topology, cuts=[bad])
+        with self.assertRaises(ValueError):
+            discovery.discover(topology, cuts=[dict(plane=0, squares=[[0, 0]], reason='r')] * 2)
 
 
     def test_missing_coverage_or_invalid_spans_fail(self):
