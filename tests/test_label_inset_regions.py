@@ -64,6 +64,12 @@ class LabelTest(unittest.TestCase):
             if change == 'removed-source':
                 self.assertEqual(result['regions']['a']['status'], 'unresolved')
 
+    def test_cuts_without_terrain_need_review(self):
+        cat, anchors, sources, authored = fixture()
+        cat['cutIssues'] = [dict(cut=0, plane=0, squares=[[9, 9]], reason='cut-square-without-terrain')]
+        _, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
+        self.assertEqual(report['issues'], cat['cutIssues'])
+
     def test_every_reachable_component_needs_a_name(self):
         cat, anchors, sources, authored = fixture()
         anchors['insetRegionIds'] = []

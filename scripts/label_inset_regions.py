@@ -107,6 +107,7 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
     # anchor, which places it beside the main map.
     required = set(anchors['reachableRegionIds']) | set(annotations.get('routeRequiredRegionIds', []))
     issues.extend(anchors.get('curatedIssues', []))
+    issues.extend(catalogue.get('cutIssues', []))
     for rid in sorted(required):
         if rid not in labels or labels[rid]['status'] == 'unresolved':
             issues.append(dict(componentId=rid, reason='required-component-unnamed'))

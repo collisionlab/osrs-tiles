@@ -90,6 +90,20 @@ The build (`scripts/build-insets`) extracts terrain from the cache, finds the ar
 transports, compiles names, and then **checks that every style of the tile version has a tile for
 every map square an area covers**. A tile version from before all planes were rendered is rejected.
 
+## Areas and cuts
+
+An area is a connected patch of visible terrain on one plane: tiles join their four neighbours, with no
+gap closing. Some areas fill their map squares edge to edge with filler terrain, such as the lava
+around the Fire Altar, so neighbouring areas in the cache would join into one inset. A **cut** in
+`data/inset-labels/annotations.json` keeps a set of map squares apart from the terrain around them:
+
+```json
+"cuts": [{"plane": 0, "squares": [[40, 75]], "reason": "The Fire Altar's square is lava to its edges, ..."}]
+```
+
+Squares in one cut stay joined to each other. A cut whose squares no longer have terrain is a
+`review.json` issue.
+
 ## Names and anchors
 
 **Every reachable area needs a name and an anchor.** Reachable means some chain of transport rows

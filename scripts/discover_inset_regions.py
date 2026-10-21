@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Label terrain spans with four-neighbour connectivity; retain exact clipping geometry."""
+"""Label terrain spans with four-neighbour connectivity; retain exact clipping geometry.
+
+Curated cuts (annotations.json `cuts`) keep a set of map squares apart from the terrain around it. Some
+areas fill their map squares edge to edge with filler terrain, such as the lava around the Fire Altar,
+so neighbouring areas would otherwise join into one.
+"""
 import argparse
 import hashlib
 import json
@@ -39,9 +44,42 @@ def rectangles(spans):
     return result
 
 
-def discover(topology, examples=()):
+def cut_domains(cuts):
+    """(plane, square x, square y) -> index of the cut that holds that map square."""
+    domains = {}
+    for index, cut in enumerate(cuts):
+        squares, plane = cut.get('squares'), cut.get('plane')
+        if (type(plane) is not int or not 0 <= plane < 4 or not squares
+                or not isinstance(cut.get('reason'), str) or not cut['reason'].strip()):
+            raise ValueError(f'A cut needs a plane, squares and a reason: {cut}')
+        for square in squares:
+            if (not isinstance(square, list) or len(square) != 2 or any(type(n) is not int for n in square)
+                    or not all(0 <= n < 256 for n in square)):
+                raise ValueError(f'Invalid cut square: {square}')
+            key = (plane, *square)
+            if key in domains:
+                raise ValueError(f'Map square {square} on plane {plane} is in two cuts')
+            domains[key] = index
+    return domains
+
+
+def split_at_cuts(plane, y, intervals, domains):
+    """Split a row's spans wherever they cross from one cut's squares to another's (or to none)."""
+    result = []
+    for x1, x2 in intervals:
+        start = x1
+        for edge in range((x1 // 64 + 1) * 64, x2, 64):
+            if domains.get((plane, edge // 64 - 1, y // 64), -1) != domains.get((plane, edge // 64, y // 64), -1):
+                result.append([start, edge])
+                start = edge
+        result.append([start, x2])
+    return result
+
+
+def discover(topology, examples=(), cuts=()):
     if topology.get('schemaVersion') != 1:
         raise ValueError('Unsupported topology schema')
+    domains = cut_domains(cuts)
     rows = defaultdict(list)
     for span in topology['spans']:
         if (len(span) != 4 or any(type(n) is not int for n in span)
@@ -77,16 +115,18 @@ def discover(topology, examples=()):
         if previous_key != (key[0], key[1] - 1):
             previous = []
         left = 0
-        for x1, x2 in merge(intervals):
+        for x1, x2 in split_at_cuts(key[0], key[1], merge(intervals), domains):
+            domain = domains.get((key[0], x1 // 64, key[1] // 64), -1)
             index = len(runs)
             parents.append(index)
             runs.append((key[0], key[1], x1, x2))
-            current.append((x1, x2, index))
+            current.append((x1, x2, index, domain))
             while left < len(previous) and previous[left][1] <= x1:
                 left += 1
             j = left
             while j < len(previous) and previous[j][0] < x2:
-                parents[root(index)] = root(previous[j][2])
+                if previous[j][3] == domain:
+                    parents[root(index)] = root(previous[j][2])
                 j += 1
         previous, previous_key = current, key
     groups = defaultdict(list)
@@ -125,6 +165,12 @@ def discover(topology, examples=()):
                             classification=classification, surfaceTiles=surface_count,
                             touchesUnknown=unknown, examples=[]))
     regions.sort(key=lambda r: (-r['tileCount'], r['id']))
+    # A cut whose squares have no terrain no longer separates anything: the terrain moved.
+    terrain_squares = {(p, sx, y // 64) for (p, y), intervals in rows.items() for a, b in intervals
+                       for sx in range(a // 64, (b - 1) // 64 + 1)}
+    cut_issues = [dict(cut=index, plane=cut['plane'], squares=missing, reason='cut-square-without-terrain')
+                  for index, cut in enumerate(cuts)
+                  for missing in [[s for s in cut['squares'] if (cut['plane'], *s) not in terrain_squares]] if missing]
     checks = []
     for example in examples:
         x, y, p = example['route'][example['detachedEndpoint']]
@@ -138,7 +184,7 @@ def discover(topology, examples=()):
     return dict(schemaVersion=1, mapIndexRevision=topology['mapIndexRevision'],
                 connectivity=4, maskRule='visible terrain; full-tile overlays replace underlays; no gap closing',
                 surfaceRule='identity sections of cache main world-map, across all planes',
-                surfaceRects=topology['surfaceRects'],
+                surfaceRects=topology['surfaceRects'], cuts=list(cuts), cutIssues=cut_issues,
                 loadedMapSquareCount=len(loaded), regions=regions, checks=checks)
 
 
@@ -147,9 +193,11 @@ def main():
     parser.add_argument('topology', type=Path)
     parser.add_argument('--output', type=Path, default=Path('build/inset-metadata/regions.json'))
     parser.add_argument('--examples', type=Path, default=None)
+    parser.add_argument('--annotations', type=Path, default=Path('data/inset-labels/annotations.json'))
     args = parser.parse_args()
     raw = args.topology.read_bytes()
-    catalogue = discover(json.loads(raw), json.loads(args.examples.read_text()) if args.examples else [])
+    cuts = json.loads(args.annotations.read_text()).get('cuts', []) if args.annotations.is_file() else []
+    catalogue = discover(json.loads(raw), json.loads(args.examples.read_text()) if args.examples else [], cuts)
     catalogue['topologySha256'] = hashlib.sha256(raw).hexdigest()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(catalogue, separators=(',', ':')) + '\n')
