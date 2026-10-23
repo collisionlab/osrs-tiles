@@ -231,56 +231,11 @@ final class TacticalStyle implements MapStyle
 			return building(rgb, x, y, z, terrain);
 		}
 		int cls = ground(rgb);
-		if ((cls == p.scrub || cls == p.scrubDark || cls == p.dirt || cls == p.dirtDark) && sandy(x, y, z, terrain))
+		if ((cls == p.scrub || cls == p.scrubDark || cls == p.dirt || cls == p.dirtDark) && terrain.sandy(x, y, z))
 		{
 			cls = p.sand;
 		}
 		return shadow(coast(relief(cls, x, y, z, terrain), x, y, z, terrain), x, y, z, terrain);
-	}
-
-	/**
-	 * Whether at least three quarters of the ground in the 5x5 window is sand
-	 * by definition: a sand
-	 * hue at brightness 0.55 or more. RuneLite's blended colour cannot tell
-	 * the Kharidian Desert (definitions #b19a3d, #d0c074, #946b03) from
-	 * Varlamore's olive grass (#78680b): both blend to about hue 0.13,
-	 * saturation 0.8, value 0.6. Their definitions differ in brightness. A
-	 * three-quarter majority keeps the boundary smooth.
-	 */
-	private boolean sandy(int x, int y, int z, Terrain terrain)
-	{
-		int sand = 0;
-		int ground = 0;
-		for (int dx = -2; dx <= 2; dx++)
-		{
-			for (int dy = -2; dy <= 2; dy++)
-			{
-				UnderlayDefinition u = terrain.underlayDefinition(x + dx, y + dy, z);
-				if (u == null)
-				{
-					continue;
-				}
-				ground++;
-				if (isSand(u))
-				{
-					sand++;
-				}
-			}
-		}
-		// A strong majority: real desert is almost all sand, while Varlamore's
-		// grassland mixes in up to about half sandy definitions.
-		return sand * 4 >= ground * 3;
-	}
-
-	private final Map<Integer, Boolean> sandDefinitions = new HashMap<>();
-
-	private boolean isSand(UnderlayDefinition underlay)
-	{
-		return sandDefinitions.computeIfAbsent(underlay.getId(), id ->
-		{
-			float[] hsb = hsb(underlay.getColor());
-			return hsb[0] >= 0.08f && hsb[0] < 0.16f && hsb[2] >= 0.55f;
-		});
 	}
 
 	@Override
@@ -651,7 +606,7 @@ final class TacticalStyle implements MapStyle
 	int surface(int rgb)
 	{
 		float[] hsb = hsb(rgb);
-		if (hsb[0] < 0.17f && hsb[1] > 0.75f && hsb[2] > 0.85f)
+		if (isLava(rgb))
 		{
 			return p.lava;
 		}
@@ -664,6 +619,13 @@ final class TacticalStyle implements MapStyle
 			return p.path;
 		}
 		return hsb[2] > 0.3f ? p.dirt : p.dirtDark;
+	}
+
+	/** Bright orange-yellow: lava, by RuneLite's displayed overlay colour. */
+	static boolean isLava(int rgb)
+	{
+		float[] hsb = hsb(rgb);
+		return hsb[0] < 0.17f && hsb[1] > 0.75f && hsb[2] > 0.85f;
 	}
 
 	private int relief(int rgb, int x, int y, int z, Terrain terrain)
