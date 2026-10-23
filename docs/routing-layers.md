@@ -39,7 +39,12 @@ as an active crossing.
 
 Separately, `RoutingStaticBuilder.walkingGraph()` classifies **all** collision-walkable tiles by
 natural-component structural reachability. Only unreachable walkable tiles enter the negative
-mask. Search membership is checked against that classification. A reachable tile omitted by
+mask, and not those of an **open expanse**: an unreachable natural component of 100,000 tiles or more
+(`RoutingLayers.EXPANSE_TILES`). The collision map leaves sea tiles open, because ships sail over
+them, so each sea is one huge walkable component that no walking transport reaches. On cache 2746
+the five surface seas are 249,286 to 2,458,003 tiles and the largest enclosed unreachable area is
+35,933, so the threshold sits in a sevenfold gap. Expanses are neither counted nor drawn; the
+manifest lists each one's plane, tile count and bounds so the exclusion can be checked. Search membership is checked against that classification. A reachable tile omitted by
 production candidate discovery remains reachable, without a made-up routing ID. Cuts cannot
 change the negative mask. Quest, item, skill and profile filtering are not applied.
 
@@ -47,8 +52,9 @@ change the negative mask. Quest, item, skill and profile filtering are not appli
 
 The output directory is `<output>/<24-hex-content-address>/`:
 
-- `manifest.json`: schema 1, plugin revision, tile release, ZIP hash, normalized collision-content
-  hash, cut fingerprint, separator/transport/bank hashes, graph counts, cut diagnostics, all file hashes.
+- `manifest.json`: schema 2, plugin revision, tile release, ZIP hash, normalized collision-content
+  hash, cut fingerprint, separator/transport/bank hashes, graph counts, `expanses` (the threshold, their tile count, and each one's plane, tiles and
+  exclusive-max bounds), cut diagnostics, all file hashes.
 - `components.json`: retained production IDs, plane, search tile count, exclusive-max bounds,
   representative tile, incident crossing count and distinct neighbouring component IDs.
 - `crossings.json`: the full graph's effective crossings, for offline analysis.
@@ -81,7 +87,7 @@ of unit tile squares, not at the tile centres used by crossing endpoints.
 
 Palette reference zero means **absent**; reference `n` selects palette entry `n-1`.
 Classification zero is non-walkable, one structurally reachable walking terrain, two structurally
-unreachable walking terrain. Absent membership does not determine reachability. Files also cover
+unreachable walking terrain, three walkable terrain in an open expanse (see above). Absent membership does not determine reachability. Files also cover
 collision-bearing planes without walkable tiles. A square absent from the manifest has no published
 collision plane; an HTTP/checksum failure on an indexed square is an error, never missing collision.
 
@@ -112,9 +118,10 @@ never overwritten. Publish **before** releasing the planner pin. The pin records
 plugin revision and collision/transport/separator hashes; the frontend rejects any mismatch.
 Nothing runs in the tile-serving request path, and there is no unversioned latest lookup.
 
-The validated development output is `4fd5c5fa701122f8fb8b9a08`, for tile release
+The validated development output is `043b756bc1e0bd384462a668`, for tile release
 `2746-44385d655b71` and plugin `537092df2be681b7f47b488c1adc7be40c8d7b59`:
-1,398 retained components, 1,964 effective crossings, 1,446,082 search tiles and 6,303,245 excluded
-walkable tiles. All cuts are effective in this revision. Its synthetic cuts are on surface plane 0;
-Taverley Dungeon has several natural/retained components and excluded fragments but no synthetic
-cuts. The UI faithfully shows that rather than synthesizing dungeon separators.
+1,398 retained components, 1,964 effective crossings, 1,446,082 search tiles, 1,766,277 structurally
+unreachable walkable tiles, and 4,536,968 more in the five sea expanses. All cuts are effective in
+this revision. Its synthetic cuts are on surface plane 0; Taverley Dungeon has several natural and
+retained components and unreachable fragments but no synthetic cuts, and the UI shows that rather
+than inventing dungeon separators.

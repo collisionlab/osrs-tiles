@@ -13,7 +13,7 @@ class RoutingPublicationTest(unittest.TestCase):
     def candidate(self, root):
         payload = b'[]'
         (root / 'components.json').write_bytes(payload)
-        manifest = {'schemaVersion': 1, 'plugin': {'repository': 'Skretzo/shortest-path'},
+        manifest = {'schemaVersion': 2, 'plugin': {'repository': 'Skretzo/shortest-path'},
                     'files': {'components.json': hashlib.sha256(payload).hexdigest()}}
         encoded = json.dumps(manifest, separators=(',', ':')).encode()
         manifest['version'] = hashlib.sha256(encoded).hexdigest()[:24]

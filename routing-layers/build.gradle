@@ -1,9 +1,21 @@
-plugins { id 'java' }
+plugins {
+    id 'java'
+}
+
+// The production plugin, at the commit plugin.json pins, compiled from its own sources. Its RuneLite
+// client stays on this project's classpath, apart from the renderer's cache library.
 def pin = new groovy.json.JsonSlurper().parse(file('plugin.json'))
+
 repositories {
-    maven { url = 'https://repo.runelite.net'; content { includeGroupByRegex('net\\.runelite.*') } }
+    maven {
+        url = 'https://repo.runelite.net'
+        content {
+            includeGroupByRegex('net\\.runelite.*')
+        }
+    }
     mavenCentral()
 }
+
 dependencies {
     implementation "net.runelite:client:${pin.runeLiteVersion}"
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -11,9 +23,12 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     testImplementation 'junit:junit:4.13.2'
 }
+
 def archive = layout.buildDirectory.file('plugin.tar')
 def unpacked = layout.buildDirectory.dir('plugin')
-// Archive a commit, never a working tree. Local edits and untracked files cannot change the input.
+
+// Archive a commit, never a working tree, so local edits and untracked files can't change the input.
+// The checkout is -ProutingPluginDir, else ../../shortest-path, else the pinned commit fetched here.
 tasks.register('resolvePlugin', Exec) {
     def local = rootProject.file('../../shortest-path')
     def supplied = providers.gradleProperty('routingPluginDir')
@@ -24,34 +39,59 @@ tasks.register('resolvePlugin', Exec) {
     doFirst {
         archive.get().asFile.parentFile.mkdirs()
         if (!file(checkout.get()).isDirectory()) {
-            if (supplied.isPresent()) throw new GradleException('routingPluginDir must be an existing read-only plugin checkout')
+            if (supplied.isPresent()) {
+                throw new GradleException('routingPluginDir must be an existing plugin checkout')
+            }
             file(checkout.get()).mkdirs()
-            providers.exec { commandLine 'git', 'init', '-q', checkout.get() }.result.get().assertNormalExitValue()
-            providers.exec { commandLine 'git', '-C', checkout.get(), 'fetch', '--quiet', '--depth=1',
-                "https://github.com/${pin.repository}.git", pin.revision }.result.get().assertNormalExitValue()
+            providers.exec {
+                commandLine 'git', 'init', '-q', checkout.get()
+            }.result.get().assertNormalExitValue()
+            providers.exec {
+                commandLine 'git', '-C', checkout.get(), 'fetch', '--quiet', '--depth=1',
+                    "https://github.com/${pin.repository}.git", pin.revision
+            }.result.get().assertNormalExitValue()
         }
     }
     commandLine 'git', '-C', checkout.get(), 'archive', pin.revision, '--output', archive.get().asFile
 }
+
 tasks.register('unpackPlugin', Sync) {
     dependsOn 'resolvePlugin'
     from { tarTree(archive.get()) }
     into unpacked
 }
+
 sourceSets.main.java.srcDir unpacked.map { it.dir('src/main/java') }
 sourceSets.main.resources.srcDir unpacked.map { it.dir('src/main/resources') }
-tasks.named('compileJava') { dependsOn 'unpackPlugin' }
-tasks.named('processResources') { dependsOn 'unpackPlugin'; from('plugin.json') }
-tasks.withType(JavaCompile).configureEach { options.release.set(11); options.encoding = 'UTF-8' }
+
+tasks.named('compileJava') {
+    dependsOn 'unpackPlugin'
+}
+
+tasks.named('processResources') {
+    dependsOn 'unpackPlugin'
+    from('plugin.json')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release.set(11)
+    options.encoding = 'UTF-8'
+}
+
+//   gradle routingLayers -ProutingCollisionDir=… -ProutingTileVersion=… -ProutingOutput=…
 tasks.register('generate', JavaExec) {
     dependsOn 'classes'
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'mapstyle.routing.RoutingLayers'
     jvmArgs '-Xmx12g'
     doFirst {
-        for (name in ['routingCollisionDir', 'routingTileVersion', 'routingOutput'])
-            if (!providers.gradleProperty(name).isPresent()) throw new GradleException("Missing -P${name}; see docs/routing-layers.md")
+        for (name in ['routingCollisionDir', 'routingTileVersion', 'routingOutput']) {
+            if (!providers.gradleProperty(name).isPresent()) {
+                throw new GradleException("Missing -P${name}; see docs/routing-layers.md")
+            }
+        }
         args rootProject.file(providers.gradleProperty('routingCollisionDir').get()),
-            providers.gradleProperty('routingTileVersion').get(), rootProject.file(providers.gradleProperty('routingOutput').get())
+            providers.gradleProperty('routingTileVersion').get(),
+            rootProject.file(providers.gradleProperty('routingOutput').get())
     }
 }
