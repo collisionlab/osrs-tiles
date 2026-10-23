@@ -3,14 +3,15 @@ name: publish
 # Renders a new tiles version when the game cache or the renderer changes,
 # uploads it to tiles.collisionlab.world and opens a pin PR in osrs-planner.
 # A version is <openrs2 cache id>-<last renderer commit>, and is skipped if
-# already published.
+# already published. Each version also carries the collision layer, from the
+# plugin's dumper (pinned in flake.lock) run on the same cache.
 on:
   schedule:
     # Thursdays: game updates land on Wednesdays and openrs2 archives them soon after.
     - cron: "0 6 * * 4"
   push:
     branches: [main]
-    paths: ['src/main/java/**', '!src/main/java/mapstyle/InsetTopology.java', build.gradle, settings.gradle, flake.nix, flake.lock]
+    paths: ['src/main/java/**', '!src/main/java/mapstyle/InsetTopology.java', scripts/collision-tiles, build.gradle, settings.gradle, flake.nix, flake.lock]
   workflow_dispatch:
     inputs:
       cache_id:
@@ -48,7 +49,7 @@ jobs:
           CACHE_ID: ${{ inputs.cache_id }}
         run: |
           cache_id=${CACHE_ID:-$(python3 -I scripts/fetch-cache --latest-id)}
-          renderer=$(git log -1 --format=%H -- src/main/java ':!src/main/java/mapstyle/InsetTopology.java' build.gradle settings.gradle flake.nix flake.lock)
+          renderer=$(git log -1 --format=%H -- src/main/java ':!src/main/java/mapstyle/InsetTopology.java' scripts/collision-tiles build.gradle settings.gradle flake.nix flake.lock)
           version="$cache_id-${renderer:0:12}"
           {
             echo "cache_id=$cache_id"
@@ -56,7 +57,7 @@ jobs:
             echo "version=$version"
           } >> "$GITHUB_OUTPUT"
           published=true
-          for style in ${STYLES//,/ }; do
+          for style in ${STYLES//,/ } collision; do
             nix develop -c scripts/upload --exists "$version" "$style" || published=false
           done
           echo "published=$published" >> "$GITHUB_OUTPUT"
@@ -71,6 +72,13 @@ jobs:
           nix develop -c gradle -q tiles --args="--cache work/source/cache --xteas work/source/keys.json \
             --out work/tiles --styles $STYLES --commit ${{ steps.version.outputs.renderer }} \
             --cache-id ${{ steps.version.outputs.cache_id }}"
+      - name: Collision layer
+        if: steps.version.outputs.published == 'false'
+        run: |
+          nix develop -c gradle -q collision --args="--cachedir work/source/cache --xteapath work/source/keys.json \
+            --outputdir work/collision-squares" > work/collision.log
+          python3 -I scripts/collision-tiles work/collision-squares work/tiles/collision \
+            --cache-id ${{ steps.version.outputs.cache_id }} --commit ${{ steps.version.outputs.renderer }}
       - name: Compare with the pinned version
         id: compare
         if: steps.version.outputs.published == 'false'

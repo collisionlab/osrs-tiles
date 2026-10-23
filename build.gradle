@@ -69,3 +69,33 @@ tasks.register('insetTopology', JavaExec) {
     mainClass = 'mapstyle.InsetTopology'
     jvmArgs = application.applicationDefaultJvmArgs
 }
+
+// The plugin's collision map generator, compiled from the tooling source the flake pins
+// (COLLISION_DUMPER_SRC) against this build's RuneLite cache library. It writes one file per map
+// square, as in the plugin's collision-map.zip.
+//   nix develop -c gradle collision --args='--cachedir work/cache --xteapath work/keys.json --outputdir work/collision'
+def collisionDumperSrc = providers.environmentVariable('COLLISION_DUMPER_SRC')
+sourceSets {
+    collision {
+        java.srcDirs = collisionDumperSrc.isPresent() ? [collisionDumperSrc.get()] : []
+        java.include 'CollisionMapDumper.java'
+        compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+dependencies {
+    // Runtime-only in the cache POM, like slf4j above; the version the cache uses.
+    collisionImplementation 'commons-cli:commons-cli:1.3.1'
+}
+
+tasks.register('collision', JavaExec) {
+    description = 'Writes the collision map, one file per map square.'
+    doFirst {
+        if (!collisionDumperSrc.isPresent()) throw new GradleException('COLLISION_DUMPER_SRC is not set: run inside nix develop')
+    }
+    classpath = sourceSets.collision.runtimeClasspath
+    mainClass = 'net.runelite.cache.CollisionMapDumper'
+    jvmArgs = application.applicationDefaultJvmArgs
+    workingDir = providers.environmentVariable('PWD').orElse(rootDir.path).get()
+}

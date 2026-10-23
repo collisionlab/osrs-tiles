@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""Lays out the plugin's collision map as a layer of a tiles version.
+
+    scripts/collision-tiles SQUARES OUT [--cache-id N] [--commit SHA]
+
+SQUARES is CollisionMapDumper's output: one file per map square, named `<rx>_<ry>`, as in the
+plugin's collision-map.zip. OUT gets one file per map square and plane, at the address the image
+tiles use at zoom 8 (`8/<x>/<y>.bin` for plane 0, `p<plane>/8/<x>/<y>.bin` above, with x = rx - 15 and
+y = ry - 19), plus index.json and manifest.json. See docs/tiles.md. Standard library only.
+"""
+import argparse
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+
+ORIGIN = (15, 19)
+SIZE = 64
+PLANES = 4
+FLAGS = 4
+# The dumper writes a java.util.BitSet: bit ((plane * 64 + y) * 64 + x) * 4 + flag, least
+# significant bit first, trailing zero bytes dropped. Each plane is a contiguous block.
+PLANE_BYTES = SIZE * SIZE * FLAGS // 8
+NAME = re.compile(r"^(\d+)_(\d+)$")
+
+
+def tile_path(plane: int, x: int, y: int) -> str:
+    return f"{f'p{plane}/' if plane else ''}8/{x}/{y}.bin"
+
+
+def split(data: bytes) -> list[bytes]:
+    """The square's planes, PLANE_BYTES each; a plane with no walkable tile is empty."""
+    data = data.ljust(PLANES * PLANE_BYTES, b"\0")
+    planes = [data[p * PLANE_BYTES:(p + 1) * PLANE_BYTES] for p in range(PLANES)]
+    return [plane if any(plane) else b"" for plane in planes]
+
+
+def dumper_source(flake_lock: Path) -> dict:
+    locked = json.loads(flake_lock.read_text())["nodes"]["tooling"]["locked"]
+    return {"repository": f"{locked['owner']}/{locked['repo']}", "rev": locked["rev"]}
+
+
+def build(squares: Path, out: Path, cache_id: str | None, commit: str | None, source: dict) -> dict:
+    index: dict[str, str] = {}
+    counts = [0] * PLANES
+    for file in sorted(squares.iterdir()):
+        match = NAME.match(file.name)
+        if not match:
+            raise SystemExit(f"unexpected file {file}")
+        x, y = int(match[1]) - ORIGIN[0], int(match[2]) - ORIGIN[1]
+        if x < 0 or y < 0:
+            raise SystemExit(f"map square {file.name} lies outside the tile extent")
+        for plane, data in enumerate(split(file.read_bytes())):
+            if not data:
+                continue
+            path = tile_path(plane, x, y)
+            (out / path).parent.mkdir(parents=True, exist_ok=True)
+            (out / path).write_bytes(data)
+            index[path] = hashlib.sha256(data).hexdigest()
+            counts[plane] += 1
+    (out / "index.json").write_text(json.dumps(index, indent=1, sort_keys=True) + "\n")
+    manifest = {
+        "layout": "explv-tms-v1",
+        "layer": "collision",
+        "format": "shortest-path-flags-v1",
+        "gameTilesPerSide": SIZE,
+        "nativeZoom": 8,
+        "origin": list(ORIGIN),
+        "planes": [{"path": f"p{p}/" if p else "", "mapSquares": counts[p]} for p in range(PLANES)],
+        "tiles": len(index),
+        "dumperSource": source,
+    }
+    if cache_id:
+        manifest["cacheId"] = int(cache_id)
+    if commit:
+        manifest["rendererCommit"] = commit
+    # Written last, as for the image styles: a version with a manifest is complete.
+    (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    return manifest
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("squares", type=Path)
+    parser.add_argument("out", type=Path)
+    parser.add_argument("--cache-id")
+    parser.add_argument("--commit")
+    parser.add_argument("--flake-lock", type=Path, default=Path(__file__).resolve().parents[1] / "flake.lock")
+    args = parser.parse_args()
+    args.out.mkdir(parents=True, exist_ok=True)
+    manifest = build(args.squares, args.out, args.cache_id, args.commit, dumper_source(args.flake_lock))
+    print(f"collision: {manifest['tiles']} tiles, per plane {[p['mapSquares'] for p in manifest['planes']]}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

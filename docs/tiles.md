@@ -3,8 +3,9 @@
 This repository publishes two kinds of release to `https://tiles.collisionlab.world`. Each is
 immutable once uploaded, and there is no "latest": consumers pin exact versions.
 
-- **Tiles** are the map imagery: every plane, in two styles. A new version is built only when the
-  game cache or the renderer changes.
+- **Tiles** are the map imagery: every plane, in two styles, plus the collision layer drawn over
+  them. A new version is built only when the game cache, the renderer or the collision dumper
+  changes.
 - **Inset bundles** are metadata only. They record which areas lie off the main map, where they are
   entered from, and what they are called. A new bundle is built whenever transports or names change.
   A bundle is cut from one tile version and draws all its pixels from it.
@@ -56,11 +57,32 @@ upper plane in smaller blocks is slower: each render has a fixed cost that outwe
 on renderer pushes to `main`; or by hand with an optional cache id. For a new version it:
 
 1. re-renders `examples/lumbridge` and requires every hash to match (`scripts/check-golden`);
-2. renders both styles (`gradle tiles`, `Tiles.java`);
+2. renders both styles (`gradle tiles`, `Tiles.java`) and the collision layer;
 3. compares them with the planner's pinned version (`scripts/compare-version`). Newly missing
    decryption keys fail the run;
 4. uploads each style with its manifest last (`scripts/upload`);
 5. hands the version to the `insets` workflow as the tile candidate.
+
+## Collision layer: `/collision/<version>/`
+
+The plugin's collision map for the same cache, laid out as a layer of the tiles version: the same
+version, the same addresses and the same manifest rules, so a viewer draws it like another style.
+It comes from `CollisionMapDumper.java` in shortest-path-tooling, at the commit `flake.lock` pins
+(the `tooling` input), compiled against this build's RuneLite cache library (`gradle collision`).
+For the same cache and dumper it is byte-for-byte the plugin's `collision-map.zip`, split by plane
+(`scripts/collision-tiles`).
+
+| Part | Value |
+|---|---|
+| plane 0 | `collision/<version>/8/{x}/{y}.bin`, where the image tile `8/{x}/{y}.png` is: map square (15 + x, 19 + y) |
+| planes 1–3 | `collision/<version>/p{plane}/8/{x}/{y}.bin` |
+| file | 2,048 bytes: 64 × 64 game tiles × 4 flags, bit `(y * 64 + x) * 4 + flag` with x, y local to the square, least significant bit first. Flags: 0 and 1, the tile's north and east edges are open; 2 and 3, a closed north or east edge is a wall or door (structural) rather than an object. The plugin's `SplitFlagMap` format, one plane |
+| `manifest.json` | `layer: "collision"`, `format`, `origin`, `planes[i]` = `{path, mapSquares}`, `tiles`, `cacheId`, `rendererCommit`, `dumperSource` (repository and commit). Uploaded last |
+| `index.json` | sha256 of every file, keyed by path |
+
+**A missing file means no walkable tile** on that plane of that square, which is also how the
+pathfinder treats it. Cache 2740: 5,085 files (2,693 / 1,260 / 732 / 400 per plane), about 10 MB.
+The dumper takes about 10 s.
 
 ## Inset bundles: `/insets/<version>/`
 

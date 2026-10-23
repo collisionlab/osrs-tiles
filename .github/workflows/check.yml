@@ -28,5 +28,5 @@ jobs:
       - uses: cachix/install-nix-action@v31
       - name: Python inset tests
         run: nix develop -c python3 -m unittest discover -s tests
-      - name: Compile cache extractor and renderer
-        run: nix develop -c gradle test
+      - name: Compile cache extractor, renderer and collision dumper
+        run: nix develop -c gradle test compileCollisionJava
