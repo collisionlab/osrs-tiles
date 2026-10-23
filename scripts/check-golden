@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Re-render an example from the cache it was made with and compare hashes.
 
-    scripts/check-golden [EXAMPLE] [--work DIR]
+    scripts/check-golden [EXAMPLE...] [--work DIR]
 
-EXAMPLE defaults to examples/lumbridge. Every output listed in its
-manifest.json must come out byte-identical, and standard.png must equal
-runelite.png (the fork with default hooks renders exactly what RuneLite
+EXAMPLE defaults to every directory under examples/. Every output listed in
+an example's manifest.json must come out byte-identical, and standard.png must
+equal runelite.png (the fork with default hooks renders exactly what RuneLite
 renders). A renderer change that is meant to change pixels regenerates the
 example in the same commit.
 
-The example's cache is openrs2 cache 2727; its idx255 hash is checked before
+The examples' cache is openrs2 cache 2727; its idx255 hash is checked before
 rendering. Runs gradle, so run it from the dev shell.
 """
 import argparse
@@ -27,23 +27,19 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def main() -> None:
-    p = argparse.ArgumentParser()
-    p.add_argument("example", nargs="?", type=Path, default=REPO / "examples/lumbridge")
-    p.add_argument("--work", type=Path, default=REPO / "build/golden")
-    a = p.parse_args()
-
-    expected = json.loads((a.example / "manifest.json").read_text())
-    source = a.work / f"cache-{CACHE_ID}"
+def check(example: Path, work: Path) -> list:
+    """Re-render one example; returns what differs."""
+    expected = json.loads((example / "manifest.json").read_text())
+    source = work / f"cache-{CACHE_ID}"
     if not (source / "cache-id").is_file() or (source / "cache-id").read_text().strip() != str(CACHE_ID):
         subprocess.run([sys.executable, str(REPO / "scripts/fetch-cache"), str(source), "--id", str(CACHE_ID)], check=True)
     idx255 = sha256(source / "cache/main_file_cache.idx255")
     if idx255 != expected["cacheIdx255Sha256"]:
-        sys.exit(f"cache {CACHE_ID} idx255 is {idx255}, the example was made from {expected['cacheIdx255Sha256']}")
+        sys.exit(f"cache {CACHE_ID} idx255 is {idx255}, {example.name} was made from {expected['cacheIdx255Sha256']}")
 
     outputs = expected["outputs"]
     styles = [name[:-4] for name in outputs if name not in ("height.png", "compare.png")]
-    out = a.work / a.example.name
+    out = work / example.name
     args = [
         "--cache", str(source / "cache"), "--xteas", str(source / "keys.json"),
         "--area", ",".join(map(str, expected["area"])), "--plane", str(expected["plane"]),
@@ -58,14 +54,27 @@ def main() -> None:
         got = sha256(out / name)
         status = "ok" if got == want["sha256"] else "DIFFERS"
         if status != "ok":
-            failed.append(name)
-        print(f"{status:8} {name}")
+            failed.append(f"{example.name}/{name}")
+        print(f"{status:8} {example.name}/{name}")
     if sha256(out / "runelite.png") != sha256(out / "standard.png"):
-        failed.append("standard.png != runelite.png")
+        failed.append(f"{example.name}: standard.png != runelite.png")
         print("DIFFERS  standard.png is not runelite.png: the fork changed default rendering")
+    return failed
+
+
+def main() -> None:
+    p = argparse.ArgumentParser()
+    p.add_argument("examples", nargs="*", type=Path)
+    p.add_argument("--work", type=Path, default=REPO / "build/golden")
+    a = p.parse_args()
+
+    examples = a.examples or sorted(d for d in (REPO / "examples").iterdir() if (d / "manifest.json").is_file())
+    failed = []
+    for example in examples:
+        failed += check(example.resolve(), a.work)
     if failed:
-        sys.exit(f"golden check failed: {', '.join(failed)} (outputs in {out})")
-    print(f"golden check passed: {len(outputs)} outputs match {a.example.relative_to(REPO)}")
+        sys.exit(f"golden check failed: {', '.join(failed)} (outputs in {a.work})")
+    print(f"golden check passed: {', '.join(e.name for e in examples)}")
 
 
 if __name__ == "__main__":

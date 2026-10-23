@@ -38,7 +38,7 @@ T=../../shortest-path-tooling        # or wherever ./cache and keys.json live
 | `--area X0,Y0,X1,Y1` | inclusive world-tile rectangle, **or** |
 | `--regions ID,…` | map squares (`(x>>6)<<8 \| (y>>6)`); renders their union |
 | `--plane Z` | 0–3 |
-| `--styles S,…` | `runelite` (default), `standard`, `declutter`, `muted`, `relief`, `tactical`, `tactical-dusk`, `tactical-field`, `tactical-classic` |
+| `--styles S,…` | `runelite` (default), `standard`, `declutter`, `muted`, `relief`, `tactical`, `tactical-dusk`, `tactical-field`, `tactical-classic`, `blueprint` |
 | `--height` | also write `height.png` |
 | `--labels` | draw area labels (off by default, as in Explv's tiles) |
 | `--out DIR` | output directory, created if missing |
@@ -287,6 +287,87 @@ rocks (a real tactics look wants our own forest and mountain glyphs) and
 in-building ladders and stairs, which matter for routing and need an
 object-sprite hook. Quest starts may deserve a quieter third badge kind.
 The palette has only been checked by eye against the planner.
+
+## The blueprint style
+
+`blueprint` (`BlueprintStyle.java`) is an architectural drawing for
+investigating dungeons, caves, multi-floor buildings and missing links under
+the workbench's diagnostic overlays. It is a pure rendering of cache data,
+through the same hooks as tactical: the RuneLite fork is unchanged, and it
+reads no collision, transport or reachability data. The layout, addresses and
+manifest are tactical's (`explv-tms-v1`, every plane).
+
+- **Ground and floors** are one flat colour per class, with no hillshade,
+  texture, terraces, waves or per-tile variation, so a corridor or a room has
+  exactly the shape the cache gives it, shaped overlays and their rotations
+  included. Each tile is classed from RuneLite's colour for it (the blended
+  ground colour, or the overlay's colour) plus its own definition: grass,
+  dirt, sand (also by `Terrain.sandy`, shared with tactical), snow, rock,
+  paved, trail, water, lava. Under a roof (tile setting `0x4`) a floor is
+  stone (grey), wood (brown) or another floor. Dungeons are seldom roofed and
+  are drawn with the outdoor classes: Taverley Dungeon's floor is dirt, the
+  Chasm of Fire's rock. Dim, weakly coloured ground counts as rock, so dark
+  cave floors don't flicker between rock and dirt. A colour no class
+  describes (blue ground, the Catacombs of Kourend's violet stone) is
+  `unclassified`, never passed off as another class.
+- **Water** is tactical's test (displayed colour, or a blue textured or
+  two-colour definition), except a plain one-colour overlay with a violet
+  hue (≥ 0.665): that is the Catacombs' floor (`#423f73`), which tactical
+  draws as water.
+- **Three kinds of dark** stay apart. An *invisible overlay* (definition
+  colour `#ff00ff`, which RuneLite leaves undrawn; it fills the space between
+  caves) is drawn as `void`, `#121c21`. Terrain the cache *draws near black*
+  (brightness < 0.11) is `dark`, `#283337`: TzHaar's floor (a `#030303`
+  underlay) and the Chasm of Fire's void (a `#000001` overlay) alike. The
+  renderer can't tell those apart, so darkness never means unwalkable; the
+  collision layer says that. A tile with *no terrain*, or a map square the
+  cache lacks, stays the renderer's black. The void colour is kept close to
+  black because the cache mixes invisible overlays and empty tiles around
+  caves tile by tile.
+- **Walls** keep RuneLite's geometry (straight, corner, diagonal and pillar
+  pieces, one pixel wide) in a pale `#d7e0da`. A wall is **door-like**,
+  `#dbb77a`, when its `wallOrDoor` is set *and* it has a right-click action.
+  `wallOrDoor` is the definition's "interactive" bit (opcode 19, defaulted to
+  true for any object with an action), and some walls set it with no action
+  at all, so on its own it doesn't mean a door. Door-like means a door, gate,
+  loose railing or crumbling wall to use, not one that opens for a given
+  player: blueprint is architecture, not transport eligibility. Walls drawn
+  with a map-scene sprite keep RuneLite's sprite.
+- **Objects:** every map icon is hidden (the workbench draws its own
+  markers), and map-scene scenery (`Styles.isScenery`: types 10, 11 and 22
+  with a map-scene sprite) is dropped unless it is a passage, i.e. one of its
+  actions starts with a movement verb (`BlueprintStyle.PASSAGE_ACTIONS`:
+  climb, enter, squeeze, cross, jump, open, …). Ladders, stairs, crevices,
+  rockslides, stepping stones, bridges, trapdoors and portals stay; trees,
+  plants, mining rocks, fountains, statues and unnamed decorations (Sailing's
+  sea decor included) go. Walls are never dropped, and objects without a
+  sprite are not drawn by the renderer anyway.
+
+The palette is a small set of dark, desaturated colours, so bright overlay
+colours (selected components, candidate links) stand out on it:
+
+| Class | Colour | Class | Colour |
+|---|---|---|---|
+| void | `#121c21` | stone floor | `#73858b` |
+| dark | `#283337` | wood floor | `#817a6a` |
+| grass | `#526b69` | other floor | `#777684` |
+| dirt | `#6b6455` | water | `#344d62` |
+| sand | `#8c8670` | lava | `#ad7350` |
+| snow | `#9aa6a6` | unclassified | `#666b6d` |
+| rock | `#5a646b` | wall | `#d7e0da` |
+| paved | `#9a9c8b` | door-like wall | `#dbb77a` |
+| trail | `#878271` | | |
+
+`Tiles` never draws icons for it, whatever `--no-icons` says (its
+manifest records `icons: false`). Golden examples with a blueprint panel:
+`examples/lumbridge` (surface), `examples/taverley-dungeon` (caves, lava,
+void), `examples/catacombs-of-kourend` (violet floors) and
+`examples/lumbridge-castle-p1` (an upper plane). `BlueprintStyleTest` checks
+the classes, walls, icons and object filter on synthetic data;
+`BlueprintRenderTest` renders from the golden cache and checks that adjoining
+render blocks agree, that the ground keeps RuneLite's shapes and voids, and
+that a `Tiles` run writes blueprint's files and manifest exactly as
+tactical's.
 
 ## The whole world
 

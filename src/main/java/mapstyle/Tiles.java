@@ -55,7 +55,7 @@ import net.runelite.cache.util.XteaKeyManager;
  *
  * <pre>
  * Tiles --cache DIR --xteas FILE --out DIR [--styles standard,tactical]
- *       [--no-icons tactical] [--planes 0,1,2,3] [--block 16] [--commit SHA] [--cache-id N]
+ *       [--no-icons tactical,blueprint] [--planes 0,1,2,3] [--block 16] [--commit SHA] [--cache-id N]
  * </pre>
  *
  * Writes {@code <out>/<style>/[p<plane>/]<z>/<x>/<y>.png}, plus per style
@@ -111,8 +111,8 @@ public final class Tiles
 
 			for (Styles style : args.styles)
 			{
-				boolean icons = !args.noIcons.contains(style);
-				MapStyle hooks = icons ? style.style : style.style.withoutIcons();
+				MapStyle hooks = args.noIcons.contains(style) ? style.style.withoutIcons() : style.style;
+				boolean icons = hooks.drawsIcons();
 				Path dir = args.out.toPath().resolve(style.id());
 				long start = System.nanoTime();
 
@@ -473,7 +473,7 @@ public final class Tiles
 			"             [--planes Z[,Z...]] [--block N] [--extent RX0,RY0,RX1,RY1] [--commit SHA] [--cache-id N]",
 			"  --planes    planes to write (default 0,1,2,3)",
 			"  --styles    styles to write (default standard,tactical)",
-			"  --no-icons  styles drawn without map icons (default tactical)",
+			"  --no-icons  styles drawn without map icons (default tactical,blueprint; blueprint never draws them)",
 			"  --block     map squares per render block side (default 16)",
 			"  --extent    inclusive map-square rectangle to write (default: every map square in the cache)",
 			"  --commit    renderer commit recorded in each manifest",
@@ -488,7 +488,7 @@ public final class Tiles
 		String commit;
 		Integer cacheId;
 		List<Styles> styles = new ArrayList<>(List.of(Styles.STANDARD, Styles.TACTICAL));
-		Set<Styles> noIcons = new HashSet<>(Set.of(Styles.TACTICAL));
+		Set<Styles> noIcons = new HashSet<>(Set.of(Styles.TACTICAL, Styles.BLUEPRINT));
 
 		static Args parse(String[] argv)
 		{

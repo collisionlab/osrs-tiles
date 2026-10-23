@@ -18,8 +18,11 @@ jobs:
         with:
           name: collisionlab
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      - name: Re-render examples/lumbridge and compare hashes
+      - name: Re-render every example and compare hashes
         run: nix develop -c scripts/check-golden
+      # Renderer tests that read the cache check-golden fetched (the insets job skips them).
+      - name: Cache-backed renderer tests
+        run: nix develop -c gradle test
 
   insets:
     runs-on: ubuntu-latest

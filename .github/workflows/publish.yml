@@ -33,7 +33,7 @@ jobs:
       R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-      STYLES: standard,tactical
+      STYLES: standard,tactical,blueprint
     steps:
       - uses: actions/checkout@v7
         with:

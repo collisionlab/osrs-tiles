@@ -66,6 +66,10 @@
       "renderer": "StyledMapImageDumper",
       "sha256": "b1212d6dd55185b2570e1102a5293cd8a3eae0d699cfed41bad71b412f7eae14"
     },
+    "blueprint.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "3a1ee590339740f8c6b5b5ceec1b2e134f937e660de73cddee385d64c5f336cd"
+    },
     "height.png": {
       "renderer": "height",
       "sha256": "08cb2673c046b4f6255fd3a5bdd8c4c7f86bb1d5dc134422a5b9db5cc1dc54d7",
@@ -76,7 +80,7 @@
     },
     "compare.png": {
       "renderer": "compare",
-      "sha256": "e837bbf912e52a61d93002f575e1b80bdffd1e85dead1519f033a789caa9aa08"
+      "sha256": "98a2817fbfb3360ba35e89ecd6d9aa27d8bf5357396741579c51d2bbc6716122"
     }
   }
 }

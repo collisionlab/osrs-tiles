@@ -1,5 +1,6 @@
 package mapstyle;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.IntFunction;
@@ -24,6 +25,7 @@ public final class Terrain
 	private final IntFunction<OverlayDefinition> overlays;
 	private final IntFunction<UnderlayDefinition> underlays;
 	private final Map<Integer, Integer> overlayCache = new HashMap<>();
+	private final Map<Integer, Boolean> sandDefinitions = new HashMap<>();
 
 	/**
 	 * {@code overlayColour} maps an overlay definition id to RuneLite's
@@ -76,6 +78,50 @@ public final class Terrain
 		}
 		int id = r.getOverlayId(z, x & (Region.X - 1), y & (Region.Y - 1));
 		return id == 0 ? 0 : overlayCache.computeIfAbsent(id - 1, overlayColour::applyAsInt);
+	}
+
+	/**
+	 * Whether at least three quarters of the ground in the 5x5 window is sand
+	 * by definition: a sand
+	 * hue at brightness 0.55 or more. RuneLite's blended colour cannot tell
+	 * the Kharidian Desert (definitions #b19a3d, #d0c074, #946b03) from
+	 * Varlamore's olive grass (#78680b): both blend to about hue 0.13,
+	 * saturation 0.8, value 0.6. Their definitions differ in brightness. A
+	 * three-quarter majority keeps the boundary smooth.
+	 */
+	public boolean sandy(int x, int y, int z)
+	{
+		int sand = 0;
+		int ground = 0;
+		for (int dx = -2; dx <= 2; dx++)
+		{
+			for (int dy = -2; dy <= 2; dy++)
+			{
+				UnderlayDefinition u = underlayDefinition(x + dx, y + dy, z);
+				if (u == null)
+				{
+					continue;
+				}
+				ground++;
+				if (isSand(u))
+				{
+					sand++;
+				}
+			}
+		}
+		// A strong majority: real desert is almost all sand, while Varlamore's
+		// grassland mixes in up to about half sandy definitions.
+		return sand * 4 >= ground * 3;
+	}
+
+	private boolean isSand(UnderlayDefinition underlay)
+	{
+		return sandDefinitions.computeIfAbsent(underlay.getId(), id ->
+		{
+			int rgb = underlay.getColor();
+			float[] hsb = Color.RGBtoHSB(rgb >> 16 & 0xFF, rgb >> 8 & 0xFF, rgb & 0xFF, null);
+			return hsb[0] >= 0.08f && hsb[0] < 0.16f && hsb[2] >= 0.55f;
+		});
 	}
 
 	/**
