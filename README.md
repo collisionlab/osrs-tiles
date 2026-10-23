@@ -388,3 +388,6 @@ nix develop -c scripts/build-insets --cache /path/to/cache --xteas /path/to/keys
 Integration sources were preserved from tooling `experiment/map-insets` commit
 `66b1bff`; the curated evidence remains build/test data rather than a runtime
 network dependency. The full source snapshot is not uploaded by the publisher.
+
+Production routing partitions, effective synthetic crossings and the structural negative mask are
+built as an independent sidecar: [routing layers](docs/routing-layers.md).

@@ -99,3 +99,6 @@ tasks.register('collision', JavaExec) {
     jvmArgs = application.applicationDefaultJvmArgs
     workingDir = providers.environmentVariable('PWD').orElse(rootDir.path).get()
 }
+
+// Separate project: the plugin's RuneLite client never enters the renderer's cache classpath.
+tasks.register('routingLayers') { dependsOn ':routing-layers:generate' }

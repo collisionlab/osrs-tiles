@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""Verify the content address and every file before publishing a routing sidecar."""
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+
+
+def verify(candidate):
+    manifest = json.loads((candidate / 'manifest.json').read_text())
+    version = manifest.pop('version')
+    encoded = json.dumps(manifest, separators=(',', ':'), ensure_ascii=False).encode()
+    if not re.fullmatch('[0-9a-f]{24}', version) or hashlib.sha256(encoded).hexdigest()[:24] != version:
+        raise ValueError('routing content address mismatch')
+    if manifest['schemaVersion'] != 2 or manifest['plugin']['repository'] != 'Skretzo/shortest-path':
+        raise ValueError('unsupported routing manifest')
+    for name, digest in manifest['files'].items():
+        if not re.fullmatch(r'(components\.json|crossings\.json|p[0-3]/\d+/\d+\.(bin|crossings\.json))', name):
+            raise ValueError(f'invalid routing path: {name}')
+        if hashlib.sha256((candidate / name).read_bytes()).hexdigest() != digest:
+            raise ValueError(f'routing file checksum mismatch: {name}')
+    actual = {str(file.relative_to(candidate)) for file in candidate.rglob('*') if file.is_file()}
+    if actual != set(manifest['files']) | {'manifest.json'}:
+        raise ValueError('unlisted routing files')
+    manifest['version'] = version
+    return manifest
+
+
+if __name__ == '__main__':
+    print(verify(Path(sys.argv[1]))['version'])
