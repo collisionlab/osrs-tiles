@@ -17,7 +17,7 @@ root.mkdir(parents=True, exist_ok=True)
 def fetch(name):
     target = root / name
     target.parent.mkdir(parents=True, exist_ok=True)
-    subprocess.run(['curl', '--fail', '--silent', '--show-error', '--location', '--retry', '2',
+    subprocess.run(['curl', '--fail', '--silent', '--show-error', '--location', '--retry', '5', '--retry-all-errors',
                     f'{base}/collision/{version}/{name}', '--output', str(target)], check=True)
     return target.read_bytes()
 
