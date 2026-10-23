@@ -48,7 +48,9 @@ def main() -> None:
     lines = []
     review = False
     coverage_lost = []
-    styles = sorted(d.name for d in a.render.iterdir() if (d / "manifest.json").is_file())
+    # Image styles only: data layers (collision) have no keys or pixels to compare.
+    styles = sorted(d.name for d in a.render.iterdir()
+                    if (d / "manifest.json").is_file() and "layer" not in json.loads((d / "manifest.json").read_text()))
     if pinned:
         lines.append(f"Compared with the pinned version `{pinned['version']}`.\n")
     else:

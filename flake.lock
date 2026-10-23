@@ -18,7 +18,24 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "tooling": "tooling"
+      }
+    },
+    "tooling": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792667042,
+        "narHash": "sha256-eMG5F7yPVWgAbX5hLw83VkMoPNY2tFwifLp/te0TrIs=",
+        "owner": "osrs-pathfinding",
+        "repo": "shortest-path-tooling",
+        "rev": "e615afa705469cdb541c496f1fe99d7ce7e5d4e5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "osrs-pathfinding",
+        "repo": "shortest-path-tooling",
+        "type": "github"
       }
     }
   },
