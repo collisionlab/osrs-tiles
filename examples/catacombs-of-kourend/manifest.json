@@ -1,0 +1,54 @@
+{
+  "cache": "<scripts/fetch-cache --id 2727>/cache",
+  "cacheIdx255Sha256": "e02780d12c6a6ba6f17be79dad42e61732b6000795e6d955c527a12473d0caa8",
+  "xteas": "<scripts/fetch-cache --id 2727>/keys.json",
+  "xteasSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+  "runeliteCache": "1.13.2",
+  "area": [
+    1600,
+    9984,
+    1727,
+    10111
+  ],
+  "plane": 0,
+  "renderedRegions": [
+    6299,
+    6300,
+    6301,
+    6302,
+    6555,
+    6556,
+    6557,
+    6558,
+    6811,
+    6812,
+    6813,
+    6814,
+    7067,
+    7068,
+    7069,
+    7070
+  ],
+  "outputs": {
+    "runelite.png": {
+      "renderer": "MapImageDumper",
+      "sha256": "897dab02bc7dd016f0a1b71c68bc6eafad91a53d1c360e15ed98cc840ae58a51"
+    },
+    "standard.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "897dab02bc7dd016f0a1b71c68bc6eafad91a53d1c360e15ed98cc840ae58a51"
+    },
+    "tactical.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "406b0b0f2d2ba20e887ecd10a08caad6167957abd7815b82239ce02e093f4fea"
+    },
+    "blueprint.png": {
+      "renderer": "StyledMapImageDumper",
+      "sha256": "ca6f2dfc22d0de2a8fcc0ca21e642f43aa01c30d2aedf7be96b06bb64aa93eea"
+    },
+    "compare.png": {
+      "renderer": "compare",
+      "sha256": "ca47ec8d21f3165f8d5d6618c3402b67edceb023fd7639af5ba35bffbde2b8b2"
+    }
+  }
+}

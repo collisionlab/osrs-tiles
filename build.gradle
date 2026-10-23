@@ -102,3 +102,13 @@ tasks.register('collision', JavaExec) {
 
 // Separate project: the plugin's RuneLite client never enters the renderer's cache classpath.
 tasks.register('routingLayers') { dependsOn ':routing-layers:generate' }
+
+// BlueprintRenderTest renders from the golden example's cache, which
+// scripts/check-golden fetches; without it those tests are skipped.
+tasks.named('test') {
+    systemProperty 'golden.cache', providers.environmentVariable('GOLDEN_CACHE')
+        .orElse(file('build/golden/cache-2727').path).get()
+    jvmArgs application.applicationDefaultJvmArgs
+    // As in the CLI: RuneLite's WorldMapManager asserts on data the renderer handles.
+    enableAssertions = false
+}

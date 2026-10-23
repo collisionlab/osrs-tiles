@@ -81,7 +81,9 @@ enum Styles
 	/** Tactical as a printed field map with contour lines. */
 	TACTICAL_FIELD(true, new TacticalStyle(TacticalStyle.FIELD)),
 	/** Tactical in saturated Advance Wars colours. */
-	TACTICAL_CLASSIC(true, new TacticalStyle(TacticalStyle.CLASSIC));
+	TACTICAL_CLASSIC(true, new TacticalStyle(TacticalStyle.CLASSIC)),
+	/** Flat architectural classes, pale walls, no icons or decorative scenery: for dungeon investigation. */
+	BLUEPRINT(true, new BlueprintStyle());
 
 	// Hillshade parameters: sun azimuth/altitude and vertical exaggeration.
 	private static final double SUN_AZIMUTH = Math.toRadians(315);

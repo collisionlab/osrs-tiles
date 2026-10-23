@@ -3,7 +3,7 @@
 This repository publishes two kinds of release to `https://tiles.collisionlab.world`. Each is
 immutable once uploaded, and there is no "latest": consumers pin exact versions.
 
-- **Tiles** are the map imagery: every plane, in two styles, plus the collision layer drawn over
+- **Tiles** are the map imagery: every plane, in three styles, plus the collision layer drawn over
   them. A new version is built only when the game cache, the renderer or the collision dumper
   changes.
 - **Inset bundles** are metadata only. They record which areas lie off the main map, where they are
@@ -18,7 +18,7 @@ How these releases reach production (pin PRs, drafts, deploys) is in osrs-planne
 | Part | Value |
 |---|---|
 | version | `<openrs2 cache id>-<renderer commit, 12 hex>`. The commit is the last one touching renderer sources (not `InsetTopology`), the Gradle files or the flake |
-| styles | `standard` (RuneLite's rendering, as in Explv's tiles) and `tactical` (no icons) |
+| styles | `standard` (RuneLite's rendering, as in Explv's tiles), `tactical` (no icons) and `blueprint` (an architectural drawing for dungeon investigation; never icons). Every style has the same layout, addresses and manifest fields; see the README for what each draws |
 | layout | `explv-tms-v1`: 256 px tiles, TMS rows counted from the south. Tile (c, r) at zoom 8 is map square (15 + c, 19 + r) at 4 px per game tile. Zooms 7–3 average 2×2 tiles of the zoom above. Nothing above 8: viewers upscale |
 | plane 0 | `<style>/<version>/{z}/{x}/{y}.png`, the same addresses as Explv's set, so Leaflet uses it unchanged |
 | planes 1–3 | `<style>/<version>/p{plane}/{z}/{x}/{y}.png` |
@@ -49,15 +49,15 @@ never rendered, and an upper plane renders only the 16×16-square blocks that ha
 | 3 | 226 | 577 |
 
 In CI (publish run for `2740-07d92fc06f50`), each style renders plane 0 in 65–90 s and all four
-planes in 195–210 s, so about 7 minutes for both. Uploading takes about 5.5 minutes, and the whole
+planes in 195–210 s, so about 7 minutes for two styles and 10 for three. Uploading takes about 5.5 minutes, and the whole
 publish about 14. A style is about 55–65 MB, and its upper planes about 16 MB of that. Rendering an
 upper plane in smaller blocks is slower: each render has a fixed cost that outweighs the area saved.
 
 **Built by** `.github/workflows/publish.yml`: Thursdays at 06:00 UTC, after Wednesday's game update;
 on renderer pushes to `main`; or by hand with an optional cache id. For a new version it:
 
-1. re-renders `examples/lumbridge` and requires every hash to match (`scripts/check-golden`);
-2. renders both styles (`gradle tiles`, `Tiles.java`) and the collision layer;
+1. re-renders every example under `examples/` and requires every hash to match (`scripts/check-golden`);
+2. renders every style in the workflow's `STYLES` (`gradle tiles`, `Tiles.java`) and the collision layer;
 3. compares them with the planner's pinned version (`scripts/compare-version`). Newly missing
    decryption keys fail the run;
 4. uploads each style with its manifest last (`scripts/upload`);

@@ -54,6 +54,12 @@ public interface MapStyle
 		return false;
 	}
 
+	/** Whether {@link #icon} ever lets a map icon through; false for a style that hides them all. */
+	default boolean drawsIcons()
+	{
+		return true;
+	}
+
 	/**
 	 * Whether a placed object is drawn at all. Applied to the decoded
 	 * region data before rendering, so it works with the unforked
@@ -95,6 +101,12 @@ public interface MapStyle
 			public boolean icon(BufferedImage image, AreaDefinition area, int cx, int cy)
 			{
 				return true;
+			}
+
+			@Override
+			public boolean drawsIcons()
+			{
+				return false;
 			}
 
 			@Override

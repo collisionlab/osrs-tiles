@@ -268,7 +268,7 @@ public final class RenderRegions
 			"  --area     inclusive world-tile rectangle",
 			"  --regions  map-square ids ((x>>6)<<8 | (y>>6)); renders their union",
 			"  --styles   runelite (default), standard, declutter, muted, relief, tactical,",
-			"             tactical-dusk, tactical-field, tactical-classic");
+			"             tactical-dusk, tactical-field, tactical-classic, blueprint");
 
 		File cache;
 		File xteas;
