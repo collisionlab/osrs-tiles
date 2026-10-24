@@ -309,6 +309,7 @@ public final class RoutingLayers
 			});
 			files.put("components.json", jsonBytes(components.values()));
 			files.putAll(ComponentTiles.tiles(this));
+			files.putAll(BlockedTiles.tiles(this));
 			files.put("crossings.json", jsonBytes(crossings));
 			return files;
 		}

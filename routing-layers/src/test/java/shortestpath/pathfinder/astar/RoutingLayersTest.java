@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import javax.imageio.ImageIO;
+import mapstyle.routing.BlockedTiles;
 import mapstyle.routing.ComponentTiles;
 import mapstyle.routing.RoutingLayers;
 import org.junit.Test;
@@ -161,6 +162,36 @@ public class RoutingLayersTest
 		assertEquals(0, native8.getRGB(1, 250) >>> 24);
 		// Every zoom down to 3, and nothing where no component is.
 		assertTrue(tiles.containsKey("components/3/1/0.png"));
+		assertEquals(6, tiles.size());
+	}
+
+	@Test
+	public void drawsBlockedGroundAsTilesAtEveryZoom() throws Exception
+	{
+		// A line of four walkable tiles in map square (50, 50); the rest of the square is blocked.
+		int a = t(3200, 3200), b = t(3201, 3200), c = t(3202, 3200), d = t(3203, 3200);
+		World world = new World(edge(a, b), edge(b, c), edge(c, d))
+		{
+			@Override
+			public SplitFlagMap.RegionExtent regionExtent()
+			{
+				return new SplitFlagMap.RegionExtent(50, 50, 51, 51);
+			}
+		};
+		var walking = RoutingStaticBuilder.walkingGraph(world, Map.of(), a);
+		var built = RoutingStaticBuilder.build(world, Map.of(), Set.of(), new int[0], a);
+		var exported = RoutingLayers.export(built.routingStatic, walking);
+		var tiles = BlockedTiles.tiles(exported);
+		BufferedImage native8 = ImageIO.read(new ByteArrayInputStream(tiles.get("blocked/8/35/31.png")));
+		// (3200, 3200) is walkable, so clear; the tile north of it is blocked, fully red.
+		assertEquals(0, native8.getRGB(1, 254) >>> 24);
+		assertEquals(0, native8.getRGB(13, 254) >>> 24);
+		assertEquals(BlockedTiles.ALPHA[BlockedTiles.ALPHA.length - 1] << 24 | BlockedTiles.RGB, native8.getRGB(1, 250));
+		// Zoomed out the square is nearly all blocked: the darkest step.
+		BufferedImage zoom3 = ImageIO.read(new ByteArrayInputStream(tiles.get("blocked/3/1/0.png")));
+		// 8 game tiles a pixel: square (50, 50) is pixels 24-31 across, 0-7 down.
+		assertEquals(BlockedTiles.ALPHA[BlockedTiles.ALPHA.length - 1], zoom3.getRGB(25, 6) >>> 24);
+		assertEquals(0, zoom3.getRGB(0, 255) >>> 24);
 		assertEquals(6, tiles.size());
 	}
 
