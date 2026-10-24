@@ -1,5 +1,7 @@
 package shortestpath.pathfinder.astar;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,6 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import javax.imageio.ImageIO;
+import mapstyle.routing.ComponentTiles;
 import mapstyle.routing.RoutingLayers;
 import org.junit.Test;
 import shortestpath.WorldPointUtil;
@@ -20,6 +24,8 @@ import shortestpath.transport.Transport;
 import shortestpath.transport.TransportType;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertThrows;
 
 public class RoutingLayersTest
@@ -40,7 +46,7 @@ public class RoutingLayersTest
 	}
 
 	/** Only the given walking edges; every partition and reachability decision is production's. */
-	private static final class World extends CollisionMap
+	private static class World extends CollisionMap
 	{
 		private static final int[] DX = {0, 1, 1, 1, 0, -1, -1, -1};
 		private static final int[] DY = {1, 1, 0, -1, -1, -1, 0, 1};
@@ -123,6 +129,44 @@ public class RoutingLayersTest
 		assertArrayEquals(new int[]{65, 11, 0}, exported.crossings.get(1).to);
 		assertEquals(-1, exported.square(u).owners[local(u)]);
 		assertEquals(2, exported.square(u).status[local(u)]);
+	}
+
+	@Test
+	public void drawsComponentsAsTilesInTheirOwnColoursNeighboursApart() throws Exception
+	{
+		// Two components either side of a cut, in map square (50, 50): tile (35, 31) at zoom 8.
+		int a = t(3200, 3200), b = t(3201, 3200), c = t(3202, 3200), d = t(3203, 3200);
+		World world = new World(edge(a, b), edge(b, c), edge(c, d))
+		{
+			@Override
+			public SplitFlagMap.RegionExtent regionExtent()
+			{
+				return new SplitFlagMap.RegionExtent(50, 50, 51, 51);
+			}
+		};
+		var walking = RoutingStaticBuilder.walkingGraph(world, Map.of(), a);
+		var built = RoutingStaticBuilder.build(world, Map.of(), Set.of(), new int[]{b, c}, a);
+		var exported = RoutingLayers.export(built.routingStatic, walking);
+		assertEquals(2, exported.components.size());
+		int left = exported.square(a).owners[local(a)], right = exported.square(c).owners[local(c)];
+		int leftColour = exported.components.get(left).colour, rightColour = exported.components.get(right).colour;
+		assertNotEquals(leftColour, rightColour);
+
+		var tiles = ComponentTiles.tiles(exported);
+		BufferedImage native8 = ImageIO.read(new ByteArrayInputStream(tiles.get("components/8/35/31.png")));
+		// 4 px a game tile, rows from the north: (3200, 3200) is the bottom-left 4 x 4 pixels.
+		assertEquals(rgb(leftColour), native8.getRGB(1, 254));
+		assertEquals(rgb(leftColour), native8.getRGB(5, 254));
+		assertEquals(rgb(rightColour), native8.getRGB(9, 254));
+		assertEquals(0, native8.getRGB(1, 250) >>> 24);
+		// Every zoom down to 3, and nothing where no component is.
+		assertTrue(tiles.containsKey("components/3/1/0.png"));
+		assertEquals(6, tiles.size());
+	}
+
+	private static int rgb(int colour)
+	{
+		return 0xFF000000 | Integer.parseInt(ComponentTiles.PALETTE.get(colour), 16);
 	}
 
 	@Test

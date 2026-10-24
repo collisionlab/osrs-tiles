@@ -52,11 +52,14 @@ change the negative mask. Quest, item, skill and profile filtering are not appli
 
 The output directory is `<output>/<24-hex-content-address>/`:
 
-- `manifest.json`: schema 2, plugin revision, tile release, ZIP hash, normalized collision-content
+- `manifest.json`: schema 3, plugin revision, tile release, ZIP hash, normalized collision-content
   hash, cut fingerprint, separator/transport/bank hashes, graph counts, `expanses` (the threshold, their tile count, and each one's plane, tiles and
-  exclusive-max bounds), cut diagnostics, all file hashes.
+  exclusive-max bounds), cut diagnostics, `componentPalette` (the component colours as hex RGB), all
+  file hashes.
 - `components.json`: retained production IDs, plane, search tile count, exclusive-max bounds,
-  representative tile, incident crossing count and distinct neighbouring component IDs.
+  representative tile, incident crossing count, distinct neighbouring component IDs, and `colour`,
+  the component's index in `componentPalette`.
+- `components/[p<plane>/]<z>/<x>/<y>.png`: the components as a tile pyramid (below).
 - `crossings.json`: the full graph's effective crossings, for offline analysis.
 - `p<plane>/<world-square-x>/<world-square-y>.bin`: ownership, reachability and boundaries.
 - The same square with `.crossings.json`: only its incident effective crossings, for lazy display.
@@ -67,6 +70,24 @@ inset placement. Crossings have stable IDs scoped by the content-addressed versi
 `fromComponent` / `toComponent` are the production site memberships; if a future production build
 retains a crossing entirely outside the search graph, an absent membership is omitted, never
 invented. The current pinned build has no such crossings.
+
+## Component tiles
+
+The components are also published as a tile pyramid in the styles' layout (`explv-tms-v1`, see
+`docs/tiles.md`): 256 px tiles with rows counted from the south, tile (c, r) at zoom 8 being map square
+(15 + c, 19 + r) at 4 px per game tile, zooms 3–7 each half the one above, plane 0 at the root and
+planes 1–3 under `p1/`–`p3/`. Viewers show the whole world's partition from these without fetching a
+square, and paste inset terrain's tiles from them exactly as from a style's. Every search tile is
+its component's `componentPalette` colour; everything else is transparent, and a tile with no search
+tile isn't written (the manifest lists every tile there is). Colours never blend: a pixel covering
+several game tiles at zooms 5–3 takes the commonest colour among them, so small components stay
+visible. The PNGs are 4-bit paletted, about 1 KB each; cache 2746 has 2,359 of them, 11 MB in all.
+
+Colours are chosen here, once, so every viewer agrees: largest component first, each takes the first
+palette colour not used by a component it touches (shares a tile edge with) or crosses to, starting
+from a place its id picks, so lone components vary too. The rule guarantees a component differs from
+its neighbours whenever fewer than ten of them are coloured before it; on cache 2746 no two neighbours,
+by edge or crossing, share a colour.
 
 ## Binary format (RTL1)
 

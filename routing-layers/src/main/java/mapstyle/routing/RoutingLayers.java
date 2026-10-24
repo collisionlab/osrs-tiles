@@ -106,7 +106,7 @@ public final class RoutingLayers
 		}
 
 		JsonObject manifest = new JsonObject();
-		manifest.addProperty("schemaVersion", 2);
+		manifest.addProperty("schemaVersion", 3);
 		manifest.add("plugin", JSON.fromJson(new String(resource("/plugin.json"), StandardCharsets.UTF_8), JsonObject.class));
 		manifest.addProperty("tileVersion", tileVersion);
 		manifest.addProperty("collisionSha256", sha(collisionBytes));
@@ -139,6 +139,8 @@ public final class RoutingLayers
 		diagnostics.addProperty("invalid", built.diagnostics.invalidCutCount);
 		diagnostics.addProperty("nonSeparating", built.diagnostics.nonSeparatingCutCount);
 		manifest.add("cuts", diagnostics);
+		// The colours components.json's `colour` indexes, as components/ draws them.
+		manifest.add("componentPalette", JSON.toJsonTree(ComponentTiles.PALETTE));
 		SortedMap<String, byte[]> files = export.files();
 		JsonObject checksums = new JsonObject();
 		for (var entry : files.entrySet())
@@ -226,6 +228,8 @@ public final class RoutingLayers
 		public int[] bounds;
 		public int[] representative;
 		public final SortedSet<Integer> neighbours = new TreeSet<>();
+		/** Its index in the manifest's componentPalette; no neighbour or component it touches shares it. */
+		public int colour;
 
 		Component(int id, int tile)
 		{
@@ -289,6 +293,8 @@ public final class RoutingLayers
 		public final SortedMap<Integer, Expanse> expanses = new TreeMap<>();
 		public long unreachableCount;
 		public long expanseCount;
+		/** Components sharing a tile edge, by component; not published, only coloured apart. */
+		final Map<Integer, Set<Integer>> touching = new HashMap<>();
 
 		SortedMap<String, byte[]> files()
 		{
@@ -302,6 +308,7 @@ public final class RoutingLayers
 				}
 			});
 			files.put("components.json", jsonBytes(components.values()));
+			files.putAll(ComponentTiles.tiles(this));
 			files.put("crossings.json", jsonBytes(crossings));
 			return files;
 		}
@@ -374,6 +381,10 @@ public final class RoutingLayers
 				int next = routing.searchIndex(pack(x(tile) + DX[side], y(tile) + DY[side], p(tile)));
 				int kind = next < 0 ? 1 : routing.routingComponent(next) != id ? 2 : 0;
 				flags |= kind << (side * 2);
+				if (kind == 2)
+				{
+					output.touching.computeIfAbsent(id, k -> new TreeSet<>()).add(routing.routingComponent(next));
+				}
 			}
 			square.boundaries[local(tile)] = (byte) flags;
 		}
@@ -408,6 +419,7 @@ public final class RoutingLayers
 				link(output.components.get(b[0]), a[0]);
 			}
 		}
+		ComponentTiles.colour(output);
 		return output;
 	}
 
