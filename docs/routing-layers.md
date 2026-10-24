@@ -60,6 +60,7 @@ The output directory is `<output>/<24-hex-content-address>/`:
   representative tile, incident crossing count, distinct neighbouring component IDs, and `colour`,
   the component's index in `componentPalette`.
 - `components/[p<plane>/]<z>/<x>/<y>.png`: the components as a tile pyramid (below).
+- `blocked/[p<plane>/]<z>/<x>/<y>.png`: blocked ground as a tile pyramid (below).
 - `crossings.json`: the full graph's effective crossings, for offline analysis.
 - `p<plane>/<world-square-x>/<world-square-y>.bin`: ownership, reachability and boundaries.
 - The same square with `.crossings.json`: only its incident effective crossings, for lazy display.
@@ -88,6 +89,15 @@ palette colour not used by a component it touches (shares a tile edge with) or c
 from a place its id picks, so lone components vary too. The rule guarantees a component differs from
 its neighbours whenever fewer than ten of them are coloured before it; on cache 2746 no two neighbours,
 by edge or crossing, share a colour.
+
+## Blocked tiles
+
+Blocked ground is published as a second pyramid in the same layout, so a viewer can show collision
+at any zoom without reading a square: every tile of a collision-bearing square that isn't walkable
+(status 0) is red `#eb263a`, walkable ground transparent, and squares with no collision at all are
+left out. Where a pixel covers several game tiles (zooms 7–3) its alpha says what share of those with
+collision are blocked, in four steps (alpha 70, 105, 125, 140), so walkable regions still show through
+from far out. The PNGs are 4-bit paletted, about 500 bytes each; cache 2746 has 8,326, 6.6 MB in all.
 
 ## Binary format (RTL1)
 
