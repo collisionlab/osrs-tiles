@@ -13,10 +13,11 @@ def verify(candidate):
     encoded = json.dumps(manifest, separators=(',', ':'), ensure_ascii=False).encode()
     if not re.fullmatch('[0-9a-f]{24}', version) or hashlib.sha256(encoded).hexdigest()[:24] != version:
         raise ValueError('routing content address mismatch')
-    if manifest['schemaVersion'] != 2 or manifest['plugin']['repository'] != 'Skretzo/shortest-path':
+    if manifest['schemaVersion'] != 3 or manifest['plugin']['repository'] != 'Skretzo/shortest-path':
         raise ValueError('unsupported routing manifest')
     for name, digest in manifest['files'].items():
-        if not re.fullmatch(r'(components\.json|crossings\.json|p[0-3]/\d+/\d+\.(bin|crossings\.json))', name):
+        if not re.fullmatch(r'(components\.json|crossings\.json|p[0-3]/\d+/\d+\.(bin|crossings\.json)'
+                            r'|components/(p[1-3]/)?[3-8]/\d+/\d+\.png)', name):
             raise ValueError(f'invalid routing path: {name}')
         if hashlib.sha256((candidate / name).read_bytes()).hexdigest() != digest:
             raise ValueError(f'routing file checksum mismatch: {name}')
