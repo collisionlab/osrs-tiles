@@ -444,10 +444,10 @@ latest pointer.
 `scripts/compare-insets` requests review for the first release or >10% change in
 component count or covered map squares, and `scripts/tile-review` for more than
 10% of a style's tiles changed (recomputed from the published indexes on every
-run). Those, the first insets, and a reachable component without a name or an
-anchor keep the pin PR a **draft**, and its body lists each one under "Action
-needed" with what to do: check and mark it ready, or add the names and anchors
-in `data/inset-labels/annotations.json`. A refresh with nothing left to check marks the
+run). Those and the first insets keep the pin PR a **draft**, and its body lists
+each one under "Action needed" with what to do. A reachable component without a
+name or an anchor doesn't: the body lists it under "Follow-ups", to fix in
+`data/inset-labels/annotations.json` for a later pin. A refresh with nothing left to check marks the
 PR ready, so CI merges it. A PR a person marked ready stays ready while every
 remaining reason is one it already listed (`review-keys` in the body).
 While a pin PR is open, every run builds for its tiles, not `main`'s, so a

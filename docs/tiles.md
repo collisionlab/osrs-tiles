@@ -135,7 +135,8 @@ leads there, following each row's own direction and counting every file, leagues
 included, from the main world or from a row with no source, such as a spell. The name is what the
 planner's area search lists. The anchor is where the planner places the area: beside a point on the
 main map, linked by a line, instead of above the map. A reachable area without either is an issue in
-`review.json`, which keeps the pin PR a draft (osrs-planner's `docs/deployment.md`).
+`review.json`. It doesn't hold the pin back: the pin PR lists it as a follow-up and merges anyway, and
+the planner shows the coordinate label, or the area above the map, until it is fixed.
 
 Names come only from `data/inset-labels/annotations.json`, each tied to evidence in `sources.json`
 or to a connection; `scripts/label_inset_regions.py --worklist` suggests evidence. Anchors are worked
@@ -162,6 +163,13 @@ planner draws the line from the surface, and marks a door there, only for entran
 only place the area: the areas hung off Zanaris, or the altars, which the transport data reaches
 only by teleporting on from inside the Abyss.
 
+**Names survive data changes.** A connection's `c-…` id hashes only the edge: its file, both ends and
+its menu action. Editing a row's requirements, label or duration upstream keeps the id. A name goes
+wherever its `seed` lies, so a component whose id changes with the terrain keeps its name
+(`component-id-changed` in `review.json`), and evidence that no longer exists is a note
+(`evidence-removed`), not a lost name. A name is dropped only when its seed leaves inset terrain
+(`geometry-or-seed-changed`).
+
 To add a curated anchor, give the area's component an `anchor` in `annotations.json`:
 
 ```json
@@ -184,7 +192,8 @@ in another area, or whose seed no longer lies in its component, is a `review.jso
 | osrs-coord-preview | `{base, version, styles}` | a new tile version only: it reads every plane from the tiles and nothing from bundles |
 
 `scripts/pin-insets` opens and refreshes the `pin/map-assets` PR in each repository. It's a draft
-only while something needs a person, and its body says what (osrs-planner's `docs/deployment.md`).
+only while something needs a person (big tile or geometry changes, the first bundle), and its body says
+what (osrs-planner's `docs/deployment.md`). Unnamed and unanchored areas are listed as follow-ups.
 coord-preview's PR waits only for big tile changes.
 
 ## Known quirks

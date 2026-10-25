@@ -159,13 +159,17 @@ class AnchorTest(unittest.TestCase):
         assert result['regions']['a']['status'] == 'unresolved'
         assert result['regions']['b']['status'] == 'direct'
 
-    def test_all_alternative_direct_transports_retained_as_evidence(self):
+    def test_alternative_rows_for_one_edge_share_its_connection(self):
+        # Requirements, labels and durations aren't part of a connection's id, so editing them upstream
+        # keeps the ids annotations.json cites; every row is kept as a source.
         rows = [transport([10, 10, 0], [100, 100, 0]),
                 transport([10, 10, 0], [100, 100, 0], conditions={'Items': 'KEY=1'})]
         result = anchors.build_anchors(catalogue(), rows)
-        assert len(result['connections']) == 2
+        assert len(result['connections']) == 1
+        assert len(next(iter(result['connections'].values()))['sources']) == 2
         assert len(result['regions']['a']['anchors']) == 1
-        assert len(result['regions']['a']['connectionIds']) == 2
+        edited = [dict(rows[0], label='Travel', duration='20', conditions={'Quests': 'A quest'})]
+        assert anchors.build_anchors(catalogue(), edited)['connections'].keys() == result['connections'].keys()
 
     def test_invalid_masks_and_missing_surface_coverage_fail(self):
         data = catalogue()

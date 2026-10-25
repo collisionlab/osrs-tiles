@@ -64,7 +64,12 @@ class LabelTest(unittest.TestCase):
             result, report = labels.compile_labels(cat, anchors, sources, authored, 'hash')
             self.assertTrue(report['issues'], change)
             if change == 'removed-source':
-                self.assertEqual(result['regions']['a']['status'], 'unresolved')
+                # Stale evidence is a note: the area hasn't moved, so it keeps its name.
+                self.assertEqual(result['regions']['a']['status'], 'named')
+                self.assertEqual({i['reason'] for i in report['issues']}, {'evidence-removed'})
+            if change == 'changed-id':
+                self.assertEqual(result['regions']['new-a']['status'], 'named')
+                self.assertIn('component-id-changed', [i['reason'] for i in report['issues']])
 
     def test_cuts_without_terrain_need_review(self):
         cat, anchors, sources, authored = fixture()
@@ -141,7 +146,8 @@ class LabelTest(unittest.TestCase):
             self.assertTrue(json.loads((directory / 'report.json').read_text())['issues'])
             result = subprocess.run(command + ['--allow-unresolved'], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(json.loads(output.read_text())['regions']['changed']['status'], 'unresolved')
+            # The name follows its seed into the renamed component.
+            self.assertEqual(json.loads(output.read_text())['regions']['changed']['status'], 'named')
 
     def test_mejrs_snapshot_retains_missing_pins_but_rejects_malformed_rows(self):
         rows = snapshot.mejrs_records(b'100,101,1,A dungeon\n,,0,No pin\n')

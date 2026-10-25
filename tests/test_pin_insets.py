@@ -124,17 +124,21 @@ class PinTest(unittest.TestCase):
         self.assertIn('## Action needed', body)
         self.assertIn('**draft**', body)
         self.assertIn('The inset areas changed a lot.', body)
+        self.assertIn('## Follow-ups', body)
         self.assertIn('1 reachable areas have no name', body)
         self.assertNotIn('no anchor', body)
 
-    def test_unanchored_areas_get_their_own_action(self):
-        _, body = self.pin_with([], draft=False, naming=['p0-1-2-abc'], anchoring=['p0-3-4-def', 'p0-1-2-abc'])
-        self.assertIn('- [ ] **1 reachable areas have no name', body)
-        self.assertIn('- [ ] **2 reachable areas have no anchor', body)
+    def test_unnamed_and_unanchored_areas_are_follow_ups_that_dont_hold_the_pin(self):
+        commands, body = self.pin_with([], draft=True, naming=['p0-1-2-abc'], anchoring=['p0-3-4-def', 'p0-1-2-abc'])
+        self.assertIn(('gh', 'pr', 'ready', '7', '--repo', 'owner/one'), commands)
+        self.assertIn('No action needed', body)
+        self.assertIn('## Follow-ups', body)
+        self.assertNotIn('- [ ]', body)
+        self.assertIn('- **1 reachable areas have no name', body)
+        self.assertIn('- **2 reachable areas have no anchor', body)
         self.assertIn('`p0-3-4-def` (required-component-unanchored)', body)
-        self.assertIn('<!-- review-keys: naming:p0-1-2-abc anchors:p0-1-2-abc,p0-3-4-def -->', body)
         self.assertIn('`p0-1-2-abc` (required-component-unnamed): shown as "Unidentified terrain at p0-1-2-abc"', body)
-        self.assertIn('mark it ready', body)
+        self.assertIn('<!-- review-keys:  -->', body)
         self.assertIn('Built by https://run.', body)
 
     def test_a_draft_that_still_needs_review_stays_a_draft(self):
@@ -148,14 +152,19 @@ class PinTest(unittest.TestCase):
 
     def test_a_person_accepting_the_same_reasons_is_remembered(self):
         _, drafted = self.pin_with(['--geometry-review'], draft=True, naming=['p0-1-2-abc'])
-        self.assertIn('<!-- review-keys: geometry:2-renderer naming:p0-1-2-abc -->', drafted)
-        # Marked ready by a person, then refreshed with the same findings: stays ready.
-        commands, body = self.pin_with(['--geometry-review'], draft=False, naming=['p0-1-2-abc'], previous=drafted)
+        self.assertIn('<!-- review-keys: geometry:2-renderer -->', drafted)
+        # Marked ready by a person, then refreshed with the same findings: stays ready, and a new
+        # follow-up doesn't change that.
+        commands, body = self.pin_with(['--geometry-review'], draft=False, naming=['p0-1-2-abc', 'p0-3-4-def'],
+                                       previous=drafted)
         self.assertFalse([c for c in commands if c[:3] == ('gh', 'pr', 'ready')])
         self.assertIn('A person marked this ready', body)
         self.assertIn('- [x] **The inset areas changed a lot.**', body)
         # Something new turns up: back to draft.
-        commands, body = self.pin_with(['--geometry-review'], draft=False, naming=['p0-1-2-abc', 'p0-3-4-def'], previous=drafted)
+        with tempfile.TemporaryDirectory() as temporary:
+            review = Path(temporary) / 'tiles.json'
+            review.write_text(json.dumps(dict(review=True, styles=dict(tactical=dict(tiles=10, changed=3, added=0, removed=0)))))
+            commands, body = self.pin_with(['--geometry-review', '--tile-review', str(review)], draft=False, previous=drafted)
         self.assertIn(('gh', 'pr', 'ready', '7', '--undo', '--repo', 'owner/one'), commands)
         self.assertIn('## Action needed', body)
 

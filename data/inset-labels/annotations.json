@@ -171,7 +171,7 @@
             "s-31703b4c619885e7",
             "s-4eaf3fbc1e26f55e",
             "s-6a5a26fd5645d707",
-            "c-d2df6079cfcc0a13"
+            "c-b31241c1f11e2bed"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -199,7 +199,7 @@
             "s-31703b4c619885e7",
             "s-4eaf3fbc1e26f55e",
             "s-6a5a26fd5645d707",
-            "c-067067b056578aab"
+            "c-03c4bf06ad3a24b5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -227,8 +227,8 @@
             "s-31703b4c619885e7",
             "s-4eaf3fbc1e26f55e",
             "s-6a5a26fd5645d707",
-            "c-067067b056578aab",
-            "c-1b567228815d7570"
+            "c-03c4bf06ad3a24b5",
+            "c-a2cc728e888217fe"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -256,9 +256,9 @@
             "s-31703b4c619885e7",
             "s-4eaf3fbc1e26f55e",
             "s-6a5a26fd5645d707",
-            "c-067067b056578aab",
-            "c-1b567228815d7570",
-            "c-071f64ac1ae948a5"
+            "c-03c4bf06ad3a24b5",
+            "c-a2cc728e888217fe",
+            "c-c3cea7a989020191"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -286,9 +286,9 @@
             "s-31703b4c619885e7",
             "s-4eaf3fbc1e26f55e",
             "s-6a5a26fd5645d707",
-            "c-d2df6079cfcc0a13",
-            "c-02531f901c66c451",
-            "c-2cef66bebaa5c5fa"
+            "c-b31241c1f11e2bed",
+            "c-040eae5a6511028b",
+            "c-58463760e0cc2f1b"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -316,8 +316,8 @@
             "s-31703b4c619885e7",
             "s-4eaf3fbc1e26f55e",
             "s-6a5a26fd5645d707",
-            "c-d2df6079cfcc0a13",
-            "c-02531f901c66c451"
+            "c-b31241c1f11e2bed",
+            "c-040eae5a6511028b"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -345,10 +345,10 @@
             "s-31703b4c619885e7",
             "s-4eaf3fbc1e26f55e",
             "s-6a5a26fd5645d707",
-            "c-d2df6079cfcc0a13",
-            "c-02531f901c66c451",
-            "c-2cef66bebaa5c5fa",
-            "c-53b7ac74e9e441be"
+            "c-b31241c1f11e2bed",
+            "c-040eae5a6511028b",
+            "c-58463760e0cc2f1b",
+            "c-7241500de049a58a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -369,10 +369,10 @@
           ],
           "evidence": [
             "s-8e5d94e3a67802a3",
-            "c-11ca662dd6be4fef",
-            "c-413216eb541304c2",
-            "c-46c6aa1d73a695f4",
-            "c-5e387272d80cf8bc"
+            "c-0187a63f7c675ad7",
+            "c-cee176125efcb8fd",
+            "c-01fe08bc6f302606",
+            "c-1f1edf29c53c3fd5"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -392,7 +392,7 @@
             0
           ],
           "evidence": [
-            "c-09b047aa93c07a45"
+            "c-917f8859512974b0"
           ],
           "reason": "Transport rows landing here."
         }
@@ -412,7 +412,7 @@
             0
           ],
           "evidence": [
-            "c-c19a90d63963ed23"
+            "c-281c600f564a4f84"
           ],
           "reason": "Transport rows landing here.",
           "anchor": {
@@ -442,8 +442,8 @@
           ],
           "evidence": [
             "s-6279362b5559739f",
-            "c-13f926e5042af23c",
-            "c-5ec54c4ddcd9709f"
+            "c-8b438abddddf809b",
+            "c-b777f2bc8bf3ee3d"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -473,7 +473,7 @@
           ],
           "evidence": [
             "s-f74518a2c082882a",
-            "c-5c889d853818a090"
+            "c-c86813b4dbd466b8"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -495,7 +495,7 @@
           "evidence": [
             "s-aa3573305fed2a3b",
             "s-30c4cf942016069b",
-            "c-c3cfd24f4aa50af2",
+            "c-dace95a56a327c24",
             "s-0aa0135cab092282",
             "s-f3f2b4e3b101076b"
           ],
@@ -524,8 +524,8 @@
             "s-9baa9255e636ae44",
             "s-3e211d1e6b1a1aea",
             "s-266df76a3d96ac12",
-            "c-430043bbe1fb4ce8",
-            "c-ec4485ff977db8c9"
+            "c-c63a39ce039a93c5",
+            "c-f0116eacf96de291"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -549,7 +549,7 @@
             "s-9baa9255e636ae44",
             "s-3e211d1e6b1a1aea",
             "s-266df76a3d96ac12",
-            "c-430043bbe1fb4ce8"
+            "c-c63a39ce039a93c5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -569,8 +569,8 @@
             1
           ],
           "evidence": [
-            "c-32ad0dc8609eaae9",
-            "c-cefdcc6adcf2fd54"
+            "c-56292c65cf793985",
+            "c-d6e1926e5fdd69f7"
           ],
           "reason": "Transport rows landing here."
         },
@@ -582,8 +582,8 @@
             2
           ],
           "evidence": [
-            "c-2ad5a49220a5801a",
-            "c-f688ed2aca6858eb"
+            "c-eeb071c1ea97bb20",
+            "c-0a68281c6c26ad4f"
           ],
           "reason": "Transport rows landing here."
         },
@@ -595,7 +595,7 @@
             0
           ],
           "evidence": [
-            "c-a965a81de7cc810a"
+            "c-f9036d3a9556a33c"
           ],
           "reason": "Transport rows landing here."
         }
@@ -616,7 +616,7 @@
           ],
           "evidence": [
             "s-4c060a7174cbe1eb",
-            "c-c9f6d52f2fe2ef30"
+            "c-12c3d5c27ba6d487"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -648,7 +648,7 @@
             "s-07adb44a3b9b0486",
             "s-70f8534f63181345",
             "s-0f9d21c3cc0db395",
-            "c-b7107159a9b636ac"
+            "c-aa807d1c6a1345ef"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -669,7 +669,7 @@
           ],
           "evidence": [
             "s-e3b413629d1ce4b2",
-            "c-0414e33804bbf63b"
+            "c-b53295324edf97b0"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -691,7 +691,7 @@
           "evidence": [
             "s-5bc449f29d374a36",
             "s-7177394f70f338f5",
-            "c-5e3df373e1e11361"
+            "c-3cb5ac34b081504f"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles.",
           "anchor": {
@@ -714,7 +714,7 @@
           "evidence": [
             "s-5bc449f29d374a36",
             "s-7177394f70f338f5",
-            "c-5e3df373e1e11361"
+            "c-3cb5ac34b081504f"
           ],
           "reason": "The western part of the dungeon, joined to the rest by the ice cavern and the tunnel."
         }
@@ -735,7 +735,7 @@
           ],
           "evidence": [
             "s-cc5d5491be194a85",
-            "c-91400a7a797b42ce"
+            "c-ace6c65180a32b4a"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -766,9 +766,9 @@
           "evidence": [
             "s-97361f3fbfed0b66",
             "s-5f1a239beebd9b1c",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-4beebfae69c522d1"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-874f106e76217699"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -789,7 +789,7 @@
           ],
           "evidence": [
             "s-706ec0f47b20ce02",
-            "c-e197c61b6f25ac1b"
+            "c-5198a965309c0aaa"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -811,7 +811,7 @@
           "evidence": [
             "s-b7c6bf46d410fada",
             "s-e77e37fd705d3dab",
-            "c-9ee38ffc54cee225"
+            "c-b03cc90d6d4568bd"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -832,7 +832,7 @@
           ],
           "evidence": [
             "s-81a9c813429f557c",
-            "c-b9f05d8ed83cb623"
+            "c-af7068b3b666284d"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -856,7 +856,7 @@
             "s-cfe8e98135d80646",
             "s-51fd34074432671f",
             "s-df85531bc12d3688",
-            "c-ba9eb880ee85c2a3"
+            "c-383ec74103203cce"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -880,8 +880,8 @@
             "s-cfe8e98135d80646",
             "s-51fd34074432671f",
             "s-df85531bc12d3688",
-            "c-ba9eb880ee85c2a3",
-            "c-749cd91cfc296ec5"
+            "c-383ec74103203cce",
+            "c-143c1f21d194f919"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -904,7 +904,7 @@
             "s-1c7214059f749df8",
             "s-4f6d115febab1908",
             "s-21538d8b1fde7505",
-            "c-522060fc9dcd1acc"
+            "c-82a6c0de2e51a37e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -928,7 +928,7 @@
             "s-3e750d9bbb21ea07",
             "s-7bd6c955644efdc5",
             "s-218a5e9c987a7c45",
-            "c-e8edf42ba45277bf"
+            "c-5c1823d5f6afab22"
           ],
           "reason": "Stairs 4627 join the room to Burthorpe Castle at 2899,3564; the Games Room source pin labels the complex on a different plane."
         },
@@ -944,8 +944,8 @@
             "s-3e750d9bbb21ea07",
             "s-7bd6c955644efdc5",
             "s-218a5e9c987a7c45",
-            "c-e8edf42ba45277bf",
-            "c-15cd6db37c7221b7"
+            "c-5c1823d5f6afab22",
+            "c-0adecc821cd92c39"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -970,7 +970,7 @@
             "s-30d3420357b11aff",
             "s-5d7ee38685c9ad4b",
             "s-2fcd72b05b550a05",
-            "c-520ad224287d68b1"
+            "c-2a4f211a3438b5aa"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -990,10 +990,10 @@
             0
           ],
           "evidence": [
-            "c-13d30e3347bb7399",
-            "c-2b012bfc88fb1b19",
-            "c-2e31c2c6912eb1bd",
-            "c-5669a7d96a614b78"
+            "c-13184bd21dded27f",
+            "c-b8fe1833b384b7ea",
+            "c-4ec2cc38aa37a296",
+            "c-6a04702c77e0e8e3"
           ],
           "reason": "Transport rows landing here."
         }
@@ -1013,10 +1013,10 @@
             0
           ],
           "evidence": [
-            "c-02e421c04c3f91ae",
-            "c-46122698a3449b02",
-            "c-8ab9a7c78811c917",
-            "c-9fa065fd58874898"
+            "c-ebd0194a2dddd38c",
+            "c-be4f6afbc85cec74",
+            "c-6eaaa3d60fae43d9",
+            "c-fc550439b7b5a4ca"
           ],
           "reason": "Transport rows landing here."
         }
@@ -1039,7 +1039,7 @@
             "s-96d61f757fe31571",
             "s-b335ce7268f543ed",
             "s-eeeedeeb458c9904",
-            "c-805c8024a6d52a83"
+            "c-75079ca923b73187"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1064,8 +1064,8 @@
             "s-3f8f00d3f60d72c8",
             "s-3d659246e6b286c8",
             "s-28c6dd7bfcdd5fa9",
-            "c-1e1eaa8b8b8f5533",
-            "c-095f0a95d7d14dd6"
+            "c-4cad3d60e9bc5e68",
+            "c-d7af27a45190ff07"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -1110,7 +1110,7 @@
           ],
           "evidence": [
             "s-eff44708350f1db4",
-            "c-04f46e0adab0cbdf"
+            "c-cdfae4eb5565c452"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -1133,8 +1133,8 @@
             "s-2147b24779bef326",
             "s-19520d477c6b1d66",
             "s-c5805b7081fa5517",
-            "c-c310e73231402a73",
-            "c-975e57aa3222c5f6"
+            "c-fbc3fab44d81821c",
+            "c-ea82b13d55d23bb3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -1149,8 +1149,8 @@
             "s-2147b24779bef326",
             "s-19520d477c6b1d66",
             "s-c5805b7081fa5517",
-            "c-c310e73231402a73",
-            "c-789759f73589a714"
+            "c-fbc3fab44d81821c",
+            "c-4e5281f4c3df490c"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -1165,7 +1165,7 @@
             "s-2147b24779bef326",
             "s-19520d477c6b1d66",
             "s-c5805b7081fa5517",
-            "c-c310e73231402a73"
+            "c-fbc3fab44d81821c"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -1180,9 +1180,9 @@
             "s-2147b24779bef326",
             "s-19520d477c6b1d66",
             "s-c5805b7081fa5517",
-            "c-c310e73231402a73",
-            "c-975e57aa3222c5f6",
-            "c-941c48978c0e4f37"
+            "c-fbc3fab44d81821c",
+            "c-ea82b13d55d23bb3",
+            "c-f973e2c824d1f42d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1209,8 +1209,8 @@
             "s-44719675e6b2034a",
             "s-3a3f9c3498bb4358",
             "s-2d59eb868552e414",
-            "c-56041c931c87465b",
-            "c-20943389c1f8284a"
+            "c-02cc8e176a0d0ae2",
+            "c-e3ef30afd216f246"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1231,8 +1231,8 @@
           ],
           "evidence": [
             "s-44719675e6b2034a",
-            "c-59496e0bf01d3697",
-            "c-ed9d12b66ed2587b"
+            "c-ea38d218534cd2d7",
+            "c-6f1cad511181c4bd"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -1253,7 +1253,7 @@
           ],
           "evidence": [
             "s-88434cb57ceeee02",
-            "c-a728677af1ae501a"
+            "c-8ec4c1753e7f7bba"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -1276,10 +1276,10 @@
             "s-f032ade58eb3bfe3",
             "s-38e5e3a871578741",
             "s-0d2f7f850c056275",
-            "c-0a0d8cb4a380c740",
-            "c-38867306fcaf9a84",
-            "c-6f9957155b9cfd9b",
-            "c-8f60e8f4d21347ff"
+            "c-bf221a5d97a419c2",
+            "c-1683d5be75b969c3",
+            "c-c30fc617d850a802",
+            "c-24f954bbe398ccb8"
           ],
           "reason": "Transport rows landing here and source places inside it."
         },
@@ -1291,10 +1291,10 @@
             1
           ],
           "evidence": [
-            "c-15e1e0c1d7bce922",
-            "c-6602b48a49c81c0e",
-            "c-8322e73b9e041f84",
-            "c-dc51d8bbae4d1ba4"
+            "c-53d3876ded1d4007",
+            "c-a0b20c9d3d10f118",
+            "c-2d1ce246e46d2585",
+            "c-f53f2c744f305497"
           ],
           "reason": "Transport rows landing here."
         }
@@ -1317,7 +1317,7 @@
             "s-f8458319242b2aa7",
             "s-27b405b9f50721bc",
             "s-5d39c1de02668f7d",
-            "c-df1b336fae116792"
+            "c-0a6d9889345c056c"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1341,7 +1341,7 @@
             "s-158962b75dcaa3b8",
             "s-b2293e73e2eaec14",
             "s-420c14a3aa406199",
-            "c-f64951efbca3fb60"
+            "c-1e7a3a6550314ded"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1364,7 +1364,7 @@
             "s-4c96a814683d131e",
             "s-8fcf6edd96a10c0e",
             "s-7a784afd25621340",
-            "c-d81926257cfd46b3"
+            "c-7f42407e77f65ef3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1385,7 +1385,7 @@
           ],
           "evidence": [
             "s-826de3ae661a042e",
-            "c-9af9e3c25d946bd5"
+            "c-525dcf3bdb5cf771"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -1408,8 +1408,8 @@
             "s-02a39a3f54d9b7e1",
             "s-ca69b3b72bf2bbba",
             "s-f0601079ab11ae5f",
-            "c-f62b13905dbd91a7",
-            "c-f6f70986fa9bdc7b"
+            "c-12e124fc91caba1d",
+            "c-56e8f0f252782d73"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -1441,7 +1441,7 @@
             "s-3cf18ada5722e1cf",
             "s-c901775a33d129db",
             "s-36945107b1eba3a0",
-            "c-b9b19cdfffe815c9"
+            "c-c28dcc9b654ceee6"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -1456,8 +1456,8 @@
             "s-3cf18ada5722e1cf",
             "s-c901775a33d129db",
             "s-36945107b1eba3a0",
-            "c-b9b19cdfffe815c9",
-            "c-39f5abb49891cd98"
+            "c-c28dcc9b654ceee6",
+            "c-1cee6de03202055e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1480,7 +1480,7 @@
             "s-ff7f0bf55fc415ee",
             "s-3d583ac723b2fe22",
             "s-52d8e99e7777729a",
-            "c-701e30e770bccbae"
+            "c-1c00111b3836eeba"
           ],
           "reason": "The hole on Karamja leads into it (connection c-701e30e770bccbae), and source places lie inside it."
         }
@@ -1500,7 +1500,7 @@
             0
           ],
           "evidence": [
-            "c-7f2f4ac390388c83"
+            "c-7ed15412a801b34d"
           ],
           "reason": "Large door 12349 from Lumbridge Castle dining room at 3213,3221 identifies the Recipe for Disaster portal area."
         }
@@ -1523,7 +1523,7 @@
             "s-a6707c34525d8aa2",
             "s-6845fb324cbb0303",
             "s-2929d66519597187",
-            "c-c54c9418f25b1a92"
+            "c-205850856e36efd3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1546,7 +1546,7 @@
             "s-81099ac274a89f77",
             "s-c0bddc65d94cb015",
             "s-6da43af2ef2cd3c7",
-            "c-31659283400412e5"
+            "c-72a4234ee1ba0aea"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1567,7 +1567,7 @@
           ],
           "evidence": [
             "s-07d7ecde34f06985",
-            "c-b6cc30e75420197d"
+            "c-e58dd611f3e143a1"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -1590,7 +1590,7 @@
             "s-f381ce480e2710c7",
             "s-f5a65881d95c4601",
             "s-2b6baa52e4e79af0",
-            "c-3dac7c21366fd5f6"
+            "c-80a9f7697aedaf70"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1613,10 +1613,10 @@
             "s-b0af70a0db2c77de",
             "s-36f0069054e36734",
             "s-ff05c79b326cdd41",
-            "c-1315842e85a07bdd",
-            "c-1cd93bf70769823a",
-            "c-253bb8050cdb4331",
-            "c-300ec83bb4f1ddce"
+            "c-6eecb51efa8d1a2f",
+            "c-d1b40754041b649a",
+            "c-3d393f1c0477c586",
+            "c-49b34c611bf5982a"
           ],
           "reason": "Transport rows landing here and source places inside it."
         },
@@ -1629,10 +1629,10 @@
           ],
           "evidence": [
             "s-7a252bdb5b72bd32",
-            "c-004cc89218bf63da",
-            "c-0323de3e1c678714",
-            "c-0b2c0adf246b1e21",
-            "c-0f81870ef85f8629"
+            "c-879b2bfd116bcef1",
+            "c-8187549b669956d2",
+            "c-30827efa396bf188",
+            "c-c3074d1b0cea7e12"
           ],
           "reason": "Transport rows landing here and source places inside it."
         },
@@ -1644,8 +1644,8 @@
             0
           ],
           "evidence": [
-            "c-70f76572b91f3e6a",
-            "c-ec906153563fdb8e"
+            "c-c4207cd83faa4e7e",
+            "c-f7136f90225c6e4f"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1657,10 +1657,10 @@
             0
           ],
           "evidence": [
-            "c-0400465f793fe547",
-            "c-4c3591455d70e6ca",
-            "c-538238f18700b992",
-            "c-d7dafebd83312448"
+            "c-c029334726eff3ac",
+            "c-962ab3c20e8e16fe",
+            "c-b69c79cb700145af",
+            "c-5668bd4c818a5822"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1675,10 +1675,10 @@
             "s-df7780b0b26ef55a",
             "s-d75464f32799c19f",
             "s-5a2771c902c9d7b8",
-            "c-085dcd391b2450b4",
-            "c-0cfc09fa4c56e0d2",
-            "c-0e346e5551af7a48",
-            "c-1c3582c876e06ad3"
+            "c-4c3dcd88704b7be0",
+            "c-158f5b2ecb97d11e",
+            "c-467fe6938256daa9",
+            "c-c07e879661362ff2"
           ],
           "reason": "Transport rows landing here and source places inside it."
         },
@@ -1690,7 +1690,7 @@
             1
           ],
           "evidence": [
-            "c-3645b255444b518f"
+            "c-a374ecf94f7443db"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1702,8 +1702,8 @@
             1
           ],
           "evidence": [
-            "c-74b38f252f547fc4",
-            "c-af5c05aa97a0ebe4"
+            "c-11548d39596dc4d0",
+            "c-94cb725ed4ce4350"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1715,8 +1715,8 @@
             2
           ],
           "evidence": [
-            "c-46d098bac8c967e8",
-            "c-70f8796e5da104ab"
+            "c-abedbdd3117deff7",
+            "c-585cec1303f0bdb3"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1728,7 +1728,7 @@
             2
           ],
           "evidence": [
-            "c-0cd0c15650ebea64"
+            "c-6358694eefb1625c"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1740,7 +1740,7 @@
             2
           ],
           "evidence": [
-            "c-ecbc73caf163d3f7"
+            "c-0734a09eb7cfbad6"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1752,7 +1752,7 @@
             2
           ],
           "evidence": [
-            "c-3b3866e9a6a0e21e"
+            "c-936d65ee70240b4d"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1764,7 +1764,7 @@
             2
           ],
           "evidence": [
-            "c-8e49f58cb5d98217"
+            "c-0d4391dff01fe188"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1776,8 +1776,8 @@
             2
           ],
           "evidence": [
-            "c-42ea64be6468e055",
-            "c-7c3ccadb27393755"
+            "c-d8721de47235c6df",
+            "c-cfb1032cba4a19ec"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1789,8 +1789,8 @@
             2
           ],
           "evidence": [
-            "c-6c0b06f70da71a14",
-            "c-bdcdc76256dbe318"
+            "c-6235b7dfa3d76dc3",
+            "c-f4e0a515db920aaf"
           ],
           "reason": "Transport rows landing here."
         },
@@ -1803,7 +1803,7 @@
           ],
           "evidence": [
             "s-c7fee77e32619436",
-            "c-a6b16169b18d1fdc"
+            "c-e4262327a3b2bfb7"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -1826,8 +1826,8 @@
             "s-b0af70a0db2c77de",
             "s-c1e9fb327dae847f",
             "s-dc581bb1767ecd59",
-            "c-74d19f4085132ddc",
-            "c-5023f13c30569c21"
+            "c-c3474f33aea47a20",
+            "c-7274f2045fd7bb1e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -1842,9 +1842,9 @@
             "s-b0af70a0db2c77de",
             "s-c1e9fb327dae847f",
             "s-dc581bb1767ecd59",
-            "c-74d19f4085132ddc",
-            "c-5023f13c30569c21",
-            "c-f118fd6a1ed75a95"
+            "c-c3474f33aea47a20",
+            "c-7274f2045fd7bb1e",
+            "c-4d5aa33cfc47c72a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1864,10 +1864,10 @@
             0
           ],
           "evidence": [
-            "c-4df714bb47872548",
-            "c-a7c40c094a9f3e85",
-            "c-cf4a618eb1559ac8",
-            "c-d8465b8a8efca552"
+            "c-3a580f31a2cd4749",
+            "c-cb86bc32b117e71a",
+            "c-06d0874c5e2e0720",
+            "c-b2d47be64da216d9"
           ],
           "reason": "Transport rows landing here."
         }
@@ -1890,7 +1890,7 @@
             "s-e49d7f589d2c0b1e",
             "s-b87e64c5da345926",
             "s-cb3961bccab66a5f",
-            "c-c225a63ec72ca059"
+            "c-05ea9deedd1209c3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1912,7 +1912,7 @@
           "evidence": [
             "s-95c7b2d7c64490cc",
             "s-cb3961bccab66a5f",
-            "c-3fa5ece444390e65"
+            "c-58b8968add68cefb"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1934,7 +1934,7 @@
           "evidence": [
             "s-a1649ebb16fd469c",
             "s-d928b234aa1771af",
-            "c-e2ace0d0d8cbdbc5"
+            "c-ff47491019b88747"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1958,7 +1958,7 @@
             "s-73f8ea2f7602ab02",
             "s-6e383a30d6725080",
             "s-120a34c01c5ae719",
-            "c-2987861897842350"
+            "c-b565784e54959943"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -1983,7 +1983,7 @@
           ],
           "evidence": [
             "s-d06153472ba6041c",
-            "c-c4330217a02a7685"
+            "c-413a9c49635911a6"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2004,7 +2004,7 @@
           ],
           "evidence": [
             "s-fd4159c44d81c7ca",
-            "c-721cae117e9cdbd0"
+            "c-0aadf5c4f26069c8"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -2025,10 +2025,10 @@
           ],
           "evidence": [
             "s-46148c65169d07d3",
-            "c-07eba057c677a3ed",
-            "c-19a065a0877cdbdd",
-            "c-4f8680b9d24597b6",
-            "c-5ca01f03c787f29b"
+            "c-1c58042ecbd2fa60",
+            "c-abefd94e14f37bb6",
+            "c-fb3e73441a8f23c3",
+            "c-e7c1a0992054c3c1"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -2061,7 +2061,7 @@
             "s-4343a30425a40bec",
             "s-4fc00ff8cf6be8bb",
             "s-7934cd3c2f435361",
-            "c-6894e4f5d3014fd3"
+            "c-d68a4840ef93344d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2085,8 +2085,8 @@
             "s-4343a30425a40bec",
             "s-4fc00ff8cf6be8bb",
             "s-7934cd3c2f435361",
-            "c-6894e4f5d3014fd3",
-            "c-d877378e2b045c67"
+            "c-d68a4840ef93344d",
+            "c-7ec084fe3f298a4a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2109,7 +2109,7 @@
             "s-0f055efca198d419",
             "s-255fa3d363c36fd3",
             "s-d920be241663c87e",
-            "c-c78e7c1ade3c706b"
+            "c-c44c4b2bb5d1d844"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2132,8 +2132,8 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-5afe2e0f108e394c",
-            "c-26a5a454b780f15c"
+            "c-86b42e8c64a4bfba",
+            "c-3933b2f37097f3ae"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -2148,9 +2148,9 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-5afe2e0f108e394c",
-            "c-26a5a454b780f15c",
-            "c-c47471633cd51d47"
+            "c-86b42e8c64a4bfba",
+            "c-3933b2f37097f3ae",
+            "c-b324f4b60001b0b4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -2165,10 +2165,10 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-5afe2e0f108e394c",
-            "c-26a5a454b780f15c",
-            "c-c47471633cd51d47",
-            "c-93a88df3e5455dc6"
+            "c-86b42e8c64a4bfba",
+            "c-3933b2f37097f3ae",
+            "c-b324f4b60001b0b4",
+            "c-8d095f38323eebb5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -2183,7 +2183,7 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-5ceb50e276b448d4"
+            "c-6429a616b480fb04"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -2198,7 +2198,7 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-5afe2e0f108e394c"
+            "c-86b42e8c64a4bfba"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -2213,7 +2213,7 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-f1965a8b6db8e52c"
+            "c-2ac111a416f4b131"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -2228,7 +2228,7 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-663c09a6b748df31"
+            "c-b2244687d54b3ad7"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -2243,8 +2243,8 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-5afe2e0f108e394c",
-            "c-26a5a454b780f15c"
+            "c-86b42e8c64a4bfba",
+            "c-3933b2f37097f3ae"
           ],
           "reason": "A floor of the temple joined to its other floors by stone ladders."
         },
@@ -2259,8 +2259,8 @@
             "s-2ff2dace246a73c6",
             "s-be81f675fb0f863d",
             "s-af6abc114f9e113d",
-            "c-5afe2e0f108e394c",
-            "c-26a5a454b780f15c"
+            "c-86b42e8c64a4bfba",
+            "c-3933b2f37097f3ae"
           ],
           "reason": "A floor of the temple joined to its other floors by stone ladders."
         }
@@ -2282,8 +2282,8 @@
           "evidence": [
             "s-729d072efa88960e",
             "s-b74b283481b2ef43",
-            "c-b37f120eba65eef3",
-            "c-d467ebbb1643b359"
+            "c-aa630bb7ddc2cb47",
+            "c-0c42bad842003f32"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -2316,7 +2316,7 @@
             "s-e5afb44ee54614ef",
             "s-c2543f89913f3d9b",
             "s-af8fb38fad10bd70",
-            "c-c06ca5babc6416cb"
+            "c-5c4e3f3f50d9bb62"
           ],
           "reason": "Dramen Tree cache pin and the Magic door exit to 3250,3772 agree with the Entrana Dungeon wiki page."
         }
@@ -2338,7 +2338,7 @@
           "evidence": [
             "s-2e4b6720474aed23",
             "s-d30355f64f647bd9",
-            "c-231889a434737d78"
+            "c-5687a237ade50f1c"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2360,7 +2360,7 @@
           "evidence": [
             "s-cade2bcb3226489d",
             "s-6f165bc40e90fa0f",
-            "c-ce915987f6e708fc"
+            "c-2f040e28d93e4f81"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -2392,7 +2392,7 @@
             "s-dd405afa068d078a",
             "s-717df00d6cdecd91",
             "s-25f3fb61e910ef7a",
-            "c-ea0bf620bb89aaf5"
+            "c-1ff86b0fa5eb10c0"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -2424,7 +2424,7 @@
             "s-a4e31f0bf07cda86",
             "s-c3611cb845c6fd8f",
             "s-1a6ceef87959e9b6",
-            "c-1d90879dfde64957"
+            "c-ca44d9b02271374d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2445,7 +2445,7 @@
           ],
           "evidence": [
             "s-4ce2ee33e68d9235",
-            "c-9b613ca91c95a928"
+            "c-1d3233a9017db845"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -2468,8 +2468,8 @@
             "s-ed372c7cff1a58ca",
             "s-9e8a3d771c4f4ba7",
             "s-6310cdd9432893da",
-            "c-4d48a014badfec0b",
-            "c-fdd2fec5a0d4966d"
+            "c-05336d5ca99f5812",
+            "c-d3b60f8aa598c64a"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -2490,10 +2490,10 @@
             1
           ],
           "evidence": [
-            "c-2f59a4c9c02a0c6e",
-            "c-684ad5cb80ab518a",
-            "c-8c73a6449b9d5579",
-            "c-a5b87d878a549b48"
+            "c-ea7d2165af8300f8",
+            "c-8e719c0be176289f",
+            "c-c4077d6d28cd4dd8",
+            "c-d94f688c593b11d7"
           ],
           "reason": "Transport rows landing here."
         },
@@ -2505,7 +2505,7 @@
             2
           ],
           "evidence": [
-            "c-92b0dc553f7c9701"
+            "c-4ac5dc37ce8f2b3c"
           ],
           "reason": "Transport rows landing here."
         },
@@ -2517,7 +2517,7 @@
             2
           ],
           "evidence": [
-            "c-00adaf9003163924"
+            "c-fed995e18ed9a5de"
           ],
           "reason": "Transport rows landing here."
         }
@@ -2539,7 +2539,7 @@
           "evidence": [
             "s-930d7b0c12794b55",
             "s-31184daaa5aeaaaf",
-            "c-7a38c6f4621a18da"
+            "c-d30f6a5903398218"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2561,7 +2561,7 @@
           "evidence": [
             "s-956b490775906d17",
             "s-731949895c7dffe5",
-            "c-7662be249ebaf792"
+            "c-01c9b9f69257a0cf"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2583,7 +2583,7 @@
           "evidence": [
             "s-781c8755c51f397c",
             "s-9e96b0d8206da24d",
-            "c-b0afdec628598577"
+            "c-fa89f4d89e0e5af3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2604,7 +2604,7 @@
           ],
           "evidence": [
             "s-040c117a32c4cd78",
-            "c-944394d8440bea6b"
+            "c-770d9477812fbfe2"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2626,8 +2626,8 @@
           "evidence": [
             "s-c5f10fbaf83a1edc",
             "s-012e50d3411011f8",
-            "c-4f293ae53e939b7d",
-            "c-8276c9e5a278b26d"
+            "c-78188b50539baf6c",
+            "c-eadbca863d4c9692"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -2658,7 +2658,7 @@
           "evidence": [
             "s-580da83af2ce8375",
             "s-d1ee5080d83278b0",
-            "c-e382ce4408adedbd"
+            "c-67e4f17e3a97e602"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2680,7 +2680,7 @@
           "evidence": [
             "s-3016dbe26f15ed81",
             "s-191d4552524e511d",
-            "c-9407ac126725645b"
+            "c-b3af7fca9a1c392b"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2722,7 +2722,7 @@
           "evidence": [
             "s-83ba75605b173baf",
             "s-2026a05c13eafad2",
-            "c-c0a5a817baf25e10"
+            "c-1b162eded8d5d617"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2747,7 +2747,7 @@
             "s-d4dda2d25632ee5a",
             "s-c959278b56e8ac1c",
             "s-11650ed6a2d62c3d",
-            "c-3272bd47475ecacf"
+            "c-95ab9ce36eb81f11"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2772,9 +2772,9 @@
             "s-d4dda2d25632ee5a",
             "s-c959278b56e8ac1c",
             "s-11650ed6a2d62c3d",
-            "c-3272bd47475ecacf",
-            "c-9f2e9e9ac0259e96",
-            "c-f24c0eaa683d0eb6"
+            "c-95ab9ce36eb81f11",
+            "c-5b4dd19957bef4f9",
+            "c-620594a767c7fbfc"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -2791,8 +2791,8 @@
             "s-d4dda2d25632ee5a",
             "s-c959278b56e8ac1c",
             "s-11650ed6a2d62c3d",
-            "c-3272bd47475ecacf",
-            "c-9f2e9e9ac0259e96"
+            "c-95ab9ce36eb81f11",
+            "c-5b4dd19957bef4f9"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2814,8 +2814,8 @@
           "evidence": [
             "s-67e513e4bbd56efc",
             "s-b1bc3519ce082ae7",
-            "c-cca9333e8fe05eb1",
-            "c-fe74002601861426"
+            "c-3035d1606b6d6abe",
+            "c-5d207320b3156a0a"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -2846,7 +2846,7 @@
           "evidence": [
             "s-9371c77dbcf7a789",
             "s-8827506485887d40",
-            "c-a3e394a014df7717"
+            "c-e50049167d4f8f9a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2868,7 +2868,7 @@
           "evidence": [
             "s-e8f8cc1fb88c49d2",
             "s-ebc00b0ee6a92c40",
-            "c-1cac9b00a5e62f03"
+            "c-0d238c3b0b9e52a6"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2889,7 +2889,7 @@
           ],
           "evidence": [
             "s-06e84f371b6ef821",
-            "c-b2c8df782dca611b"
+            "c-77aa4a8bd8a92925"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2912,7 +2912,7 @@
             "s-77dfd1b6338b2134",
             "s-0ba754e20ec4bf9f",
             "s-15965056269c112a",
-            "c-185e1439ebca6489"
+            "c-320bda1d18f7abc2"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2935,7 +2935,7 @@
             "s-0e120b73af269c58",
             "s-77dfd1b6338b2134",
             "s-f030e36ebc6b2bac",
-            "c-709728c422884d38"
+            "c-95aee4e961fe1bab"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -2957,7 +2957,7 @@
           "evidence": [
             "s-3a932ec20dec5c14",
             "s-1062e7d08278fcb3",
-            "c-65dc275022118962"
+            "c-50dba319e5c7bcd0"
           ],
           "reason": "Heroes Guild mine cache pin and the guild entrance identify the actual basement; unrelated to the misnamed fixture."
         }
@@ -2979,7 +2979,7 @@
           "evidence": [
             "s-93aad7dcca2816d5",
             "s-84bc0eed108c9369",
-            "c-b23d269195305cea"
+            "c-bce2cf55179d8271"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3002,7 +3002,7 @@
             "s-033a9b5ce3818bb7",
             "s-091166c72c3b1ef6",
             "s-9969fba5afaa73dd",
-            "c-f3362750cc05ec9f"
+            "c-c6b47e52f81cb471"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3057,7 +3057,7 @@
             "s-efa3db64ab28497d",
             "s-48466f193df4beac",
             "s-fc92ef00e5c83e23",
-            "c-2fbd61cf8538c53a"
+            "c-688336c457354250"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3082,8 +3082,8 @@
             "s-efa3db64ab28497d",
             "s-48466f193df4beac",
             "s-fc92ef00e5c83e23",
-            "c-2fbd61cf8538c53a",
-            "c-1323d8d9118c0fef"
+            "c-688336c457354250",
+            "c-5d3fe268970b94c6"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3108,8 +3108,8 @@
             "s-efa3db64ab28497d",
             "s-48466f193df4beac",
             "s-fc92ef00e5c83e23",
-            "c-000b64d38df64b65",
-            "c-2c922a94c29a0a2e"
+            "c-4971b85aa7ade9aa",
+            "c-06559ce11a890dc7"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3134,7 +3134,7 @@
             "s-efa3db64ab28497d",
             "s-48466f193df4beac",
             "s-fc92ef00e5c83e23",
-            "c-000b64d38df64b65"
+            "c-4971b85aa7ade9aa"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3154,7 +3154,7 @@
             3
           ],
           "evidence": [
-            "c-1f196843cf2dc68a"
+            "c-7b48f3b914e09fa6"
           ],
           "reason": "Transport rows landing here."
         }
@@ -3177,7 +3177,7 @@
             "s-300bc884670b15be",
             "s-71a286445465f4db",
             "s-31c201602626a341",
-            "c-18ae4d791a6cac50"
+            "c-5d156b52017a85d4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3199,7 +3199,7 @@
           "evidence": [
             "s-ef4d144361495397",
             "s-4108bed5901a0fb9",
-            "c-fb52e167e8c274be"
+            "c-9eda8153c1141e72"
           ],
           "reason": "Stairs 6841/6842 join the Jiggig surface entrance at 2485,3045 to this tomb; distant same-plane labels are unrelated."
         }
@@ -3221,7 +3221,7 @@
           "evidence": [
             "s-2728c9c7b5f1edd6",
             "s-14c44189931ccda4",
-            "c-664ee4f4d2dae985"
+            "c-a31443af9c5d3a09"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3243,7 +3243,7 @@
           "evidence": [
             "s-bbd591bd5e1ba09a",
             "s-6db01fb6cec82011",
-            "c-00f9b3cec27c5fa6"
+            "c-f585973d1887c307"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3265,7 +3265,7 @@
           "evidence": [
             "s-0d8d8242d05fa90e",
             "s-36517694f1789117",
-            "c-74d19f4085132ddc"
+            "c-c3474f33aea47a20"
           ],
           "reason": "Rope/tunnel entrance from the desert at 3226,3108 identifies the Kalphite Lair despite sparse plane-2 source labels."
         },
@@ -3279,8 +3279,8 @@
           "evidence": [
             "s-0d8d8242d05fa90e",
             "s-36517694f1789117",
-            "c-74d19f4085132ddc",
-            "c-111159872be5b16b"
+            "c-c3474f33aea47a20",
+            "c-9e8b189755b7d7a4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3312,8 +3312,8 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3337,9 +3337,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-5c5afa8685fcc151"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-6896985644dee8b7"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3363,9 +3363,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-0e0c544f6a382624"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-8e3175c79446fdc8"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3389,9 +3389,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-b764cc01d3b9098e"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-49c70b7d39f27097"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3415,9 +3415,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-411219220a47a0d9"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-3a989d45ae863c8e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3441,9 +3441,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-5aba308c5564f4b9"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-9e453d21a1f29274"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3467,10 +3467,10 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-5aba308c5564f4b9",
-            "c-5bbcd24216f790bf"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-9e453d21a1f29274",
+            "c-4e1c93e95ebd52e6"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3494,9 +3494,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-5dcd40799508e933"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-ddf81d6d57cfb327"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3520,9 +3520,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-6e94794ba6db6302"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-f47310851ab4dded"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3546,9 +3546,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-01c49563993ea235"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-f747977c7a8bc1d9"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3572,9 +3572,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-105d1270541aa9fd"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-418338bed763241d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3598,10 +3598,10 @@
             "s-e8e84fe8ac52e33d",
             "s-678d4d798bc7d8b1",
             "s-196e57379983c08d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-8445b52fa532f2da",
-            "c-e6c30f2d3626dc8e"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-c5084965e7eb9ca9",
+            "c-0d529b4d424812eb"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3617,9 +3617,9 @@
             "s-e8e84fe8ac52e33d",
             "s-678d4d798bc7d8b1",
             "s-196e57379983c08d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-8445b52fa532f2da"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-c5084965e7eb9ca9"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3651,9 +3651,9 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-1e70192196774a70"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-59953f24c075ee35"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -3677,10 +3677,10 @@
             "s-ec06f9e42f69a735",
             "s-caee6789301cd53e",
             "s-2610169e3569291d",
-            "c-7fabecc83e47e8a1",
-            "c-3a3347999b799b18",
-            "c-1e70192196774a70",
-            "c-05d60ef4285d7f1e"
+            "c-c957c5a93ba0ca0c",
+            "c-377148ebddda1df5",
+            "c-59953f24c075ee35",
+            "c-05856b14fef20e7a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3703,7 +3703,7 @@
             "s-e8e84fe8ac52e33d",
             "s-52d247ddcc3066aa",
             "s-196e57379983c08d",
-            "c-7fabecc83e47e8a1"
+            "c-c957c5a93ba0ca0c"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3724,8 +3724,8 @@
           ],
           "evidence": [
             "s-a4cfa180b3a314e1",
-            "c-4b66722b9de04715",
-            "c-d9ae30ba5c2085db"
+            "c-6701ade72f3890c4",
+            "c-240fb71c04f047ae"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -3747,8 +3747,8 @@
           "evidence": [
             "s-e1b8ffb6c6a0b9b2",
             "s-ba79c3779d78bf73",
-            "c-1f6526d7af5564fa",
-            "c-4aecd382ec201479"
+            "c-6ffb7f3e06da9c20",
+            "c-75e0233abcbb392d"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -3771,7 +3771,7 @@
             "s-bea4616ae8cae5ee",
             "s-308e26a32d683792",
             "s-4593b49b99a58ebd",
-            "c-ac80c9c0db9ef074"
+            "c-5cf7d1b59034c977"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -3804,7 +3804,7 @@
             "s-5b63e162d0d3a953",
             "s-d9b4c59489f14d36",
             "s-8d018a53146c0f06",
-            "c-193d77e29c1ac0fb"
+            "c-8c1b27e7a6f0acf4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3825,7 +3825,7 @@
           ],
           "evidence": [
             "s-9f4d7868a558ae1c",
-            "c-146f4c3835c22d22"
+            "c-3cfd0fbee2b17b9a"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -3847,7 +3847,7 @@
           "evidence": [
             "s-b7d1809050390eb1",
             "s-1ca637fa32e2c505",
-            "c-c30461cfa9c99cd5"
+            "c-b970100b2a218f48"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3900,7 +3900,7 @@
             "s-8385f8ab4b2a86d8",
             "s-b1cefdddcf43c903",
             "s-fd302e7fe72ee210",
-            "c-795f24f5fcdbe1ee"
+            "c-2342633f1a96ce28"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3924,7 +3924,7 @@
             "s-f170283a10fb2b07",
             "s-b1cefdddcf43c903",
             "s-3f5eda6d80a19891",
-            "c-56041c931c87465b"
+            "c-02cc8e176a0d0ae2"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3944,8 +3944,8 @@
             0
           ],
           "evidence": [
-            "c-2a8a39f31679da26",
-            "c-cd789bbdd25d1d79"
+            "c-be2e39600126f691",
+            "c-026dfe449ec7f14c"
           ],
           "reason": "Transport rows landing here."
         }
@@ -3967,7 +3967,7 @@
           "evidence": [
             "s-878c474bd086121c",
             "s-0ab1fc0795346669",
-            "c-9c20c6259658f2ed"
+            "c-4a80fe3e82df3e33"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -3987,7 +3987,7 @@
             0
           ],
           "evidence": [
-            "c-0f17983c8aadfb39"
+            "c-3fc1856c3e581037"
           ],
           "reason": "Transport rows landing here.",
           "anchor": {
@@ -4017,7 +4017,7 @@
           ],
           "evidence": [
             "s-9a23efa602f9a2ad",
-            "c-60ba08df959386f4"
+            "c-f4845eb3af5e6c54"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -4041,7 +4041,7 @@
             "s-cbbf339a5596614c",
             "s-64bb0b4191a70528",
             "s-beaf728f79fd6df3",
-            "c-8ee70594e10a3e31"
+            "c-63dd891c99cead3d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4057,8 +4057,8 @@
             "s-cbbf339a5596614c",
             "s-64bb0b4191a70528",
             "s-beaf728f79fd6df3",
-            "c-8ee70594e10a3e31",
-            "c-caa0777e37ce7c52"
+            "c-63dd891c99cead3d",
+            "c-839f00b7a33a38ff"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4074,7 +4074,7 @@
             "s-cbbf339a5596614c",
             "s-64bb0b4191a70528",
             "s-beaf728f79fd6df3",
-            "c-9495b38495106e67"
+            "c-151aa7166040054c"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4098,8 +4098,8 @@
             "s-cbbf339a5596614c",
             "s-64bb0b4191a70528",
             "s-beaf728f79fd6df3",
-            "c-9495b38495106e67",
-            "c-28470a43021b1bd7"
+            "c-151aa7166040054c",
+            "c-435349d4eca751e2"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4125,8 +4125,8 @@
             "s-a538cb7148d4805a",
             "s-027fabbf11231b5b",
             "s-faffb5e5880a277b",
-            "c-701e30e770bccbae",
-            "c-0c84e773a4ec4fc4"
+            "c-1c00111b3836eeba",
+            "c-02af3c114a58ad2a"
           ],
           "reason": "Cache place pins identify Mor Ul Rek; Fight Caves and Fight Pits labels identify activities within the larger terrain component."
         }
@@ -4153,7 +4153,7 @@
           "evidence": [
             "s-fa62b7b80b73d9f6",
             "s-057f7d92c9bc306d",
-            "c-61447bcf119b79c5"
+            "c-970ff74724718215"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4167,8 +4167,8 @@
           "evidence": [
             "s-fa62b7b80b73d9f6",
             "s-057f7d92c9bc306d",
-            "c-61447bcf119b79c5",
-            "c-81823031721887ad"
+            "c-970ff74724718215",
+            "c-948f6e0a93641076"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4182,8 +4182,8 @@
           "evidence": [
             "s-fa62b7b80b73d9f6",
             "s-057f7d92c9bc306d",
-            "c-61447bcf119b79c5",
-            "c-2e234801da3ccf1b"
+            "c-970ff74724718215",
+            "c-36b9c26255ebafbd"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4197,8 +4197,8 @@
           "evidence": [
             "s-fa62b7b80b73d9f6",
             "s-057f7d92c9bc306d",
-            "c-61447bcf119b79c5",
-            "c-9040af5c5236e0ad"
+            "c-970ff74724718215",
+            "c-6be2d0691d8ff031"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4212,9 +4212,9 @@
           "evidence": [
             "s-fa62b7b80b73d9f6",
             "s-057f7d92c9bc306d",
-            "c-61447bcf119b79c5",
-            "c-2e234801da3ccf1b",
-            "c-bbe5476a8333d7d4"
+            "c-970ff74724718215",
+            "c-36b9c26255ebafbd",
+            "c-290c6b80cfffeb0d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4228,8 +4228,8 @@
           "evidence": [
             "s-fa62b7b80b73d9f6",
             "s-057f7d92c9bc306d",
-            "c-61447bcf119b79c5",
-            "c-c2f5e4eecfb594b1"
+            "c-970ff74724718215",
+            "c-d7f36fcf1d2f92e2"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4252,7 +4252,7 @@
             "s-05fe0c2792da7539",
             "s-02d538ee353b7327",
             "s-9c79f138a8376e26",
-            "c-cb3c5f468bc23c7d"
+            "c-9c2e22e09606429d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4274,8 +4274,8 @@
           "evidence": [
             "s-a84361108d91ec37",
             "s-1e6bd9d08049dacd",
-            "c-2987861897842350",
-            "c-96fdd2288d68db8f"
+            "c-b565784e54959943",
+            "c-0eecc0720a274f89"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4297,7 +4297,7 @@
           "evidence": [
             "s-08c145e6d38fbb8d",
             "s-45536fa2f21a8220",
-            "c-1fb7fa25d5a119f5"
+            "c-1500c6f5c54a9bb5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4318,7 +4318,7 @@
           ],
           "evidence": [
             "s-c43c2328f47f0309",
-            "c-a30d988938ef2761"
+            "c-b9ded43a02a107bc"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -4341,7 +4341,7 @@
             "s-1e2d1e0c19d177e0",
             "s-40e8f06db7b3ee3d",
             "s-c00bc801cdeb0745",
-            "c-101e04a956903ce7"
+            "c-6a601c6f290b56a0"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4364,7 +4364,7 @@
             "s-5c6ac9cb0f6f5d6c",
             "s-c383ec9c52d098aa",
             "s-2de6e88324c3b3a8",
-            "c-a6caaeaf91fd96f1"
+            "c-750d64f50fb40eae"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4385,7 +4385,7 @@
           ],
           "evidence": [
             "s-390731af0d5050ef",
-            "c-ec073998a63598a6"
+            "c-639b784552dd8e67"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4407,8 +4407,8 @@
           "evidence": [
             "s-bd218f16a439aa73",
             "s-7738aea7c1c8efa5",
-            "c-ec073998a63598a6",
-            "c-b63c79a3622b7926"
+            "c-639b784552dd8e67",
+            "c-e3d7f7dfdb138a07"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4430,7 +4430,7 @@
           "evidence": [
             "s-3b1c6ae9c6186d13",
             "s-b14b1ec4fcf0ba35",
-            "c-f1bb2e220f2eabd1"
+            "c-1d6807448d00870f"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4450,10 +4450,9 @@
             0
           ],
           "evidence": [
-            "c-0044cfcedad2628f",
-            "c-1378366fe5db821b",
-            "c-34acae2aaf639ea4",
-            "c-3817ddb4131642bb"
+            "c-72f02f5f84ae40fd",
+            "c-f435b4a787d4d543",
+            "c-24189b2aa8761ad6"
           ],
           "reason": "Transport rows landing here."
         }
@@ -4474,7 +4473,7 @@
           ],
           "evidence": [
             "s-4f287ab74ee8f4c8",
-            "c-636cf3bd02f42a64"
+            "c-cf4a7d6c998e0056"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4497,7 +4496,7 @@
             "s-3d4124e48ad4d5d5",
             "s-678d4d798bc7d8b1",
             "s-fe7cc62964d05593",
-            "c-0f0d4b28f6337b0f"
+            "c-a664c8103a25c6d3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4522,7 +4521,7 @@
             "s-6c7c765ece27e74e",
             "s-a0c2767bbb4c2885",
             "s-516d9f413e2cde09",
-            "c-f3894f99d2bdfff8"
+            "c-21781f1b202b7bf9"
           ],
           "reason": "Prifddinas is the umbrella area; the overlapping execution-cutscene pin is retained as evidence, not a second dungeon name."
         }
@@ -4547,8 +4546,8 @@
           "evidence": [
             "s-f5ffd4ec95b74b31",
             "s-7c85e03aa148c1d0",
-            "c-87d655f5f5754ca5",
-            "c-82a10bdb72920b0d"
+            "c-3ed779fbbcce2c68",
+            "c-673410a91c17a7ce"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4570,7 +4569,7 @@
           "evidence": [
             "s-73ceb0ff8173632a",
             "s-da83ef7cbd63e224",
-            "c-787d8be2a4660fe1"
+            "c-455fae550cb096c9"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4584,7 +4583,7 @@
           "evidence": [
             "s-73ceb0ff8173632a",
             "s-da83ef7cbd63e224",
-            "c-19ceb94ce21512a1"
+            "c-0ae067e4cf9ffa75"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4598,7 +4597,7 @@
           "evidence": [
             "s-73ceb0ff8173632a",
             "s-da83ef7cbd63e224",
-            "c-6e41dd9f9ab3a4bb"
+            "c-1af9492e075a25ce"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4612,7 +4611,7 @@
           "evidence": [
             "s-73ceb0ff8173632a",
             "s-da83ef7cbd63e224",
-            "c-4162891b2136824b"
+            "c-fe5f31bc3a4ecb2c"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4626,7 +4625,7 @@
           "evidence": [
             "s-73ceb0ff8173632a",
             "s-da83ef7cbd63e224",
-            "c-6de643d8bd6490d8"
+            "c-f4334835e5a7ff6d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4640,7 +4639,7 @@
           "evidence": [
             "s-73ceb0ff8173632a",
             "s-da83ef7cbd63e224",
-            "c-ace7703d82bfd487"
+            "c-cf245b46fe6e1468"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4654,7 +4653,7 @@
           "evidence": [
             "s-73ceb0ff8173632a",
             "s-da83ef7cbd63e224",
-            "c-5b0e7491d5344899"
+            "c-63548e7f9893d367"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4668,7 +4667,7 @@
           "evidence": [
             "s-73ceb0ff8173632a",
             "s-da83ef7cbd63e224",
-            "c-7eb2133a62d9579f"
+            "c-766a175d9d5bdb74"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4689,7 +4688,7 @@
           ],
           "evidence": [
             "s-d5f433d052d2e3b2",
-            "c-63ddc786ce474a83"
+            "c-1475a0dee1e942a8"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4711,7 +4710,7 @@
           "evidence": [
             "s-c9a64edbb6533aa9",
             "s-96a074dc96735164",
-            "c-5f71d97f1f007a8c"
+            "c-36c6ac1da16f03d9"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4733,7 +4732,7 @@
           "evidence": [
             "s-17f7ce4dbd160b57",
             "s-778b15eb5bdbdcd3",
-            "c-0663c59f9ef4113c"
+            "c-6cd2799bac0df4bf"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4754,7 +4753,7 @@
           ],
           "evidence": [
             "s-a0e25bef94122873",
-            "c-6030b698b1881c0a"
+            "c-f8f472b19b7f4d54"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4775,7 +4774,7 @@
           ],
           "evidence": [
             "s-8778551183b8341e",
-            "c-53d5ad198d657348"
+            "c-7704630ab62ecc7e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4799,8 +4798,8 @@
             "s-58adabc42398e449",
             "s-1a003e34f165ca10",
             "s-0156f25406fda10f",
-            "c-f227c1e536c3a083",
-            "c-ac94a64127de5e0c"
+            "c-f853b899154b027e",
+            "c-3e1d3bc45151f812"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4816,7 +4815,7 @@
             "s-58adabc42398e449",
             "s-1a003e34f165ca10",
             "s-0156f25406fda10f",
-            "c-f227c1e536c3a083"
+            "c-f853b899154b027e"
           ],
           "reason": "Entrance 40887 near Taverley and crevice 40889 join this room to the labelled Scrubfoot cave component."
         }
@@ -4836,7 +4835,7 @@
             0
           ],
           "evidence": [
-            "c-a680a482dd2a930d"
+            "c-254acee988437772"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4858,7 +4857,7 @@
           "evidence": [
             "s-c19e0fc10de4fac1",
             "s-760dc3b92fa5be01",
-            "c-042e54d18236741d"
+            "c-d2d1a9c1e24da0b0"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4880,7 +4879,7 @@
           "evidence": [
             "s-e843fc6da17550f3",
             "s-a0e68b22218cb81a",
-            "c-d9afd91c6886d6e3"
+            "c-672858aa30248d24"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4894,8 +4893,8 @@
           "evidence": [
             "s-e843fc6da17550f3",
             "s-a0e68b22218cb81a",
-            "c-d9afd91c6886d6e3",
-            "c-8ebdc7093d3242d5"
+            "c-672858aa30248d24",
+            "c-1023530bef44c215"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4919,7 +4918,7 @@
             "s-3347b37b37896a95",
             "s-1bd2a793ccc02eeb",
             "s-6e2a93ca79e72697",
-            "c-1978ba6643fdabfa"
+            "c-34b2c9351233080e"
           ],
           "reason": "Crypt entrance 32403 at 1483,3549 agrees with the revised wiki entrance pin for Shayzien Crypts."
         }
@@ -4940,7 +4939,7 @@
           ],
           "evidence": [
             "s-d9513f2dd12d4b3b",
-            "c-8af67350b015d190"
+            "c-c6067ae1d5caecd8"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4962,7 +4961,7 @@
           "evidence": [
             "s-33d503d591fd194e",
             "s-d2936871e1116703",
-            "c-51717f682e341d48"
+            "c-de376a9bb92906e4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -4976,8 +4975,8 @@
           "evidence": [
             "s-33d503d591fd194e",
             "s-d2936871e1116703",
-            "c-51717f682e341d48",
-            "c-621d70fc6a1fd308"
+            "c-de376a9bb92906e4",
+            "c-7df7aa9b2481dcca"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4999,7 +4998,7 @@
           "evidence": [
             "s-8494d01f683a54f5",
             "s-0afb8fbefa627cc8",
-            "c-80e4a87e13ea83f5"
+            "c-2396f91f0f7d2450"
           ],
           "reason": "The legacy Heroes Guild basement fixture actually targets 3447,9934,3 in the Slayer Tower basement."
         }
@@ -5021,7 +5020,7 @@
           "evidence": [
             "s-0f4ec9b055a0d62f",
             "s-3219ce488a161ad9",
-            "c-70a35d352ebebd04"
+            "c-a09ac82435430fe7"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5044,7 +5043,7 @@
             "s-c8203c9d44b9cac3",
             "s-e33151c2d32a84d3",
             "s-a64d482c7c656063",
-            "c-2e30eb457914cb6d"
+            "c-cfe696e1e598191a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5067,8 +5066,8 @@
             "s-8edef044b63f5f78",
             "s-52659da3db503bd2",
             "s-e33151c2d32a84d3",
-            "c-2e30eb457914cb6d",
-            "c-b260fa3e2276a04d"
+            "c-cfe696e1e598191a",
+            "c-9f1c6822bf73c71d"
           ],
           "reason": "Ladder 20278 joins Sophanem bank basement to the dungeon. Sheet plane differs; do not use faraway plane-2 labels."
         }
@@ -5089,10 +5088,7 @@
           ],
           "evidence": [
             "s-bea67163fe822b6c",
-            "c-0487d416e3303bb8",
-            "c-0ad3f92d225d2cb1",
-            "c-19881367a214659c",
-            "c-1e8e1131efb7aba0"
+            "c-4b6948e2f8d57d59"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -5124,7 +5120,7 @@
             "s-66e257dd71aabde3",
             "s-939d248e03aed68e",
             "s-c7db40baa7d5ac51",
-            "c-a2b16e9018ac78a0"
+            "c-133e6e44d7cdcc6e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5146,7 +5142,7 @@
           "evidence": [
             "s-6dbfefa2a05ae33d",
             "s-71cd22364ee0e01f",
-            "c-c14b128f3e87b02c"
+            "c-856523bc49f76835"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5170,8 +5166,8 @@
             "s-bb24ba22da393e9a",
             "s-1a4c428152f63123",
             "s-e4e3a02dff2f145f",
-            "c-29b6c01e63a8ce5f",
-            "c-0a27ed185766bb80"
+            "c-09e3639b0c5bc315",
+            "c-477e0078b79f0671"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5195,8 +5191,8 @@
             "s-bb24ba22da393e9a",
             "s-1a4c428152f63123",
             "s-e4e3a02dff2f145f",
-            "c-4f34ef5ef3a2493e",
-            "c-40cec58f6e16c826"
+            "c-fafcec2fe60e108a",
+            "c-7074cdd241c482bc"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5220,7 +5216,7 @@
             "s-bb24ba22da393e9a",
             "s-1a4c428152f63123",
             "s-e4e3a02dff2f145f",
-            "c-4f34ef5ef3a2493e"
+            "c-fafcec2fe60e108a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5244,7 +5240,7 @@
             "s-bb24ba22da393e9a",
             "s-1a4c428152f63123",
             "s-e4e3a02dff2f145f",
-            "c-29b6c01e63a8ce5f"
+            "c-09e3639b0c5bc315"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5266,7 +5262,7 @@
           "evidence": [
             "s-fd9cf5f96f9b236f",
             "s-2fc580de47780a26",
-            "c-3a6d222106f1aee4"
+            "c-c59b0e132cafd7fa"
           ],
           "reason": "The legacy Taverley fixture is misnamed: its tile is in the Stronghold Slayer Cave component."
         }
@@ -5287,10 +5283,10 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-9a4e5ccb6c1c6c83"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-7e1fb4e339dc5f4b"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5303,9 +5299,9 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5318,8 +5314,8 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5332,13 +5328,13 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5351,9 +5347,9 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5366,10 +5362,10 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-46933495a3a05d66"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-010a497e9303c6cf"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5382,14 +5378,14 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5402,10 +5398,10 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-af89bf86b364267e"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-3fa2dee17cf0014b"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5418,11 +5414,11 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-9a4e5ccb6c1c6c83",
-            "c-8911a78933e688df"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-7e1fb4e339dc5f4b",
+            "c-203b9142b10da821"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5435,13 +5431,13 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-09e5d6cd0d7849d2",
-            "c-0a6a9d6a866ca34c"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-3e09704b0d14ebc9",
+            "c-2d6be10260c0ae18"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5454,15 +5450,15 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-bcfc44847f0d2ca8"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-e3d139882d184d1f"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5475,10 +5471,10 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-660cb2d54cac969b"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-32983e32f087da87"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5491,11 +5487,11 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-089085fe1be7b39e"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-2611bbb9073ca9e8"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5508,12 +5504,12 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-09e5d6cd0d7849d2"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-3e09704b0d14ebc9"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5526,12 +5522,12 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5544,11 +5540,11 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5561,10 +5557,10 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-04f2455d23537cda"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-dae0a6a6cf969bad"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5577,10 +5573,10 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5593,11 +5589,11 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-46933495a3a05d66",
-            "c-7dc2114dee72ada4"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-010a497e9303c6cf",
+            "c-3d130f96c967e1af"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5610,11 +5606,11 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-9a4e5ccb6c1c6c83",
-            "c-fec9fac429a01b7f"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-7e1fb4e339dc5f4b",
+            "c-b34ac66ea9a21b52"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5635,14 +5631,14 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-f1f4a2d3ba30a919"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-dd767028db159caf"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5655,15 +5651,15 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-f1f4a2d3ba30a919",
-            "c-f0c8a20ce6d7c7ab"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-dd767028db159caf",
+            "c-9ed51b803aa18349"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5676,15 +5672,15 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-cf07d34218c7d845",
-            "c-e6f04898b22b1119"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-8bed4aaec76705d8",
+            "c-875cd00e1b38f4c9"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5697,14 +5693,14 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-cf07d34218c7d845"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-8bed4aaec76705d8"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5717,16 +5713,16 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-f1f4a2d3ba30a919",
-            "c-f0c8a20ce6d7c7ab",
-            "c-077923144bda1e95"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-dd767028db159caf",
+            "c-9ed51b803aa18349",
+            "c-f6fcc05f13cb17de"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5739,15 +5735,15 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-f45dc7d0b94bc9e2",
-            "c-3726df7648927687"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-845cf4f7a10b7fa0",
+            "c-c591ff6fe0826833"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5760,14 +5756,14 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-f45dc7d0b94bc9e2"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-845cf4f7a10b7fa0"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5780,15 +5776,15 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-835d776f6545a676"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-b270efc21fe82eab"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5801,15 +5797,15 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-9b7a7b183f5a3d4c"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-5f05ffeea9a93605"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5822,10 +5818,10 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-7e78a5e31e239c49"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-135dc0a76461c524"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5838,10 +5834,10 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-2eb68ac1ade866de",
-            "c-cd73500c124f48c3"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-594973461874846a",
+            "c-e149c3fbe82a00ed"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5854,17 +5850,17 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-9b7a7b183f5a3d4c",
-            "c-39a2414a948adf6a",
-            "c-e14c760d0847f9f6"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-5f05ffeea9a93605",
+            "c-dafecd72775d4913",
+            "c-3d30ade7381c5622"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5877,16 +5873,16 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-9b7a7b183f5a3d4c",
-            "c-39a2414a948adf6a"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-5f05ffeea9a93605",
+            "c-dafecd72775d4913"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5899,16 +5895,16 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-06f0db1ec63d2f5c",
-            "c-e0771ae2aba49bf4"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-f98a634c89a77bff",
+            "c-6c9303346feb0659"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5921,17 +5917,17 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-06f0db1ec63d2f5c",
-            "c-e0771ae2aba49bf4",
-            "c-80e5bafa6c20a796"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-f98a634c89a77bff",
+            "c-6c9303346feb0659",
+            "c-a8c1d749182c76df"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5944,15 +5940,15 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-06f0db1ec63d2f5c"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-f98a634c89a77bff"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -5965,15 +5961,15 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-002d290383b42447"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-a87623e88fb33ef2"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -5994,16 +5990,16 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-bcfc44847f0d2ca8",
-            "c-a00629aef09935ca"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-e3d139882d184d1f",
+            "c-a8e2dfc553439eb4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6016,17 +6012,17 @@
           ],
           "evidence": [
             "s-a252cd4639433bfc",
-            "c-d2df6079cfcc0a13",
-            "c-0fac37fdff593c46",
-            "c-8f7263d4e9cf7257",
-            "c-8487b4a8db0aa5fa",
-            "c-bbc0c04e0292764e",
-            "c-44f4dfd5d1a58588",
-            "c-a4efe0d89dc8dafd",
-            "c-42c896344bb02ed5",
-            "c-bcfc44847f0d2ca8",
-            "c-a00629aef09935ca",
-            "c-bc22928a2a9daf87"
+            "c-b31241c1f11e2bed",
+            "c-06acef0ee580a63d",
+            "c-e265934c45c8eb30",
+            "c-72d3142752d9a25b",
+            "c-478f1278b8acad1d",
+            "c-69dcb189af9b1323",
+            "c-a25ba67df6341b34",
+            "c-ce710cdea164a1db",
+            "c-e3d139882d184d1f",
+            "c-a8e2dfc553439eb4",
+            "c-766d491baeeac626"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6049,7 +6045,7 @@
             "s-b8dc7a9e8fe9d2d4",
             "s-89ded9cd7056a99e",
             "s-9f98621f9f93e4f2",
-            "c-1e1eaa8b8b8f5533"
+            "c-4cad3d60e9bc5e68"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6064,8 +6060,8 @@
             "s-b8dc7a9e8fe9d2d4",
             "s-89ded9cd7056a99e",
             "s-9f98621f9f93e4f2",
-            "c-1e1eaa8b8b8f5533",
-            "c-8bf844c6db70a7a8"
+            "c-4cad3d60e9bc5e68",
+            "c-45f3e9c642809108"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6080,8 +6076,8 @@
             "s-b8dc7a9e8fe9d2d4",
             "s-89ded9cd7056a99e",
             "s-9f98621f9f93e4f2",
-            "c-1e1eaa8b8b8f5533",
-            "c-242dc104a64fc7f9"
+            "c-4cad3d60e9bc5e68",
+            "c-0a47c430e8074522"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6105,13 +6101,13 @@
             "s-2ea2dbe50e320b6d",
             "s-be81f675fb0f863d",
             "s-761325b4194d5835",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-c04e561194993cf8",
-            "c-0aeaebcb162d5cb6"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-572e782dd7ad6136",
+            "c-4e7ca9d953c66ba7"
           ],
           "reason": "Temple of Light label lies inside; Mourner Tunnels label is just outside the same component. Keep the connected complex together."
         }
@@ -6136,10 +6132,9 @@
           ],
           "evidence": [
             "s-6b5e7d6f8675282f",
-            "c-37aeee6af2e109e6",
-            "c-3b4ee1bbf246329e",
-            "c-3e93fd1ab881b1d3",
-            "c-3f1d9e2b250f8d8b"
+            "c-54fc2ecc958c17c2",
+            "c-9acf7d3242d8a788",
+            "c-5d1c1d46cd6b3224"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -6160,9 +6155,30 @@
           ],
           "evidence": [
             "s-f28f69c6b4745f8c",
-            "c-ed82569508d426c7"
+            "c-eabfc1944832cd04"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "the-fractured-archive",
+      "name": "The Fractured Archive",
+      "status": "named",
+      "reason": "Named from the plugin's Fractured Archive entrance (#839): the Crawl-through Opening from the Chasm of Tears (While Guthix Sleeps) lands here, and the plugin's Fractured Archive banks are inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-4108-5506-f3f3809248",
+          "seed": [
+            4127,
+            5508,
+            0
+          ],
+          "evidence": [
+            "c-7829ee7cb70c27d0",
+            "c-1a2b2f1729183aae"
+          ],
+          "reason": "The raid lobby: the entrance opening's landing tile and the Fractured Archive banks."
         }
       ]
     },
@@ -6180,9 +6196,9 @@
             1
           ],
           "evidence": [
-            "c-0884140a2120655c",
-            "c-2f54aa34a0366388",
-            "c-40a0419d9bc6a7a8"
+            "c-f5fdff984f48b6a1",
+            "c-f32208e2b1602088",
+            "c-ed8fefe801fe755f"
           ],
           "reason": "Transport rows landing here."
         }
@@ -6202,8 +6218,8 @@
             0
           ],
           "evidence": [
-            "c-b3560d837fa36de5",
-            "c-bf5edd03b9e4281a"
+            "c-72e850c09a3ecff8",
+            "c-076361b70b85f52d"
           ],
           "reason": "Transport rows landing here.",
           "anchor": {
@@ -6234,7 +6250,7 @@
           "evidence": [
             "s-295040647daad720",
             "s-98e58325bf82016f",
-            "c-965569fd98ff02d6"
+            "c-01346c109cc8adc5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6256,7 +6272,7 @@
           "evidence": [
             "s-2754c341462123a1",
             "s-0571c76fa0dc50bf",
-            "c-14642a8ecc16b8ef"
+            "c-8bd70f18783e1122"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6278,7 +6294,7 @@
           "evidence": [
             "s-7356ab6523d02c7f",
             "s-eccb8b7f297f7877",
-            "c-e9824e9b164bcdaa"
+            "c-d3dee7c72bfcb3b5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6299,8 +6315,8 @@
           ],
           "evidence": [
             "s-eb6fd059247a2e08",
-            "c-61447bcf119b79c5",
-            "c-95c0b9e6e70219ce"
+            "c-970ff74724718215",
+            "c-de7be983e202d795"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6321,8 +6337,8 @@
           ],
           "evidence": [
             "s-e3f0c5b052c2626b",
-            "c-008d1636ffffe0fd",
-            "c-70dc26c634d0c297"
+            "c-05c273370c5e47dc",
+            "c-ebb8d70933275888"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -6356,7 +6372,7 @@
             "s-9c9375fe67f9af04",
             "s-c0332b17d65034b3",
             "s-6ec980f7320f9d35",
-            "c-c06440061ac5840e"
+            "c-82fc27ddec3f94ad"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6380,7 +6396,7 @@
             "s-e9ff199cdd78c817",
             "s-c0332b17d65034b3",
             "s-6ec980f7320f9d35",
-            "c-cdecdacfebbd4737"
+            "c-22a19f53cf9e158d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6403,7 +6419,7 @@
             "s-cf60b4afdeecace1",
             "s-34d701071b0c6a3c",
             "s-966c193803f0b75f",
-            "c-2d1bb982a4bdaa18"
+            "c-59fe76f2be831e21"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6418,8 +6434,8 @@
             "s-cf60b4afdeecace1",
             "s-34d701071b0c6a3c",
             "s-966c193803f0b75f",
-            "c-9cf4127cdc4b0512",
-            "c-40391f1f175555e3"
+            "c-2532bb2aefe16f77",
+            "c-09aaee08e738a748"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6434,7 +6450,7 @@
             "s-cf60b4afdeecace1",
             "s-34d701071b0c6a3c",
             "s-966c193803f0b75f",
-            "c-9cf4127cdc4b0512"
+            "c-2532bb2aefe16f77"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6457,9 +6473,9 @@
             "s-cf60b4afdeecace1",
             "s-34d701071b0c6a3c",
             "s-966c193803f0b75f",
-            "c-9cf4127cdc4b0512",
-            "c-40391f1f175555e3",
-            "c-e6a0b00aa13e9a59"
+            "c-2532bb2aefe16f77",
+            "c-09aaee08e738a748",
+            "c-a4d0571f0b387e21"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6481,7 +6497,7 @@
           "evidence": [
             "s-a5beacba696e212a",
             "s-f79f1a0b8b11d9f3",
-            "c-fe7d26e9dbf3f352"
+            "c-e2889fad193819f2"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6503,7 +6519,7 @@
           "evidence": [
             "s-d3f1ad447161d57e",
             "s-09ae0118ba3e3cd3",
-            "c-efa11eda93adcb00"
+            "c-db167b9625334517"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6525,7 +6541,7 @@
           "evidence": [
             "s-d6c2f10b51daa3b9",
             "s-e271efa5d6fc4062",
-            "c-98d78c402295c40d"
+            "c-77466d8c0e9f5e1f"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6552,12 +6568,12 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-c04e561194993cf8"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-572e782dd7ad6136"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6576,7 +6592,7 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155"
+            "c-94fd22e8c4a88246"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6595,8 +6611,8 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6615,10 +6631,10 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6637,9 +6653,9 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-d57565a93e595b14"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-2930e511678da234"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6658,11 +6674,11 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-70ed27ad7f7c13b4"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-b8be10c2ce810e91"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6681,9 +6697,9 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6710,11 +6726,11 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6733,12 +6749,12 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-2a2d1cedeffbf178"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-8f250c5523630dcb"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6757,12 +6773,12 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6781,13 +6797,13 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6806,14 +6822,14 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440",
-            "c-11c6897559d528a0"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842",
+            "c-9f4c306a217ff05d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6832,14 +6848,14 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440",
-            "c-9af9421d3e4bb1e3"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842",
+            "c-db55a4deea238966"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6858,15 +6874,15 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440",
-            "c-9af9421d3e4bb1e3",
-            "c-50e9fe6b3d438ccc"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842",
+            "c-db55a4deea238966",
+            "c-914393e8be17ac8d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6885,15 +6901,15 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440",
-            "c-bcad8d0372ef6f92",
-            "c-03d677cb197355e6"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842",
+            "c-f0aeab762d4e8462",
+            "c-ad982fb76c6ccae5"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6912,15 +6928,15 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440",
-            "c-9af9421d3e4bb1e3",
-            "c-810c478015174064"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842",
+            "c-db55a4deea238966",
+            "c-b569eaa926c9ba79"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6939,12 +6955,12 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-f0108a4363a7fcd3"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-fe80cc4ed2a43289"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6963,12 +6979,12 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-9902630f4ebd6d78"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-5e6420112fd53c49"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -6987,16 +7003,16 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440",
-            "c-9af9421d3e4bb1e3",
-            "c-50e9fe6b3d438ccc",
-            "c-28288a8e45d96416"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842",
+            "c-db55a4deea238966",
+            "c-914393e8be17ac8d",
+            "c-dd5eba34d320a5e4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7015,15 +7031,15 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-2a2d1cedeffbf178",
-            "c-e2b6922df8f1bedc",
-            "c-e51eed600050dc22",
-            "c-45076f7a0c16e506"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-8f250c5523630dcb",
+            "c-2f95c207c668c69b",
+            "c-4a59c5d0bbe03191",
+            "c-3aaaa0a9683e50e8"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7042,14 +7058,14 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440",
-            "c-b7e3910674ed0157"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842",
+            "c-5d9ef5d0d62b4a85"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7068,13 +7084,13 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-2a2d1cedeffbf178",
-            "c-e2b6922df8f1bedc"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-8f250c5523630dcb",
+            "c-2f95c207c668c69b"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7093,13 +7109,13 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-9902630f4ebd6d78",
-            "c-7e9e48ca3537b632"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-5e6420112fd53c49",
+            "c-16eef5216efe9d68"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7118,14 +7134,14 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-3c1033c1ff20a773",
-            "c-0b65e6d23c247440",
-            "c-bcad8d0372ef6f92"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-80b76a7016769c63",
+            "c-98ee2426cdc43842",
+            "c-f0aeab762d4e8462"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7152,14 +7168,14 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-2a2d1cedeffbf178",
-            "c-e2b6922df8f1bedc",
-            "c-e51eed600050dc22"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-8f250c5523630dcb",
+            "c-2f95c207c668c69b",
+            "c-4a59c5d0bbe03191"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7181,12 +7197,12 @@
           "evidence": [
             "s-e1827c4497916bd4",
             "s-9d2d8da1405ba6c2",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-9617d71adb84ad95"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-603241082712e045"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7213,15 +7229,15 @@
             "s-ecfe60f016886dd6",
             "s-9d2d8da1405ba6c2",
             "s-1ae50f6f549e682e",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-2a2d1cedeffbf178",
-            "c-e2b6922df8f1bedc",
-            "c-e51eed600050dc22",
-            "c-5423fa5b697c29b8"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-8f250c5523630dcb",
+            "c-2f95c207c668c69b",
+            "c-4a59c5d0bbe03191",
+            "c-562b89c70e9117d7"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7244,7 +7260,7 @@
             "s-71f2d91e5634856e",
             "s-b8de26be40022368",
             "s-f6d7afcf4f40c82d",
-            "c-2da89c2a61f65a44"
+            "c-8697ee46ca71f155"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7266,8 +7282,8 @@
           "evidence": [
             "s-8b61a3e85caa2452",
             "s-8b7c3ad5f301dccc",
-            "c-27527a30d7242e50",
-            "c-616b4b01cdf2fe40"
+            "c-e283a7b0ab1b1fcf",
+            "c-cab84d0e4ff655f4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7289,7 +7305,7 @@
           "evidence": [
             "s-8b61a3e85caa2452",
             "s-8b7c3ad5f301dccc",
-            "c-27527a30d7242e50"
+            "c-e283a7b0ab1b1fcf"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7310,7 +7326,7 @@
           ],
           "evidence": [
             "s-deeb327e63fe59e4",
-            "c-74001665cabfb4fa"
+            "c-15beab9259a3d472"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7331,8 +7347,8 @@
           ],
           "evidence": [
             "s-deeb327e63fe59e4",
-            "c-74001665cabfb4fa",
-            "c-1a460d060c03f338"
+            "c-15beab9259a3d472",
+            "c-12ac7a35f29822aa"
           ],
           "reason": "Thammaron throne-room cache pin and Uzer staircase/door chain identify this plane-2 room."
         }
@@ -7354,7 +7370,7 @@
           "evidence": [
             "s-cfd8d797ec9e7e6d",
             "s-067279ca5759daba",
-            "c-b8eb8b2f01014b35"
+            "c-74fe1bd5106596ba"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7377,7 +7393,7 @@
             "s-fc6054d1493eedf6",
             "s-067279ca5759daba",
             "s-d1173d141681f4d7",
-            "c-28412cb617dce1f4"
+            "c-14f10e6b834c39bb"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7398,7 +7414,7 @@
           ],
           "evidence": [
             "s-c9894457c527adbf",
-            "c-0d61f7035de76af7"
+            "c-b083d726a75a20b7"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -7429,7 +7445,7 @@
           "evidence": [
             "s-8267fca0ed7f127a",
             "s-9d28e5e87c0ae4a6",
-            "c-4f0a4cd333c34f11"
+            "c-1fcdf25715c7f57a"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7456,7 +7472,7 @@
             "s-55034780a870703d",
             "s-4efb841fb4e104a2",
             "s-700c25b51f4e7ad2",
-            "c-597a628ec8acdf9c"
+            "c-0117aaac3c6322ec"
           ],
           "reason": "Wiki Watchtower building pin at 2931,4715,2 falls in the mask; ladder 2796 joins its Yanille room."
         }
@@ -7477,7 +7493,7 @@
           ],
           "evidence": [
             "s-9d52b949f6386894",
-            "c-927911b97cabe7a2"
+            "c-d8e4855bfe632923"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -7499,7 +7515,7 @@
           "evidence": [
             "s-570e4b979e2cc6c0",
             "s-63635ef946bf441d",
-            "c-029381ddeefa07cb"
+            "c-2798f1ca98202e8e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7519,7 +7535,7 @@
             3
           ],
           "evidence": [
-            "c-f114e3db40abc742"
+            "c-cd9f5b0a19e1a1c0"
           ],
           "reason": "Transport rows landing here.",
           "anchor": {
@@ -7550,7 +7566,7 @@
           "evidence": [
             "s-d763868a2e139030",
             "s-35705c44826b52fe",
-            "c-c77c051a3b1fabff"
+            "c-1c1386c54b3d841c"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7564,8 +7580,8 @@
           "evidence": [
             "s-d763868a2e139030",
             "s-35705c44826b52fe",
-            "c-c77c051a3b1fabff",
-            "c-aeeebf13567fa0ae"
+            "c-1c1386c54b3d841c",
+            "c-063f923dafb96891"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7586,7 +7602,7 @@
           ],
           "evidence": [
             "s-c99c2f9b3fd566b7",
-            "c-18fb90e73a5a02cd"
+            "c-3243e6760e7f4c19"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7607,16 +7623,16 @@
           ],
           "evidence": [
             "s-0008aba875766f25",
-            "c-5c41c7e002c19155",
-            "c-34427d9bb8e70a91",
-            "c-3ef2544786b1d2a5",
-            "c-7f87f1d6079ffc4e",
-            "c-b6635c42d8db0b7f",
-            "c-2a2d1cedeffbf178",
-            "c-e2b6922df8f1bedc",
-            "c-e51eed600050dc22",
-            "c-5423fa5b697c29b8",
-            "c-2783e7f369563749"
+            "c-94fd22e8c4a88246",
+            "c-8506f4102dd1403d",
+            "c-a9761a4b0ec49693",
+            "c-fd5712e096af5c3a",
+            "c-341bdb29a37bd9ed",
+            "c-8f250c5523630dcb",
+            "c-2f95c207c668c69b",
+            "c-4a59c5d0bbe03191",
+            "c-562b89c70e9117d7",
+            "c-42cb08659a10386d"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7639,7 +7655,7 @@
             "s-4b7bf55850f0e077",
             "s-c7db40baa7d5ac51",
             "s-7ab837482e112e49",
-            "c-098069f7d5cd6433"
+            "c-416123524c44ccfc"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7661,7 +7677,7 @@
           "evidence": [
             "s-f4997201d599f6d9",
             "s-874b5c54bd5af1cf",
-            "c-6100fd140cac7389"
+            "c-bb80f8fa7e8fbdbb"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7685,7 +7701,7 @@
             "s-be6736b7b02a8cb0",
             "s-f5a65881d95c4601",
             "s-7420414ce1b5fa46",
-            "c-43492a273e62b3b4"
+            "c-0dc37fccffe7244e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7709,7 +7725,7 @@
             "s-f5a65881d95c4601",
             "s-f65f3d872e72cfba",
             "s-4503725155e4a110",
-            "c-51308cb606f04c15"
+            "c-e627ad22a8c58bf4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7730,7 +7746,7 @@
           ],
           "evidence": [
             "s-c1f3f752dbe30dc2",
-            "c-928037f36f516682"
+            "c-42b137c1c4eb32c7"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7752,7 +7768,7 @@
           "evidence": [
             "s-c1f3f752dbe30dc2",
             "s-96ddec209b05afda",
-            "c-9aeff3cf3de77637",
+            "c-bf12ddb9d4464a0b",
             "s-d6f6f8cd38216f77",
             "s-5eee395bb37b5a22"
           ],
@@ -7776,7 +7792,7 @@
           "evidence": [
             "s-844a22802baeb5db",
             "s-c86f934361d6bbd8",
-            "c-b1769cb8ba685c05"
+            "c-78071367c8ac9fa7"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7798,7 +7814,7 @@
           "evidence": [
             "s-23d8b5c19044a992",
             "s-760a8a3080ba1af2",
-            "c-6459b2bf2fddd25a"
+            "c-a22d01c6996c9b21"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7820,7 +7836,7 @@
           "evidence": [
             "s-439f41b327301b08",
             "s-e164a9b09bb265b5",
-            "c-fcb9f09ef0bf4cf4"
+            "c-15b3a971ab64ccda"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7846,8 +7862,8 @@
             "s-502927f9ab6ce8ab",
             "s-8bc5035d928703f7",
             "s-7197d2aebe9df057",
-            "c-b07b1cbd488b5677",
-            "c-239b54921cc4b492"
+            "c-f2d889562aca68bd",
+            "c-b1bc6ecd4e969265"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7865,8 +7881,8 @@
             "s-502927f9ab6ce8ab",
             "s-8bc5035d928703f7",
             "s-7197d2aebe9df057",
-            "c-b07b1cbd488b5677",
-            "c-0aeacce22262317e"
+            "c-f2d889562aca68bd",
+            "c-47113a0da2e2296e"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7884,7 +7900,7 @@
             "s-502927f9ab6ce8ab",
             "s-8bc5035d928703f7",
             "s-7197d2aebe9df057",
-            "c-31e873c78a3cd8c3"
+            "c-7d58ca7e8190daa3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7902,7 +7918,7 @@
             "s-502927f9ab6ce8ab",
             "s-8bc5035d928703f7",
             "s-7197d2aebe9df057",
-            "c-e41ff20c47301e59"
+            "c-a1eb78b717633fd4"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7928,7 +7944,7 @@
             "s-502927f9ab6ce8ab",
             "s-8bc5035d928703f7",
             "s-7197d2aebe9df057",
-            "c-b07b1cbd488b5677"
+            "c-f2d889562aca68bd"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         },
@@ -7946,8 +7962,8 @@
             "s-502927f9ab6ce8ab",
             "s-8bc5035d928703f7",
             "s-7197d2aebe9df057",
-            "c-31e873c78a3cd8c3",
-            "c-5ad4a412e2ff1d38"
+            "c-7d58ca7e8190daa3",
+            "c-d9412b03313728fd"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7973,9 +7989,9 @@
             "s-502927f9ab6ce8ab",
             "s-8bc5035d928703f7",
             "s-7197d2aebe9df057",
-            "c-31e873c78a3cd8c3",
-            "c-5ad4a412e2ff1d38",
-            "c-12b264f26c85bac5"
+            "c-7d58ca7e8190daa3",
+            "c-d9412b03313728fd",
+            "c-0506b11e5c0d74f2"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -7997,8 +8013,8 @@
           "evidence": [
             "s-b8fba37b2d52358c",
             "s-9bb7e35721e5cc9e",
-            "c-cf54fa369fdda2b7",
-            "c-fe773d48236a5fd2"
+            "c-6106767ce4b344ad",
+            "c-90eac810edf92048"
           ],
           "reason": "Transport rows landing here and source places inside it.",
           "anchor": {
@@ -8030,7 +8046,7 @@
             "s-4dfa5af88dfdf757",
             "s-cd18cf2294ac7b70",
             "s-128c841f25261e19",
-            "c-87d655f5f5754ca5"
+            "c-3ed779fbbcce2c68"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
