@@ -6162,6 +6162,27 @@
       ]
     },
     {
+      "key": "the-fractured-archive",
+      "name": "The Fractured Archive",
+      "status": "named",
+      "reason": "Named from the plugin's Fractured Archive entrance (#839): the Crawl-through Opening from the Chasm of Tears (While Guthix Sleeps) lands here, and the plugin's Fractured Archive banks are inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-4108-5506-f3f3809248",
+          "seed": [
+            4127,
+            5508,
+            0
+          ],
+          "evidence": [
+            "c-7829ee7cb70c27d0",
+            "c-1a2b2f1729183aae"
+          ],
+          "reason": "The raid lobby: the entrance opening's landing tile and the Fractured Archive banks."
+        }
+      ]
+    },
+    {
       "key": "the-gauntlet",
       "name": "The Gauntlet",
       "status": "named",
