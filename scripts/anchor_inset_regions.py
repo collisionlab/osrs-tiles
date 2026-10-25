@@ -79,6 +79,13 @@ def coordinate(value, source):
     return point
 
 
+def connection_key(row):
+    """A connection's id: the edge itself (file, ends and menu action). Labels, requirements and durations
+    are left out, so editing them upstream keeps the ids that annotations.json cites as evidence."""
+    identity = dict(file=row['file'], source=row['source'], target=row['target'], action=row['action'])
+    return 'c-' + hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(',', ':')).encode()).hexdigest()[:16]
+
+
 def read_transports(directory):
     # Account restrictions describe teleport families, not geographic transport edges.
     files = sorted(file for file in directory.glob('*.tsv') if file.name != 'teleport_restrictions.tsv')
@@ -253,8 +260,7 @@ def build_anchors(catalogue, transports, annotations=None):
                 continue
         elif source and target and source['regionId'] == target['regionId']:
             continue
-        identity = {k: v for k, v in row.items() if k != 'line'}
-        connection_id = 'c-' + hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(',', ':')).encode()).hexdigest()[:16]
+        connection_id = connection_key(row)
         if connection_id in connections:
             connections[connection_id]['sources'].append(dict(file=row['file'], line=row['line']))
             continue

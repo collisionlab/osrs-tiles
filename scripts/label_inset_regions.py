@@ -71,11 +71,18 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
             if (len(point) != 3 or any(type(n) is not int for n in point)
                     or not all(0 <= n < 16384 for n in point[:2]) or not 0 <= point[2] < 4):
                 raise ValueError(f'{key}: invalid interior seed')
+            # The seed, not the component id, decides where a name goes: ids change with the terrain, so a
+            # name follows its seed into the component that now holds it and is lost only when the seed
+            # leaves inset terrain.
             endpoint = index.endpoint(point)
-            if endpoint['regionId'] != rid or endpoint['kind'] != 'inset':
+            if endpoint['kind'] != 'inset':
                 issues.append(dict(area=key, componentId=rid, seed=point,
                                    nowResolvesTo=endpoint['regionId'], reason='geometry-or-seed-changed'))
                 continue
+            if endpoint['regionId'] != rid:
+                issues.append(dict(area=key, componentId=rid, seed=point,
+                                   nowResolvesTo=endpoint['regionId'], reason='component-id-changed'))
+                rid = endpoint['regionId']
             anchor = association.get('anchor')
             if anchor is not None and (not isinstance(anchor.get('reason'), str) or not anchor['reason'].strip()
                                        or not isinstance(anchor.get('point'), list) or len(anchor['point']) != 3
@@ -85,13 +92,11 @@ def compile_labels(catalogue, anchors, sources, annotations, catalogue_hash):
             refs = association.get('evidence', [])
             if not refs or not association.get('reason'):
                 raise ValueError(f'{key}/{rid}: missing association evidence/reason')
-            missing_evidence = False
+            # Evidence records why the name was chosen. A transport row edited or removed upstream doesn't
+            # move the area, so the name stays; the stale reference is a review note.
             for ref in refs:
                 if ref not in evidence and ref not in anchors['connections']:
                     issues.append(dict(area=key, componentId=rid, evidence=ref, reason='evidence-removed'))
-                    missing_evidence = True
-            if missing_evidence:
-                continue
             assigned[rid].append(dict(areaKey=key, name=area['name'], status=area['status'],
                                       aliases=area.get('aliases', []), evidence=refs,
                                       reason=association['reason'], seed=point))

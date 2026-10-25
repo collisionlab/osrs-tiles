@@ -5,7 +5,8 @@ Consumers that read only the tiles (--tiles-only) get the tile version alone, so
 when the tiles do.
 
 The PR is a draft exactly while something needs a person (see review_reasons), and its body says what to
-do. When a refresh no longer needs review it is marked ready, so CI merges it.
+do. When a refresh no longer needs review it is marked ready, so CI merges it. Reachable areas without a
+name or an anchor never hold a pin back: the body lists them as follow-ups (see follow_ups).
 
 Uses gh's credential helper rather than embedding credentials in clone URLs.
 """
@@ -38,15 +39,17 @@ def main():
         raise ValueError('Inset candidate does not match tiles')
     full = dict(pin, insets=dict(version=manifest['version'], tileVersion=pin['version']))
     reasons = review_reasons(args, manifest)
+    notes = follow_ups(manifest, Path(args.manifest).parent)
     if not args.repo and not args.tiles_only:
         args.repo, args.tiles_only = ['collisionlab/osrs-planner'], ['collisionlab/osrs-coord-preview']
     for repo in args.repo or []:
-        pin_repo(repo, full, manifest, reasons, args.run_url)
+        pin_repo(repo, full, manifest, reasons, args.run_url, notes)
     for repo in args.tiles_only:
         pin_repo(repo, pin, None, [reason for reason in reasons if reason[0].startswith('tiles:')], args.run_url)
 
 
 ANCHORING = {'required-component-unanchored', 'curated-anchor-not-into-component'}
+NAMING = {'required-component-unnamed'}
 
 
 def review_issues(manifest_dir):
@@ -86,26 +89,34 @@ def review_reasons(args, manifest):
                         f"More than 10% of inset areas or covered map squares differ from the pinned bundle "
                         f"(now {manifest['componentCount']} areas). Check the insets in the planner, then mark this "
                         f"PR ready."))
-    if manifest.get('reviewCount'):
-        issues = review_issues(Path(args.manifest).parent)
-        naming = [i for i in issues if i['reason'] not in ANCHORING]
-        anchoring = [i for i in issues if i['reason'] in ANCHORING]
-        if naming:
-            reasons.append(('naming:' + ','.join(sorted(i['componentId'] for i in naming)),
-                            f"{len(naming)} reachable areas have no name, so the planner's area search can't find them.",
-                            "Name them in osrs-tiles `data/inset-labels/annotations.json` (`scripts/label_inset_regions.py "
-                            "--worklist` suggests evidence) and push to `main`: the rebuild refreshes this PR and marks it "
-                            "ready once nothing else needs review. Or mark it ready now to publish the coordinate "
-                            "labels." + listed(naming)))
-        if anchoring:
-            reasons.append(('anchors:' + ','.join(sorted(i['componentId'] for i in anchoring)),
-                            f"{len(anchoring)} reachable areas have no anchor, so the planner can't place them beside "
-                            f"the main map.",
-                            "Give each an `anchor` in osrs-tiles `data/inset-labels/annotations.json`: a point on the "
-                            "surface, or in an area that has an anchor, and a reason (see `docs/tiles.md`). Push to "
-                            "`main`: the rebuild refreshes this PR and marks it ready once nothing else needs review. Or "
-                            "mark it ready now to show them above the map." + listed(anchoring)))
     return reasons
+
+
+def follow_ups(manifest, manifest_dir):
+    """review.json's gaps, each as (title, what to do). They are listed in the PR but don't make it a draft:
+    a missing name or anchor shows the coordinate label or the area above the map, which is no worse than
+    not publishing the rest of the bundle."""
+    if not manifest.get('reviewCount'):
+        return []
+    issues = review_issues(manifest_dir)
+    anchoring = [i for i in issues if i['reason'] in ANCHORING]
+    naming = [i for i in issues if i['reason'] in NAMING]
+    other = [i for i in issues if i['reason'] not in ANCHORING | NAMING]
+    notes = []
+    if naming:
+        notes.append((f"{len(naming)} reachable areas have no name, so the planner's area search can't find them.",
+                      "Name them in osrs-tiles `data/inset-labels/annotations.json` (`scripts/label_inset_regions.py "
+                      "--worklist` suggests evidence) and push to `main`; the rebuild opens the next pin."
+                      + listed(naming)))
+    if anchoring:
+        notes.append((f"{len(anchoring)} reachable areas have no anchor, so the planner shows them above the main map.",
+                      "Give each an `anchor` in osrs-tiles `data/inset-labels/annotations.json`: a point on the "
+                      "surface, or in an area that has an anchor, and a reason (see `docs/tiles.md`)." + listed(anchoring)))
+    if other:
+        notes.append((f"{len(other)} curated names or cuts no longer match the data.",
+                      "Names still follow their seeds; re-point the evidence or component in "
+                      "`data/inset-labels/annotations.json` when convenient." + listed(other)))
+    return notes
 
 
 KEYS = re.compile(r'<!-- review-keys: (.*?) -->')
@@ -115,7 +126,7 @@ def title(pin, manifest):
     return f"Use inset assets {manifest['version']}" if manifest else f"Use tiles {pin['version']}"
 
 
-def body(pin, manifest, reasons, run_url, accepted=False):
+def body(pin, manifest, reasons, run_url, accepted=False, notes=()):
     text = (f"Use tiles `{pin['version']}` with inset metadata `{manifest['version']}`.\n\n"
             "The build checked cache hashes and that the tiles cover every inset area.\n\n" if manifest else
             f"Use tiles `{pin['version']}`.\n\n")
@@ -130,12 +141,15 @@ def body(pin, manifest, reasons, run_url, accepted=False):
                  + ''.join(f"- [ ] **{title}** {action}\n" for _, title, action in reasons))
     else:
         text += "**No action needed.** Nothing needs review: CI merges this once it passes, and the merge releases it.\n"
+    if notes:
+        text += ("\n## Follow-ups\n\nThese don't hold the pin back.\n\n"
+                 + ''.join(f"- **{title}** {action}\n" for title, action in notes))
     if run_url:
         text += f"\nBuilt by {run_url}.\n"
     return text + f"\n<!-- review-keys: {' '.join(key for key, _, _ in reasons)} -->\n"
 
 
-def pin_repo(repo, pin, manifest, reasons, run_url):
+def pin_repo(repo, pin, manifest, reasons, run_url, notes=()):
     branch = "pin/map-assets"
     with tempfile.TemporaryDirectory() as temporary:
         work = Path(temporary)
@@ -180,7 +194,7 @@ def pin_repo(repo, pin, manifest, reasons, run_url):
             run('gh', 'pr', 'ready', str(existing_prs[0]['number']), '--undo', '--repo', repo, cwd=work)
         run('git', 'push', f'--force-with-lease=refs/heads/{branch}:{previous_head}', 'origin', branch, cwd=work)
         body_file = work / 'body.md'
-        body_file.write_text(body(pin, manifest, reasons, run_url, accepted))
+        body_file.write_text(body(pin, manifest, reasons, run_url, accepted, notes))
         common = ['--repo', repo, '--title', title(pin, manifest), '--body-file', str(body_file)]
         if existing_prs:
             number = str(existing_prs[0]['number'])
