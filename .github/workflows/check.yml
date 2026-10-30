@@ -33,3 +33,25 @@ jobs:
         run: nix develop -c python3 -m unittest discover -s tests
       - name: Compile cache extractor, renderer and collision dumper
         run: nix develop -c gradle test compileCollisionJava
+
+  # collisionlab-bot's pin/* PRs (scripts/bump-tooling) merge themselves once both checks pass.
+  merge-pin:
+    needs: [golden, insets]
+    if: >-
+      github.event_name == 'pull_request' &&
+      startsWith(github.head_ref, 'pin/') &&
+      github.event.pull_request.user.login == 'collisionlab-bot[bot]' &&
+      !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: bot
+        with:
+          app-id: ${{ vars.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+          owner: collisionlab
+          repositories: osrs-tiles
+      - name: Merge
+        env:
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
+        run: gh pr merge "${{ github.event.number }}" --repo collisionlab/osrs-tiles --merge --delete-branch --match-head-commit "${{ github.event.pull_request.head.sha }}"

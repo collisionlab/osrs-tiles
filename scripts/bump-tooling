@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Opens, or refreshes, a PR moving flake.lock's tooling input (the collision dumper) to the tooling
+# commit the planner pins, so the tiles' collision layer comes from the same dumper as the planner's
+# plugin. Only when the dumper differs: a new lock is a new renderer commit, so merging it publishes
+# a new tiles version. check.yml merges collisionlab-bot's pin/* PRs once the checks pass. A PR
+# someone has pushed fixes to is left alone until it is merged or closed.
+#
+#   scripts/bump-tooling      (from a full checkout of main, in the dev shell;
+#                              GH_TOKEN: collisionlab-bot, osrs-tiles)
+set -euo pipefail
+
+repo=collisionlab/osrs-tiles
+branch=pin/tooling
+upstream=https://github.com/osrs-pathfinding/shortest-path-tooling.git
+dumper=collision-map-update
+bot=collisionlab-bot
+
+current=$(jq -r .nodes.tooling.locked.rev flake.lock)
+target=$(gh api repos/collisionlab/osrs-planner/contents/tooling --jq .sha)
+if [ "$current" = "$target" ]; then
+  echo "tooling is already the planner's ${target:0:12}"
+  exit 0
+fi
+
+work=$(mktemp -d)
+git clone -q --bare --filter=blob:none "$upstream" "$work"
+if [ "$(git -C "$work" rev-parse "$current:$dumper")" = "$(git -C "$work" rev-parse "$target:$dumper")" ]; then
+  echo "the dumper is the same at ${current:0:12} and the planner's ${target:0:12}"
+  exit 0
+fi
+
+if git fetch -q origin "$branch" 2>/dev/null; then
+  if git log --format=%an "HEAD..FETCH_HEAD" | grep -qv "^$bot\$"; then
+    echo "$branch has commits from someone other than $bot; leaving it alone"
+    exit 0
+  fi
+fi
+
+log=$(git -C "$work" log --oneline --no-merges "$current..$target" -- "$dumper" | head -50)
+
+git switch -q -C "$branch"
+nix flake lock --override-input tooling "github:osrs-pathfinding/shortest-path-tooling/$target"
+git add flake.lock
+git -c user.name="$bot" -c user.email="$bot@users.noreply.github.com" \
+  commit -q -m "Update the collision dumper to tooling ${target:0:12}" -m "$log"
+git push -q -f origin "$branch"
+
+title="Update the collision dumper to tooling ${target:0:12}"
+body=$(cat <<EOF
+Moves flake.lock's \`tooling\` input to the commit [osrs-planner](https://github.com/collisionlab/osrs-planner) pins, so the tiles' collision layer comes from the same dumper as the planner's plugin.
+
+- Tooling: https://github.com/osrs-pathfinding/shortest-path-tooling/compare/$current...$target
+
+Dumper changes:
+\`\`\`
+$log
+\`\`\`
+
+Merging publishes a new tiles version, which the insets run pins in the planner. Merges itself once the checks pass. If they fail, push fixes to \`$branch\`; this job won't overwrite them.
+EOF
+)
+pr=$(gh pr list --repo "$repo" --head "$branch" --state open --json number --jq '.[0].number // empty')
+if [ -n "$pr" ]; then
+  gh pr edit "$pr" --repo "$repo" --title "$title" --body "$body"
+else
+  gh pr create --repo "$repo" --base main --head "$branch" --title "$title" --body "$body"
+fi

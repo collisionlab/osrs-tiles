@@ -1,0 +1,38 @@
+name: bump-tooling
+
+# Daily, after the planner's own tooling bump (05:17): move flake.lock's collision dumper to the
+# tooling commit the planner pins, in a collisionlab-bot pin/tooling PR, which check.yml merges once
+# the checks pass. Merging it publishes a new tiles version (publish.yml watches flake.lock).
+on:
+  schedule:
+    - cron: "50 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bump-tooling
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: bot
+        with:
+          app-id: ${{ vars.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+          owner: collisionlab
+          repositories: osrs-tiles
+      # The bot's token, so its push and PR start the checks (pushes with GITHUB_TOKEN don't).
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.bot.outputs.token }}
+      - uses: cachix/install-nix-action@v31
+      - name: Bump
+        env:
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
+        run: nix develop -c scripts/bump-tooling

@@ -72,6 +72,10 @@ It comes from `CollisionMapDumper.java` in shortest-path-tooling, at the commit 
 For the same cache and dumper it is byte-for-byte the plugin's `collision-map.zip`, split by plane
 (`scripts/collision-tiles`).
 
+The `bump-tooling` workflow (daily, 05:50 UTC) keeps that input at the tooling commit the planner
+pins, whenever the dumper there differs: collisionlab-bot opens a `pin/tooling` PR, which merges
+itself once the checks pass, and the merge publishes a new tiles version.
+
 | Part | Value |
 |---|---|
 | plane 0 | `collision/<version>/8/{x}/{y}.bin`, where the image tile `8/{x}/{y}.png` is: map square (15 + x, 19 + y) |
