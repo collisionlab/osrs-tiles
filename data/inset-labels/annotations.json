@@ -369,10 +369,10 @@
           ],
           "evidence": [
             "s-8e5d94e3a67802a3",
-            "c-0187a63f7c675ad7",
-            "c-cee176125efcb8fd",
-            "c-01fe08bc6f302606",
-            "c-1f1edf29c53c3fd5"
+            "c-2168ab64b93137f1",
+            "c-535eda9a4edb0da0",
+            "c-84dcfea4f7a7ea6e",
+            "c-c28a4bbb710ea736"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
@@ -528,6 +528,19 @@
             "c-f0116eacf96de291"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        },
+        {
+          "componentId": "p1-1750-5322-cf777abd4d",
+          "seed": [
+            1762,
+            5338,
+            1
+          ],
+          "evidence": [
+            "s-95697d1b7d6e920e",
+            "c-686b172c8c6536c2"
+          ],
+          "reason": "The mithril dragons' upper level, reached by the stairs from the main cavern."
         }
       ]
     },
@@ -648,7 +661,7 @@
             "s-07adb44a3b9b0486",
             "s-70f8534f63181345",
             "s-0f9d21c3cc0db395",
-            "c-aa807d1c6a1345ef"
+            "c-2fdf5b391a09ade3"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -4524,6 +4537,20 @@
             "c-21781f1b202b7bf9"
           ],
           "reason": "Prifddinas is the umbrella area; the overlapping execution-cutscene pin is retained as evidence, not a second dungeon name."
+        },
+        {
+          "componentId": "p2-3215-6034-fb1cea3cc5",
+          "seed": [
+            3247,
+            6039,
+            2
+          ],
+          "evidence": [
+            "c-1b9c43fd36fc3b17",
+            "c-78d75ee2dd3c0629",
+            "c-d51443b32fd82a3d"
+          ],
+          "reason": "The city's upper walkways, reached by the stairs from its ground floor."
         }
       ],
       "aliases": [
@@ -8049,6 +8076,161 @@
             "c-3ed779fbbcce2c68"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
+        }
+      ]
+    },
+    {
+      "key": "hunter-guild-caverns",
+      "name": "Hunter Guild Caverns",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1538-9442-3c807cf2e4",
+          "seed": [
+            1541,
+            9446,
+            0
+          ],
+          "evidence": [
+            "s-2c7ae0c6b3921b2b",
+            "c-17ff7cc22c6cb86e",
+            "c-c590b5aff2665590"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "witchaven-dungeon",
+      "name": "Witchaven Dungeon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2692-9666-4c421d47f0",
+          "seed": [
+            2722,
+            9690,
+            0
+          ],
+          "evidence": [
+            "s-453d94058d7f21ed",
+            "c-3b533b823b80aed3",
+            "c-91ad26cd613da426"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "zalcano",
+      "name": "Zalcano",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3021-6036-a990141241",
+          "seed": [
+            3032,
+            6048,
+            0
+          ],
+          "evidence": [
+            "s-244da40619d6f5b1",
+            "s-e07b42c8f05e8cae",
+            "c-fdc280cb4da95953"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "gryphon-cave",
+      "name": "Gryphon cave",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3080-8842-bc25499c6e",
+          "seed": [
+            3112,
+            8856,
+            0
+          ],
+          "evidence": [
+            "s-e44d66abad7bf0d9",
+            "c-93835b76f8b85b7d",
+            "c-e64a4cb204134022"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "gryphon-cave-task-only",
+      "name": "Gryphon cave (task-only)",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3206-8838-fea7c48c05",
+          "seed": [
+            3232,
+            8865,
+            0
+          ],
+          "evidence": [
+            "s-eebdfa23c158fbf6",
+            "s-ed6ca271b29587df",
+            "c-06486c918fa73a3e",
+            "c-4e5aabcde86a1b6e"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "grand-library",
+      "name": "Grand Library",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3209-12511-c224ceb353",
+          "seed": [
+            3232,
+            12526,
+            0
+          ],
+          "evidence": [
+            "s-071c55c19b10379c",
+            "c-446f714bef37dd8c"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "trahaearn-mine",
+      "name": "Trahaearn Mine",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3281-12434-1c7b7a1f3c",
+          "seed": [
+            3298,
+            12453,
+            0
+          ],
+          "evidence": [
+            "s-1067edb94e9677e9",
+            "s-64dda650e4220cfb",
+            "c-3181a9146b2888a6",
+            "c-89c004cbee9877bc"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
         }
       ]
     }
