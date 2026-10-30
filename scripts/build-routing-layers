@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Rebuild the routing layers for a plugin commit when the pin's are from another, publish them, and pin them.
+
+The layers are the plugin's own graph, built from its own collision map; a tiles release only says where
+they are drawn (docs/routing-layers.md). The plugin's map and the tiles' collision layer are separate
+dumps, which can be of different caches or by different dumper commits. So this compares the plugin's map
+with the candidate pin's tiles and with the tiles the current layers use, and builds on the one with the
+fewest differing squares (the newer on a tie). The manifest lists the squares that differ.
+
+Nothing here holds the inset pin back. When the build fails, the pin keeps its current layers and a note
+for the PR's follow-ups is written to --notes.
+
+  scripts/build-routing-layers PIN --plugin-dir DIR [--revision SHA] [--work DIR] [--notes FILE] [--no-upload]
+"""
+import argparse
+import hashlib
+import io
+import json
+import runpy
+import shutil
+import subprocess
+import sys
+import urllib.request
+import zipfile
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def note(path, title, action):
+    if path:
+        notes = json.loads(path.read_text()) if path.exists() else []
+        path.write_text(json.dumps(notes + [[title, action]], indent=2))
+    print(f'{title} {action}', file=sys.stderr)
+
+
+def plugin_planes(plugin_dir, revision):
+    """The plugin's collision-map.zip as hashes of the tile release's plane files (RoutingLayers.collisionPlanes)."""
+    raw = subprocess.run(['git', '-C', str(plugin_dir), 'show', f'{revision}:src/main/resources/collision-map.zip'],
+                         check=True, capture_output=True).stdout
+    planes = {}
+    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+        for name in archive.namelist():
+            x, y = map(int, name.split('_'))
+            data = archive.read(name)
+            for plane in range(4):
+                chunk = data[plane * 2048:(plane + 1) * 2048].ljust(2048, b'\0')
+                if any(chunk):
+                    planes[f"{f'p{plane}/' if plane else ''}8/{x - 15}/{y - 19}.bin"] = hashlib.sha256(chunk).hexdigest()
+    return planes
+
+
+def differences(base, tile_version, planes):
+    request = urllib.request.Request(f'{base}/collision/{tile_version}/index.json',
+                                     headers={'User-Agent': 'collisionlab-routing-layers/1.0'})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        index = json.load(response)
+    return sorted(name for name in set(index) | set(planes) if index.get(name) != planes.get(name))
+
+
+def generate(plugin_dir, revision, tile_version, base, work):
+    collision, output = work / 'collision' / tile_version, work / 'routing-layers' / tile_version
+    shutil.rmtree(output, ignore_errors=True)
+    subprocess.run([sys.executable, '-I', str(ROOT / 'scripts/fetch-routing-collision'), base, tile_version,
+                    str(collision)], check=True)
+    result = subprocess.run(
+        ['gradle', '--no-daemon', '-q', ':routing-layers:generate', f'-ProutingPluginDir={plugin_dir}',
+         f'-ProutingPluginRevision={revision}', f'-ProutingCollisionDir={collision}',
+         f'-ProutingTileVersion={tile_version}', f'-ProutingOutput={output}'],
+        cwd=ROOT, text=True, capture_output=True)
+    sys.stdout.write(result.stdout)
+    sys.stderr.write(result.stderr)
+    if result.returncode != 0:
+        raise RuntimeError(f'routing-layers generation failed for tiles {tile_version}')
+    candidates = [d for d in output.iterdir() if d.is_dir()]
+    if len(candidates) != 1:
+        raise RuntimeError(f'expected one routing candidate in {output}')
+    return candidates[0]
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('pin', type=Path, help="the candidate tiles.json; its routingLayers is updated in place")
+    parser.add_argument('--plugin-dir', type=Path, required=True, help='a checkout holding the plugin commit')
+    parser.add_argument('--revision', help='plugin commit to build (default: the checkout HEAD)')
+    parser.add_argument('--work', type=Path, default=ROOT / 'work/routing')
+    parser.add_argument('--notes', type=Path, help='JSON list of [title, action] follow-ups to append to')
+    parser.add_argument('--no-upload', action='store_true', help='build and pin, but publish nothing')
+    args = parser.parse_args()
+    revision = args.revision or subprocess.run(['git', '-C', str(args.plugin_dir), 'rev-parse', 'HEAD'],
+                                               check=True, text=True, capture_output=True).stdout.strip()
+    pin = json.loads(args.pin.read_text())
+    current = pin.get('routingLayers') or {}
+    if current.get('pluginRevision') == revision:
+        print(f'routing layers are already from plugin {revision[:12]}')
+        return
+    try:
+        planes = plugin_planes(args.plugin_dir, revision)
+        tried = sorted({v for v in (pin['version'], current.get('tileVersion')) if v},
+                       key=lambda v: int(v.split('-')[0]), reverse=True)
+        counts = {v: differences(pin['base'], v, planes) for v in tried}
+        for version, differing in counts.items():
+            print(f"tiles {version}: {len(differing)} squares differ from plugin {revision[:12]}'s collision {differing[:8]}")
+        # min keeps the first of equals, and tried is newest first.
+        tile_version = min(tried, key=lambda v: len(counts[v]))
+        candidate = generate(args.plugin_dir.resolve(), revision, tile_version, pin['base'], args.work)
+        if not args.no_upload:
+            subprocess.run([str(ROOT / 'scripts/upload-routing-layers'), str(candidate)], check=True)
+        runpy.run_path(str(ROOT / 'scripts/pin-routing-layers'), run_name='pin')['pin_routing'](
+            candidate / 'manifest.json', args.pin)
+        print(f'routing layers {candidate.name} from plugin {revision[:12]} on tiles {tile_version}')
+    except (subprocess.CalledProcessError, RuntimeError, OSError, ValueError, SystemExit) as error:
+        note(args.notes, f"The routing layers weren't rebuilt for plugin `{revision[:12]}`.",
+             f"The build failed ({error}); the pin keeps layers from plugin `{current.get('pluginRevision', '?')[:12]}`. "
+             "See the osrs-tiles `insets` run log.")
+
+
+if __name__ == '__main__':
+    main()

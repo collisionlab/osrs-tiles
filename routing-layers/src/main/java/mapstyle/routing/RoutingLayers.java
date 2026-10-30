@@ -80,7 +80,9 @@ public final class RoutingLayers
 		RoutingCuts cuts = RoutingCuts.read(cutBytes);
 		verifyFingerprint(cuts, collisionBytes);
 		SortedMap<String, byte[]> collisionPlanes = collisionPlanes(collisionBytes);
-		verifyCollision(release, collisionPlanes);
+		// The layers are the plugin's own graph; the tiles release only says where they are drawn. Squares
+		// whose collision differs from it (another cache, or another dumper) are listed, not refused.
+		List<String> collisionDifferences = collisionDifferences(release, collisionPlanes);
 		JsonObject collisionManifest = JSON.fromJson(Files.readString(release.resolve("manifest.json")), JsonObject.class);
 		String releaseVersion = collisionManifest.get("cacheId").getAsString() + "-"
 			+ collisionManifest.get("rendererCommit").getAsString().substring(0, 12);
@@ -111,6 +113,7 @@ public final class RoutingLayers
 		manifest.addProperty("tileVersion", tileVersion);
 		manifest.addProperty("collisionSha256", sha(collisionBytes));
 		manifest.addProperty("collisionContentSha256", contentHash(collisionPlanes));
+		manifest.add("collisionDifferences", JSON.toJsonTree(collisionDifferences));
 		manifest.addProperty("cutCollisionFingerprint", Long.toUnsignedString(cuts.collisionFingerprint(), 16));
 		manifest.addProperty("separatorSha256", sha(cutBytes));
 		// Every packaged transport resource affects how production reads the map, seasonal ones included.
@@ -486,8 +489,11 @@ public final class RoutingLayers
 		return result;
 	}
 
-	/** The tile release's collision layer must hold exactly the plugin's planes, byte for byte. */
-	public static void verifyCollision(Path release, SortedMap<String, byte[]> planes) throws Exception
+	/**
+	 * The plane files where the tile release's collision layer is not the plugin's, byte for byte: missing
+	 * from either, or different. Empty when the release was dumped from the same cache by the same dumper.
+	 */
+	public static List<String> collisionDifferences(Path release, SortedMap<String, byte[]> planes) throws Exception
 	{
 		JsonObject manifest = JSON.fromJson(Files.readString(release.resolve("manifest.json")), JsonObject.class);
 		if (!"shortest-path-flags-v1".equals(manifest.get("format").getAsString()))
@@ -495,18 +501,27 @@ public final class RoutingLayers
 			throw new IOException("unsupported collision format");
 		}
 		JsonObject index = JSON.fromJson(Files.readString(release.resolve("index.json")), JsonObject.class);
-		if (!index.keySet().equals(planes.keySet()))
+		SortedSet<String> names = new TreeSet<>(planes.keySet());
+		names.addAll(index.keySet());
+		List<String> differences = new ArrayList<>();
+		for (String name : names)
 		{
-			throw new IOException("tile release collision square set differs from plugin");
-		}
-		for (var entry : planes.entrySet())
-		{
-			byte[] published = Files.readAllBytes(release.resolve(entry.getKey()));
-			if (!sha(published).equals(index.get(entry.getKey()).getAsString()) || !Arrays.equals(published, entry.getValue()))
+			if (!planes.containsKey(name) || !index.has(name))
 			{
-				throw new IOException("tile release collision differs at " + entry.getKey());
+				differences.add(name);
+				continue;
+			}
+			byte[] published = Files.readAllBytes(release.resolve(name));
+			if (!sha(published).equals(index.get(name).getAsString()))
+			{
+				throw new IOException("tile release collision file doesn't match its index: " + name);
+			}
+			if (!Arrays.equals(published, planes.get(name)))
+			{
+				differences.add(name);
 			}
 		}
+		return differences;
 	}
 
 	static byte[] resource(String name) throws IOException

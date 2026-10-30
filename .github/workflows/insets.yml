@@ -23,7 +23,7 @@ jobs:
   build:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 150
     env:
       R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -96,6 +96,14 @@ jobs:
         with:
           name: inset-review
           path: work/insets/*/review.json
+      # The routing layers follow the planner's pinned plugin, like the insets follow its transports. A
+      # failure or a plugin map no tiles release matches becomes a follow-up note; the pin goes ahead.
+      - name: Routing layers for the planner's plugin
+        run: |
+          nix develop -c gradle --stop >/dev/null 2>&1 || true
+          nix develop -c python3 -I scripts/build-routing-layers work/candidate/pin.json \
+            --plugin-dir planner/tooling/shortest-path --work work/routing --notes work/notes.json
+          jq '.routingLayers' work/candidate/pin.json >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/create-github-app-token@v2
         id: bot
         with:
@@ -113,7 +121,7 @@ jobs:
           # The PR is a draft exactly while a person needs to check something: big tile or inset
           # changes, the first insets, or reachable areas without a name. pin-insets lists them.
           python3 -I scripts/tile-review work/candidate/pin.json work/pinned.json > work/tile-review.json
-          flags=(--tile-review work/tile-review.json --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID")
+          flags=(--tile-review work/tile-review.json --notes work/notes.json --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID")
           if ! jq -e '.insets != null' work/pinned.json >/dev/null; then
             flags+=(--first-insets)
           elif [ "$(cat work/geometry-review)" = true ]; then
