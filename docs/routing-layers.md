@@ -1,7 +1,9 @@
 # Production routing layers
 
 These are an independent immutable sidecar, not a terrain style or a natural-component explorer.
-`routing-layers/plugin.json` pins the production plugin commit and RuneLite client version. The
+They update by themselves, like the tiles: see [Automatic updates](#automatic-updates).
+`routing-layers/plugin.json` pins the default plugin commit and the RuneLite client version;
+`-ProutingPluginRevision=<sha>` builds another commit (the automatic build passes the planner's). The
 Gradle subproject archives that exact commit from a checkout, compiles its original Java sources
 and packages its original resources. No working-tree edits are included. The renderer's RuneLite
 cache dependencies stay on a separate classpath. Neither shortest-path-tooling nor shortest-path-hs
@@ -20,15 +22,17 @@ nix develop -c gradle :routing-layers:test routingLayers \
 The default checkout is `../../shortest-path`, useful in the shared development workspace. If it is
 absent, Gradle fetches only the pinned commit from the pinned GitHub repository into its build directory. The
 explicit revision is always required by the checked-in pin, regardless of the checkout's HEAD.
-To update the authority, edit the pin and regenerate; do not modify the plugin through this project.
-The `routing-layers` dispatch workflow performs the same download, tests, generation and upload.
+Do not modify the plugin through this project.
 
 Generation first checks the FNV-1a fingerprint of the **packaged collision-map.zip bytes** against
 `RoutingCuts.read()`. It then splits the ZIP entries into the tile release's padded 2048-byte plane
-files. The complete set of nonzero planes, every published checksum and every actual plane byte
-must match. The tile version must also match the collision manifest's cache and renderer revision.
-A matching cache number alone is insufficient. Missing or inconsistent resources fail before graph
-construction. There is no fallback to obsolete cuts or a different collision release.
+files and compares them with the tile release's collision layer, whose published checksums must hold.
+The graph is always built from the plugin's own map; the tile release only says where it is drawn.
+The two are separate dumps: the plugin's weekly `ExtractCollisionMap` job runs tooling master on the
+newest cache, and the tiles run the dumper osrs-tiles' `flake.lock` pins on their cache. So they can
+differ in a few squares (a dumper fix, or a cache in between), and the manifest's
+`collisionDifferences` lists the plane files that do. The tile version must match the collision
+manifest's cache and renderer revision.
 
 The graph comes directly from `RoutingStaticBuilder.build(collision, ResourceLoader.transports(),
 ResourceLoader.destinations().get("bank"), RoutingCuts.read(bytes).pairs())`. Ownership is copied
@@ -133,6 +137,22 @@ The normalized content hash is SHA-256 over sorted entries: UTF-8 relative plane
 all resource-bearing production TransportTypes and their original resource paths/bytes. The
 artifact version is the first 24 hex characters of SHA-256 of the compact manifest before its
 `version` field is appended. File hashes address every payload, including component metadata.
+
+## Automatic updates
+
+The osrs-tiles `insets` workflow (daily, after each tiles publish, or dispatched) runs
+`scripts/build-routing-layers` on the candidate `tiles.json` before it opens the planner's
+`pin/map-assets` PR. When the pinned layers' `pluginRevision` isn't the planner's pinned plugin
+(`tooling/shortest-path`), it:
+
+1. compares that plugin's `collision-map.zip` with the collision layer of the candidate tiles and of the
+   tiles the current layers use, and picks the one with fewer differing squares (the newer on a tie);
+2. builds the layers for that plugin commit on those tiles, uploads them, and writes `routingLayers`
+   into the candidate pin, which goes out in the same PR as the tiles and insets.
+
+A failed build never holds the pin back: the pin keeps its current layers, and the PR lists the
+failure under Follow-ups. The layers may keep an older `tileVersion` than the map's tiles. The planner
+checks them against their own, and its provenance line says when they differ.
 
 ## Publication and planner pin
 

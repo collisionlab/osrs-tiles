@@ -1,16 +1,28 @@
 #!/usr/bin/env python3
-"""Write a verified, explicit compatible routing pin into a planner tiles.json."""
+"""Write a verified routing sidecar into a planner tiles.json as its routingLayers pin.
+
+The sidecar keeps its own tileVersion: the tiles release whose collision is the plugin's map, which can be
+older than the pin's tiles (docs/routing-layers.md). The planner checks the layers against that.
+
+  scripts/pin-routing-layers MANIFEST TILES_JSON
+"""
 import json
 import runpy
 import sys
 from pathlib import Path
 
-manifest_path, pin_path = map(Path, sys.argv[1:])
-manifest = runpy.run_path(str(Path(__file__).with_name('verify-routing-layers')))['verify'](manifest_path.parent)
-pin = json.loads(pin_path.read_text())
-if pin['version'] != manifest['tileVersion']:
-    raise SystemExit('routing sidecar belongs to different map tiles')
-pin['routingLayers'] = {key: manifest[key] for key in (
-    'version', 'tileVersion', 'collisionContentSha256', 'transportSha256', 'separatorSha256')}
-pin['routingLayers']['pluginRevision'] = manifest['plugin']['revision']
-pin_path.write_text(json.dumps(pin, indent=2) + '\n')
+
+def pin_routing(manifest_path, pin_path):
+    manifest_path, pin_path = Path(manifest_path), Path(pin_path)
+    manifest = runpy.run_path(str(Path(__file__).with_name('verify-routing-layers')))['verify'](manifest_path.parent)
+    pin = json.loads(pin_path.read_text())
+    if int(manifest['tileVersion'].split('-')[0]) > int(pin['version'].split('-')[0]):
+        raise SystemExit('routing sidecar is from a newer cache than the tiles it would be pinned with')
+    pin['routingLayers'] = {key: manifest[key] for key in (
+        'version', 'tileVersion', 'collisionContentSha256', 'transportSha256', 'separatorSha256')}
+    pin['routingLayers']['pluginRevision'] = manifest['plugin']['revision']
+    pin_path.write_text(json.dumps(pin, indent=2) + '\n')
+
+
+if __name__ == '__main__':
+    pin_routing(*sys.argv[1:3])

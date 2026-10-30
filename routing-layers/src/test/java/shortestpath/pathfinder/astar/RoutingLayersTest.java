@@ -262,7 +262,7 @@ public class RoutingLayersTest
 	}
 
 	@Test
-	public void rejectsCollisionReleaseWithDifferentUnderlyingContent() throws Exception
+	public void listsCollisionThatDiffersFromTheRelease() throws Exception
 	{
 		Path root = Files.createTempDirectory("routing-collision-test");
 		try
@@ -271,7 +271,7 @@ public class RoutingLayersTest
 			Files.writeString(root.resolve("index.json"), "{}");
 			SortedMap<String, byte[]> planes = new TreeMap<>();
 			planes.put("8/1/1.bin", new byte[2048]);
-			assertThrows(IOException.class, () -> RoutingLayers.verifyCollision(root, planes));
+			assertEquals(List.of("8/1/1.bin"), RoutingLayers.collisionDifferences(root, planes));
 		}
 		finally
 		{

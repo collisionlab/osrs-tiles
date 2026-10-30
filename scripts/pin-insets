@@ -40,6 +40,8 @@ def main():
     parser.add_argument('--geometry-review', action='store_true', help='compare-insets asked for review')
     parser.add_argument('--first-insets', action='store_true', help='the consumer pins no insets yet')
     parser.add_argument('--run-url', default='', help='The workflow run that built the candidate')
+    parser.add_argument('--notes', type=Path, help='JSON list of [title, action] follow-ups from other steps '
+                        '(scripts/build-routing-layers); listed like review gaps, never a reason for a draft')
     parser.add_argument('--repo', action='append', help='Consumer repository; repeat for multiple consumers')
     parser.add_argument('--tiles-only', action='append', default=[], metavar='REPO',
                         help='Consumer repository that pins only the tiles; repeat for multiple consumers')
@@ -50,6 +52,8 @@ def main():
     full = dict(pin, insets=dict(version=manifest['version'], tileVersion=pin['version']))
     reasons = review_reasons(args, manifest)
     notes = follow_ups(manifest, Path(args.manifest).parent)
+    if args.notes and args.notes.exists():
+        notes += [tuple(n) for n in json.loads(args.notes.read_text())]
     if not args.repo and not args.tiles_only:
         args.repo, args.tiles_only = ['collisionlab/osrs-planner'], ['collisionlab/osrs-coord-preview']
     for repo in args.repo or []:

@@ -4,7 +4,12 @@ plugins {
 
 // The production plugin, at the commit plugin.json pins, compiled from its own sources. Its RuneLite
 // client stays on this project's classpath, apart from the renderer's cache library.
+// -ProutingPluginRevision builds another commit (scripts/build-routing-layers passes the planner's).
 def pin = new groovy.json.JsonSlurper().parse(file('plugin.json'))
+if (providers.gradleProperty('routingPluginRevision').isPresent()) {
+    pin.revision = providers.gradleProperty('routingPluginRevision').get()
+}
+def effectivePin = layout.buildDirectory.file('pin/plugin.json')
 
 repositories {
     maven {
@@ -68,9 +73,19 @@ tasks.named('compileJava') {
     dependsOn 'unpackPlugin'
 }
 
+// The manifest's plugin block is this resource, so it names the commit actually built.
+tasks.register('writePluginPin') {
+    inputs.property('pin', groovy.json.JsonOutput.toJson(pin))
+    outputs.file effectivePin
+    doLast {
+        effectivePin.get().asFile.parentFile.mkdirs()
+        effectivePin.get().asFile.text = groovy.json.JsonOutput.toJson(pin)
+    }
+}
+
 tasks.named('processResources') {
-    dependsOn 'unpackPlugin'
-    from('plugin.json')
+    dependsOn 'unpackPlugin', 'writePluginPin'
+    from(effectivePin)
 }
 
 tasks.withType(JavaCompile).configureEach {
