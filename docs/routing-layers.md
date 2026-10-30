@@ -30,7 +30,7 @@ files and compares them with the tile release's collision layer, whose published
 The graph is always built from the plugin's own map; the tile release only says where it is drawn.
 The two are separate dumps: the plugin's weekly `ExtractCollisionMap` job runs tooling master on the
 newest cache, and the tiles run the dumper osrs-tiles' `flake.lock` pins on their cache. So they can
-differ in a few squares (a dumper fix, or a cache in between), and the manifest's
+differ in a few squares (a cache in between, or a dumper fix before the tiles' `bump-tooling` catches up), and the manifest's
 `collisionDifferences` lists the plane files that do. The tile version must match the collision
 manifest's cache and renderer revision.
 
