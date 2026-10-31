@@ -25,11 +25,11 @@
     "tooling": {
       "flake": false,
       "locked": {
-        "lastModified": 1793317509,
-        "narHash": "sha256-sar9njasxsb+j7FR+CYmI5U0wFOqgyFo0cjOykczJFc=",
+        "lastModified": 1793439672,
+        "narHash": "sha256-yoeY6YWErYHu1kZDpYr+wtrqQqaasONhdEe48jQpKTs=",
         "owner": "osrs-pathfinding",
         "repo": "shortest-path-tooling",
-        "rev": "0c9ddaa512b2cfe567b998a2151fc7eb3673ef9e",
+        "rev": "a85fb45578b5c8f348eb2617caae3aae7c051e91",
         "type": "github"
       },
       "original": {
