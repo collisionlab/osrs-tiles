@@ -16,7 +16,7 @@ repositories {
 // Pinned, unlike the tooling's latest.release: StyledMapImageDumper is a
 // fork of this exact version's MapImageDumper, and the standard style is
 // checked pixel-for-pixel against the unforked class.
-def runeLiteVersion = '1.13.2'
+def runeLiteVersion = '1.13.6'
 
 dependencies {
     testImplementation "junit:junit:4.13.2"

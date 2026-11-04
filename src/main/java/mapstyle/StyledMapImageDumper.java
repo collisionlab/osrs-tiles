@@ -24,7 +24,7 @@
  *
  * ---------------------------------------------------------------------------
  * Forked from net.runelite.cache.MapImageDumper at runelite-parent-1.13.2
- * (cache/src/main/java/net/runelite/cache/MapImageDumper.java). Changes:
+ * (cache/src/main/java/net/runelite/cache/MapImageDumper.java), unchanged in 1.13.6. Changes:
  * renamed, moved package, dropped main(), and routed terrain, overlay and
  * wall colours and map icons through a MapStyle (every hook is marked
  * "map-style"). With MapStyle.RUNELITE the output is pixel-identical to the
