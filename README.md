@@ -135,7 +135,7 @@ a small, generic image operation. Re-implement it independently (pyvips
   all the licence requires. Map imagery rendered from the cache is Jagex
   content. Keep it out of anything public unless that is cleared separately.
 - **Version pinning.** The fork must match the `net.runelite:cache` it
-  links against, so this build pins `1.13.2`. The tooling's own
+  links against, so this build pins `1.13.6`. The tooling's own
   `latest.release` is unaffected. When bumping, re-diff the fork against
   upstream `MapImageDumper` and confirm `runelite.png == standard.png` again.
 - **XTEAs.** openrs2 reports zero keys for recent OSRS caches, and the
