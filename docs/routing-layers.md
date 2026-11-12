@@ -5,7 +5,9 @@ They update by themselves, like the tiles: see [Automatic updates](#automatic-up
 `routing-layers/plugin.json` pins the default plugin commit and the RuneLite client version;
 `-ProutingPluginRevision=<sha>` builds another commit (the automatic build passes the planner's). The
 Gradle subproject archives that exact commit from a checkout, compiles its original Java sources
-and packages its original resources. No working-tree edits are included. The renderer's RuneLite
+(with the routing-component builder, cuts and `routing-cuts.bin`, which the plugin keeps in its
+test sources) and packages
+its original resources. No working-tree edits are included. The renderer's RuneLite
 cache dependencies stay on a separate classpath. Neither shortest-path-tooling nor shortest-path-hs
 is a generator dependency.
 
@@ -24,8 +26,11 @@ absent, Gradle fetches only the pinned commit from the pinned GitHub repository 
 explicit revision is always required by the checked-in pin, regardless of the checkout's HEAD.
 Do not modify the plugin through this project.
 
-Generation first checks the FNV-1a fingerprint of the **packaged collision-map.zip bytes** against
-`RoutingCuts.read()`. It then splits the ZIP entries into the tile release's padded 2048-byte plane
+Generation first checks that the plugin's shipped `routing-components.bin`, the layer it routes on, is
+byte for byte what its builder generates from its collision map and `routing-cuts.bin`, as the plugin's
+own freshness test requires (`ShippedComponentLayer`). Only then is the builder's graph production's.
+The cuts' own collision fingerprint isn't checked: the plugin doesn't regenerate the cuts with every map
+change. It then splits the ZIP entries into the tile release's padded 2048-byte plane
 files and compares them with the tile release's collision layer, whose published checksums must hold.
 The graph is always built from the plugin's own map; the tile release only says where it is drawn.
 The two are separate dumps: the plugin's weekly `ExtractCollisionMap` job runs tooling master on the

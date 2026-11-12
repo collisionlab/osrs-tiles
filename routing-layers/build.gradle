@@ -68,6 +68,15 @@ tasks.register('unpackPlugin', Sync) {
 
 sourceSets.main.java.srcDir unpacked.map { it.dir('src/main/java') }
 sourceSets.main.resources.srcDir unpacked.map { it.dir('src/main/resources') }
+// Since plugin #921 the routing-component builder, its writer, the cuts and routing-cuts.bin are in its test
+// sources: it ships the routing-components.bin they generate (ShippedComponentLayer checks they agree).
+tasks.named('compileJava') {
+    source fileTree(unpacked.map { it.dir('src/test/java') }) {
+        include 'shortestpath/pathfinder/astar/RoutingStaticBuilder.java'
+        include 'shortestpath/pathfinder/astar/RoutingCuts.java'
+        include 'shortestpath/pathfinder/astar/ComponentLayerWriter.java'
+    }
+}
 
 tasks.named('compileJava') {
     dependsOn 'unpackPlugin'
@@ -86,6 +95,7 @@ tasks.register('writePluginPin') {
 tasks.named('processResources') {
     dependsOn 'unpackPlugin', 'writePluginPin'
     from(effectivePin)
+    from(unpacked.map { it.file('src/test/resources/routing-cuts.bin') })
 }
 
 tasks.withType(JavaCompile).configureEach {
