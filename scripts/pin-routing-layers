@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 
-def pin_routing(manifest_path, pin_path):
+def pin_routing(manifest_path, pin_path, generator=None):
     manifest_path, pin_path = Path(manifest_path), Path(pin_path)
     manifest = runpy.run_path(str(Path(__file__).with_name('verify-routing-layers')))['verify'](manifest_path.parent)
     pin = json.loads(pin_path.read_text())
@@ -21,6 +21,8 @@ def pin_routing(manifest_path, pin_path):
     pin['routingLayers'] = {key: manifest[key] for key in (
         'version', 'tileVersion', 'collisionContentSha256', 'transportSha256', 'separatorSha256')}
     pin['routingLayers']['pluginRevision'] = manifest['plugin']['revision']
+    if generator:
+        pin['routingLayers']['generatorSha256'] = generator
     pin_path.write_text(json.dumps(pin, indent=2) + '\n')
 
 

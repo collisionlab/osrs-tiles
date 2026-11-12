@@ -277,6 +277,33 @@ public final class RoutingLayers
 		}
 	}
 
+	/** A structurally unreachable natural component, not an expanse: an area nothing reaches. */
+	public static final class Unreached
+	{
+		public int plane;
+		public int tiles;
+		/** x0, y0, x1, y1, the maxima exclusive. */
+		public int[] bounds;
+		/** One of its tiles. */
+		public int[] representative;
+
+		Unreached(int tile, int tiles)
+		{
+			plane = p(tile);
+			this.tiles = tiles;
+			bounds = new int[]{x(tile), y(tile), x(tile) + 1, y(tile) + 1};
+			representative = point(tile);
+		}
+
+		void add(int tile)
+		{
+			bounds[0] = Math.min(bounds[0], x(tile));
+			bounds[1] = Math.min(bounds[1], y(tile));
+			bounds[2] = Math.max(bounds[2], x(tile) + 1);
+			bounds[3] = Math.max(bounds[3], y(tile) + 1);
+		}
+	}
+
 	/** An effective synthetic walking crossing. */
 	public static final class Crossing
 	{
@@ -295,6 +322,8 @@ public final class RoutingLayers
 		public final List<Crossing> crossings = new ArrayList<>();
 		/** By natural component id. */
 		public final SortedMap<Integer, Expanse> expanses = new TreeMap<>();
+		/** By natural component id. */
+		public final SortedMap<Integer, Unreached> unreached = new TreeMap<>();
 		public long unreachableCount;
 		public long expanseCount;
 		/** Components sharing a tile edge, by component; not published, only coloured apart. */
@@ -315,6 +344,7 @@ public final class RoutingLayers
 			files.putAll(ComponentTiles.tiles(this));
 			files.putAll(BlockedTiles.tiles(this));
 			files.put("crossings.json", jsonBytes(crossings));
+			files.put("unreachable.json", jsonBytes(unreached.values()));
 			return files;
 		}
 
@@ -363,6 +393,7 @@ public final class RoutingLayers
 			{
 				status = UNREACHABLE;
 				output.unreachableCount++;
+				output.unreached.computeIfAbsent(natural, k -> new Unreached(tile, size)).add(tile);
 			}
 			square.status[local(tile)] = status;
 			square.naturalSizes[local(tile)] = size;

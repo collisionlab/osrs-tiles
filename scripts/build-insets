@@ -45,6 +45,18 @@ def required_squares(catalogue):
     return result
 
 
+def world_maps(topology):
+    """The world maps besides the main one, each with the real tiles it draws (see docs/tiles.md)."""
+    maps = topology.get('worldMaps')
+    if not maps:
+        raise ValueError('Regenerate the topology with worldMaps')
+    for world_map in maps:
+        if not world_map.get('name') or not world_map.get('safeName') or any(
+                len(rect) != 5 or not 0 <= rect[0] < 4 or rect[3] <= 0 or rect[4] <= 0 for rect in world_map['rects']):
+            raise ValueError(f"Invalid world map: {world_map.get('safeName')}")
+    return maps
+
+
 def native_path(plane, square):
     """A zoom-8 tile's path in a style directory (Tiles.planePath)."""
     return f"{f'p{plane}/' if plane else ''}8/{(square >> 8) - 15}/{(square & 255) - 19}.png"
@@ -98,6 +110,7 @@ def build(args):
         catalogue = discover(json.loads(raw), cuts=annotations.get('cuts', []))
         catalogue['topologySha256'] = digest(raw)
         write(out / 'regions.json', catalogue)
+        write(out / 'world-maps.json', dict(schemaVersion=1, topologySha256=digest(raw), maps=world_maps(json.loads(raw))))
         catalogue_hash = digest((out / 'regions.json').read_bytes())
         anchors = build_anchors(catalogue, transports, annotations)
         anchors.update(catalogueSha256=catalogue_hash, transportsSha256=transport_hash)

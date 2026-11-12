@@ -7,13 +7,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import net.runelite.cache.IndexType;
 import net.runelite.cache.OverlayManager;
 import net.runelite.cache.UnderlayManager;
+import net.runelite.cache.definitions.AbstractWorldMapDataDefinition;
 import net.runelite.cache.definitions.MapDefinition;
+import net.runelite.cache.definitions.MapSquareDefinition;
 import net.runelite.cache.definitions.OverlayDefinition;
 import net.runelite.cache.definitions.UnderlayDefinition;
 import net.runelite.cache.definitions.WorldMapDefinition;
@@ -22,6 +27,9 @@ import net.runelite.cache.definitions.WorldMapType0;
 import net.runelite.cache.definitions.WorldMapType1;
 import net.runelite.cache.definitions.WorldMapType2;
 import net.runelite.cache.definitions.WorldMapType3;
+import net.runelite.cache.definitions.WorldMapCompositeDefinition;
+import net.runelite.cache.definitions.ZoneDefinition;
+import net.runelite.cache.definitions.loaders.WorldMapCompositeLoader;
 import net.runelite.cache.definitions.loaders.WorldMapLoader;
 import net.runelite.cache.fs.Archive;
 import net.runelite.cache.fs.FSFile;
@@ -38,6 +46,7 @@ public final class InsetTopology {
         List<int[]> spans = new ArrayList<>();
         List<Integer> loaded = new ArrayList<>();
         List<int[]> surface = new ArrayList<>();
+        List<Map<String, Object>> worldMaps = new ArrayList<>();
         try (Store store = new Store(new java.io.File(args[0]))) {
             store.load();
             UnderlayManager underlays = new UnderlayManager(store);
@@ -87,19 +96,37 @@ public final class InsetTopology {
             Index index = store.getIndex(IndexType.WORLDMAP);
             Archive details = index.isNamed() ? index.findArchiveByName("details") : index.getArchive(0);
             boolean found = false;
+            Map<Integer, WorldMapDefinition> others = new HashMap<>();
             for (FSFile file : details.getFiles(store.getStorage().loadArchive(details)).getFiles()) {
                 WorldMapDefinition map = new WorldMapLoader().load(file.getContents(), file.getFileId());
-                if (!"main".equals(map.safeName)) continue;
+                if (!"main".equals(map.safeName)) { others.put(file.getFileId(), map); continue; }
                 found = true;
                 for (WorldMapTypeBase section : map.regionList) addSurface(section, surface);
             }
             if (!found || surface.isEmpty()) throw new IllegalStateException("Main world-map coverage missing");
+            // The other world maps (the underground ones), by the real tiles each draws. A composite
+            // map shares its file id with its details.
+            Archive composites = index.isNamed() ? index.findArchiveByName("compositemap") : index.getArchive(1);
+            WorldMapCompositeLoader compositeLoader = new WorldMapCompositeLoader().configureForRevision(index.getRevision());
+            TreeMap<String, Map<String, Object>> byName = new TreeMap<>();
+            for (FSFile file : composites.getFiles(store.getStorage().loadArchive(composites)).getFiles()) {
+                WorldMapDefinition map = others.get(file.getFileId());
+                if (map == null) continue;
+                Map<String, Object> entry = new LinkedHashMap<>();
+                entry.put("name", map.name);
+                entry.put("safeName", map.safeName);
+                entry.put("rects", realTiles(compositeLoader.load(file.getContents())));
+                byName.put(map.safeName, entry);
+            }
+            if (byName.isEmpty()) throw new IllegalStateException("No world maps besides the main one");
+            worldMaps.addAll(byName.values());
             result.put("mapIndexRevision", store.getIndex(IndexType.MAPS).getRevision());
         }
         if (spans.isEmpty()) throw new IllegalStateException("No terrain extracted");
         result.put("schemaVersion", 1);
         result.put("loadedMapSquares", loaded);
         result.put("surfaceRects", surface);
+        result.put("worldMaps", worldMaps);
         result.put("spans", spans);
         Files.createDirectories(output.toAbsolutePath().getParent());
         try (Writer writer = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
@@ -145,6 +172,42 @@ public final class InsetTopology {
         } else {
             throw new IllegalArgumentException("Unknown world-map section " + section.getClass());
         }
+    }
+
+    /**
+     * The real tiles a composite world map draws, wherever it draws them, as [plane, x, y, w, h]
+     * rectangles of whole 8x8 zones: each map square and zone's source, on each plane it covers.
+     */
+    static List<int[]> realTiles(WorldMapCompositeDefinition map) {
+        List<TreeSet<Integer>> zones = new ArrayList<>();
+        for (int plane = 0; plane < 4; plane++) zones.add(new TreeSet<>());
+        for (MapSquareDefinition square : map.getMapSquareDefinitions())
+            for (int i = 0; i < 64; i++) addZone(zones, square, i % 8, i / 8);
+        for (ZoneDefinition zone : map.getZoneDefinitions()) addZone(zones, zone, zone.getSourceZoneX(), zone.getSourceZoneZ());
+        List<int[]> rectangles = new ArrayList<>();
+        for (int plane = 0; plane < 4; plane++) {
+            TreeSet<Integer> left = zones.get(plane);
+            // Zones are keyed y << 16 | x, so the first left is the lowest row's westmost.
+            while (!left.isEmpty()) {
+                int key = left.first(), x = key & 0xffff, y = key >> 16, w = 1, h = 1;
+                while (left.contains(y << 16 | (x + w))) w++;
+                while (row(left, x, y + h, w)) h++;
+                for (int i = 0; i < w * h; i++) left.remove((y + i / w) << 16 | (x + i % w));
+                rectangles.add(new int[]{plane, x * 8, y * 8, w * 8, h * 8});
+            }
+        }
+        return rectangles;
+    }
+
+    private static void addZone(List<TreeSet<Integer>> zones, AbstractWorldMapDataDefinition d, int zoneX, int zoneY) {
+        int x = d.getSourceSquareX() * 8 + zoneX, y = d.getSourceSquareZ() * 8 + zoneY;
+        for (int plane = d.getMinLevel(); plane < Math.min(4, d.getMinLevel() + Math.max(1, d.getLevels())); plane++)
+            zones.get(plane).add(y << 16 | x);
+    }
+
+    private static boolean row(TreeSet<Integer> zones, int x, int y, int w) {
+        for (int i = 0; i < w; i++) if (!zones.contains(y << 16 | (x + i))) return false;
+        return true;
     }
 
     private static void add(List<int[]> rectangles, int plane, int count, int x, int y, int w, int h) {

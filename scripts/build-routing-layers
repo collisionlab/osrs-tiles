@@ -7,6 +7,9 @@ dumps, which can be of different caches or by different dumper commits. So this 
 with the candidate pin's tiles and with the tiles the current layers use, and builds on the one with the
 fewest differing squares (the newer on a tie). The manifest lists the squares that differ.
 
+The pin records the generator's sources too (`generatorSha256`), so a change to what the layers contain
+rebuilds them for the same plugin commit.
+
 Nothing here holds the inset pin back. When the build fails, the pin keeps its current layers and a note
 for the PR's follow-ups is written to --notes.
 
@@ -32,6 +35,16 @@ def note(path, title, action):
         notes = json.loads(path.read_text()) if path.exists() else []
         path.write_text(json.dumps(notes + [[title, action]], indent=2))
     print(f'{title} {action}', file=sys.stderr)
+
+
+def generator_hash():
+    """The routing layer generator's sources and build files, which decide what a release contains."""
+    files = sorted(p for p in (ROOT / 'routing-layers').rglob('*') if p.is_file() and 'build' not in p.relative_to(ROOT).parts)
+    files += [ROOT / name for name in ('build.gradle', 'settings.gradle', 'flake.lock')]
+    digest = hashlib.sha256()
+    for path in files:
+        digest.update(f'{path.relative_to(ROOT)}\0{hashlib.sha256(path.read_bytes()).hexdigest()}\n'.encode())
+    return digest.hexdigest()
 
 
 def plugin_planes(plugin_dir, revision):
@@ -91,8 +104,9 @@ def main():
                                                check=True, text=True, capture_output=True).stdout.strip()
     pin = json.loads(args.pin.read_text())
     current = pin.get('routingLayers') or {}
-    if current.get('pluginRevision') == revision:
-        print(f'routing layers are already from plugin {revision[:12]}')
+    generator = generator_hash()
+    if current.get('pluginRevision') == revision and current.get('generatorSha256') == generator:
+        print(f'routing layers are already from plugin {revision[:12]} and this generator')
         return
     try:
         planes = plugin_planes(args.plugin_dir, revision)
@@ -107,7 +121,7 @@ def main():
         if not args.no_upload:
             subprocess.run([str(ROOT / 'scripts/upload-routing-layers'), str(candidate)], check=True)
         runpy.run_path(str(ROOT / 'scripts/pin-routing-layers'), run_name='pin')['pin_routing'](
-            candidate / 'manifest.json', args.pin)
+            candidate / 'manifest.json', args.pin, generator)
         print(f'routing layers {candidate.name} from plugin {revision[:12]} on tiles {tile_version}')
     except (subprocess.CalledProcessError, RuntimeError, OSError, ValueError, SystemExit) as error:
         note(args.notes, f"The routing layers weren't rebuilt for plugin `{revision[:12]}`.",
