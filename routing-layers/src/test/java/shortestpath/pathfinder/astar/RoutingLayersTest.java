@@ -73,6 +73,12 @@ public class RoutingLayersTest
 		}
 
 		@Override
+		public long fingerprint()
+		{
+			return 0;
+		}
+
+		@Override
 		public byte getRegionPlaneCounts(int index)
 		{
 			return 1;
@@ -255,10 +261,10 @@ public class RoutingLayersTest
 	}
 
 	@Test
-	public void rejectsCollisionFingerprintMismatch()
+	public void rejectsAShippedComponentLayerTheCutsDoNotGenerate()
 	{
-		RoutingCuts cuts = new RoutingCuts(123, new RoutingCuts.Parameters(0, 0, 0, 0, 0, ""), new int[0]);
-		assertThrows(IllegalStateException.class, () -> RoutingLayers.verifyFingerprint(cuts, new byte[]{1, 2}));
+		ShippedComponentLayer.verify(new byte[]{1, 2}, new byte[]{1, 2});
+		assertThrows(IllegalStateException.class, () -> ShippedComponentLayer.verify(new byte[]{1, 2}, new byte[]{1, 3}));
 	}
 
 	@Test

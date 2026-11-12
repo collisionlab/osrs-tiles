@@ -28,6 +28,7 @@ import shortestpath.pathfinder.SplitFlagMap;
 import shortestpath.pathfinder.astar.RoutingCuts;
 import shortestpath.pathfinder.astar.RoutingStatic;
 import shortestpath.pathfinder.astar.RoutingStaticBuilder;
+import shortestpath.pathfinder.astar.ShippedComponentLayer;
 import shortestpath.transport.ResourceLoader;
 import shortestpath.transport.TransportType;
 
@@ -78,7 +79,6 @@ public final class RoutingLayers
 		byte[] collisionBytes = resource("/collision-map.zip");
 		byte[] cutBytes = resource(RoutingCuts.RESOURCE);
 		RoutingCuts cuts = RoutingCuts.read(cutBytes);
-		verifyFingerprint(cuts, collisionBytes);
 		SortedMap<String, byte[]> collisionPlanes = collisionPlanes(collisionBytes);
 		// The layers are the plugin's own graph; the tiles release only says where they are drawn. Squares
 		// whose collision differs from it (another cache, or another dumper) are listed, not refused.
@@ -92,6 +92,7 @@ public final class RoutingLayers
 		}
 
 		CollisionMap collision = new CollisionMap(SplitFlagMap.fromResources());
+		ShippedComponentLayer.verify(collision, cuts);
 		var transports = ResourceLoader.transports();
 		var banks = ResourceLoader.destinations().get("bank");
 		var built = RoutingStaticBuilder.build(collision, transports, banks == null ? Set.of() : banks, cuts.pairs());
@@ -433,14 +434,6 @@ public final class RoutingLayers
 		{
 			component.separatorCrossings++;
 			component.neighbours.add(neighbour);
-		}
-	}
-
-	public static void verifyFingerprint(RoutingCuts cuts, byte[] collision)
-	{
-		if (cuts.collisionFingerprint() != RoutingCuts.fingerprint(collision))
-		{
-			throw new IllegalStateException("routing-cuts collision fingerprint differs from packaged collision-map.zip");
 		}
 	}
 
