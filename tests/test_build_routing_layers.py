@@ -15,7 +15,8 @@ class BuildRoutingLayersTest(unittest.TestCase):
         self.root = Path(self.directory.name)
         self.pin = self.root / 'tiles.json'
         self.pin.write_text(json.dumps({'base': 'https://tiles.example', 'version': '2752-abc',
-                                        'routingLayers': {'tileVersion': '2746-abc', 'pluginRevision': 'old'}}))
+                                        'routingLayers': {'tileVersion': '2746-abc', 'pluginRevision': 'old',
+                                                          'generatorSha256': self.build['generator_hash']()}}))
 
     def tearDown(self):
         self.directory.cleanup()
@@ -33,6 +34,14 @@ class BuildRoutingLayersTest(unittest.TestCase):
     def test_same_plugin_does_nothing(self):
         self.run_main(['--revision', 'old'])
         self.assertFalse((self.root / 'notes.json').exists())
+
+    def test_a_changed_generator_rebuilds_the_same_plugin(self):
+        pin = json.loads(self.pin.read_text())
+        pin['routingLayers']['generatorSha256'] = 'older'
+        self.pin.write_text(json.dumps(pin))
+        # No git checkout here, so the rebuild fails, which shows it was attempted.
+        self.run_main(['--revision', 'old'])
+        self.assertIn("weren't rebuilt for plugin `old`", json.loads((self.root / 'notes.json').read_text())[0][0])
 
     def test_a_failure_is_a_follow_up_not_an_error(self):
         # No git checkout here, so reading the plugin's map fails.

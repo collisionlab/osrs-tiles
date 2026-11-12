@@ -79,4 +79,28 @@ public class InsetTopologyTest {
         org.junit.Assert.assertFalse(visibleTerrain(tile, null, null));
     }
 
+    @Test
+    public void worldMapRealTilesFollowTheSourceOnEveryLevel() {
+        WorldMapCompositeDefinition map = new WorldMapCompositeDefinition();
+        // A whole map square drawn in place on two levels, and a zone drawn 128 tiles from its source.
+        MapSquareDefinition square = new MapSquareDefinition();
+        square.sourceSquareX = square.displaySquareX = 50;
+        square.sourceSquareZ = square.displaySquareZ = 51;
+        square.minLevel = 1;
+        square.levels = 2;
+        map.getMapSquareDefinitions().add(square);
+        ZoneDefinition zone = new ZoneDefinition();
+        zone.sourceSquareX = 52;
+        zone.displaySquareX = 50;
+        zone.sourceSquareZ = zone.displaySquareZ = 51;
+        zone.sourceZoneX = 3;
+        zone.sourceZoneZ = 4;
+        zone.levels = 1;
+        map.getZoneDefinitions().add(zone);
+        List<int[]> rectangles = realTiles(map);
+        assertEquals(3, rectangles.size());
+        assertArrayEquals(new int[]{0, 3352, 3296, 8, 8}, rectangles.get(0));
+        assertArrayEquals(new int[]{1, 3200, 3264, 64, 64}, rectangles.get(1));
+        assertArrayEquals(new int[]{2, 3200, 3264, 64, 64}, rectangles.get(2));
+    }
 }

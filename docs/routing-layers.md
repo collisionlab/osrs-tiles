@@ -71,6 +71,9 @@ The output directory is `<output>/<24-hex-content-address>/`:
 - `components/[p<plane>/]<z>/<x>/<y>.png`: the components as a tile pyramid (below).
 - `blocked/[p<plane>/]<z>/<x>/<y>.png`: blocked ground as a tile pyramid (below).
 - `crossings.json`: the full graph's effective crossings, for offline analysis.
+- `unreachable.json`: every structurally unreachable natural component that isn't an expanse, the areas
+  nothing reaches: `plane`, `tiles`, exclusive-max `bounds` and a `representative` tile of it. The
+  workbench's underground areas page joins them to world maps by that tile.
 - `p<plane>/<world-square-x>/<world-square-y>.bin`: ownership, reachability and boundaries.
 - The same square with `.crossings.json`: only its incident effective crossings, for lazy display.
 
@@ -148,7 +151,8 @@ artifact version is the first 24 hex characters of SHA-256 of the compact manife
 The osrs-tiles `insets` workflow (daily, after each tiles publish, or dispatched) runs
 `scripts/build-routing-layers` on the candidate `tiles.json` before it opens the planner's
 `pin/map-assets` PR. When the pinned layers' `pluginRevision` isn't the planner's pinned plugin
-(`tooling/shortest-path`), it:
+(`tooling/shortest-path`), or their `generatorSha256` isn't this checkout's `routing-layers/` sources and
+build files, it:
 
 1. compares that plugin's `collision-map.zip` with the collision layer of the candidate tiles and of the
    tiles the current layers use, and picks the one with fewer differing squares (the newer on a tie);

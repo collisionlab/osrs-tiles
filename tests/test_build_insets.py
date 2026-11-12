@@ -33,6 +33,7 @@ class BuildTest(unittest.TestCase):
 
     TOPOLOGY = dict(schemaVersion=1, mapIndexRevision=1, loadedMapSquares=[50 << 8 | 50],
                     surfaceRects=[[0, 3200, 3200, 64, 64]],
+                    worldMaps=[dict(name='Ancient Cavern', safeName='ancient_cavern', rects=[[0, 1728, 5312, 64, 64]])],
                     spans=[[0, 3200, 3200, 3202], [1, 3200, 3200, 3202]])
 
     def tiles(self, index, planes=4):
@@ -61,7 +62,9 @@ class BuildTest(unittest.TestCase):
             self.assertEqual(manifest['planes'], [[50 << 8 | 50], [50 << 8 | 50], [], []])
             self.assertNotIn('supplemental', manifest)
             self.assertEqual(sorted(p.name for p in result.iterdir()),
-                             ['anchors.json', 'labels.json', 'manifest.json', 'regions.json', 'review.json'])
+                             ['anchors.json', 'labels.json', 'manifest.json', 'regions.json', 'review.json', 'world-maps.json'])
+            world = json.loads((result / 'world-maps.json').read_text())
+            self.assertEqual(world['maps'], self.TOPOLOGY['worldMaps'])
 
     def test_rejects_tiles_missing_a_covered_square(self):
         with tempfile.TemporaryDirectory() as temporary:

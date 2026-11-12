@@ -6,7 +6,7 @@ on:
     types: [completed]
   push:
     branches: [main]
-    paths: [scripts/**, data/inset-labels/**, src/main/java/mapstyle/InsetTopology.java]
+    paths: [scripts/**, data/inset-labels/**, src/main/java/mapstyle/InsetTopology.java, routing-layers/**]
   schedule:
     - cron: "30 7 * * *"
   workflow_dispatch:

@@ -101,6 +101,7 @@ planner cuts each area's pixels from the pinned tiles of its plane.
 | `regions.json` | every connected area of visible terrain, per plane: `id`, `plane`, `bounds`, `mask` (rectangles), `classification` (`inset`, `main-world`, `mixed`), `tileCount`; and `surfaceRects`, the main map's frame | planner: which area each route tile is in, clipping and outlining insets, which tiles to cut, placement and click hit-testing |
 | `labels.json` | `regions[id]` = `{name, plane, status, areas}` (status `named`, `descriptive` or `unresolved`) and `evidence` for each name | planner: inset headers, door markers and the AREA search (only labels that aren't `unresolved`) |
 | `anchors.json` | `connections` (transport rows matched to areas, and curated anchors); `regions[id].anchors` and `defaultAnchor` (where the area hangs off the main map: a surface point, the chain of connections from it, and whether that point is an `entrance`); `reachableRegionIds` (areas some chain of transports reaches); `curatedIssues` | planner, fetched when first needed: placement, entrances and door markers. The labeller and the pin scripts use the rest |
+| `world-maps.json` | `maps`: every world map besides the main one (the underground maps, minigames and the like), each with its `name`, `safeName` and `rects`, the real tiles it draws as `[plane, x, y, width, height]` rectangles of whole 8x8 zones, wherever the map draws them. From the cache's world map composites | planner: the workbench's underground areas |
 | `review.json` | reachable areas without a name or an anchor, and curated decisions that no longer fit the terrain; `requiredNamed`, `requiredAnchored` | `pin-insets` (the pin PR's "Action needed"), the planner's `scripts/pin-status` |
 
 The version is a hash of every input: cache and key hashes, tile version and manifest, the pinned
@@ -109,7 +110,7 @@ rules for names and anchors are below.
 
 **Built by** `.github/workflows/insets.yml`:
 - after each publish;
-- on pushes to `main` touching `scripts/`, `data/inset-labels/` or `InsetTopology.java`;
+- on pushes to `main` touching `scripts/`, `data/inset-labels/`, `InsetTopology.java` or `routing-layers/`;
 - daily at 07:30 UTC, which picks up transport changes from the planner's tooling bump.
 
 The build (`scripts/build-insets`) extracts terrain from the cache, finds the areas, matches

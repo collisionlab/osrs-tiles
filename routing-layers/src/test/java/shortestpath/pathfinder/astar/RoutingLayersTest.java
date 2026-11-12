@@ -223,10 +223,16 @@ public class RoutingLayersTest
 		var counted = RoutingLayers.export(built.routingStatic, walking, 6);
 		assertEquals(5, counted.unreachableCount);
 		assertEquals(0, counted.expanseCount);
+		var area = counted.unreached.values().iterator().next();
+		assertEquals(1, counted.unreached.size());
+		assertEquals(5, area.tiles);
+		assertArrayEquals(new int[]{40, 40, 45, 41}, area.bounds);
+		assertEquals(40, area.representative[1]);
 
 		var expanse = RoutingLayers.export(built.routingStatic, walking, 5);
 		assertEquals(0, expanse.unreachableCount);
 		assertEquals(5, expanse.expanseCount);
+		assertTrue(expanse.unreached.isEmpty());
 		assertEquals(3, expanse.square(t(42, 40)).status[local(t(42, 40))]);
 		assertEquals(5, expanse.square(t(42, 40)).naturalSizes[local(t(42, 40))]);
 		assertEquals(1, expanse.square(a).status[local(a)]);
