@@ -16,7 +16,7 @@ def verify(candidate):
     if manifest['schemaVersion'] != 3 or manifest['plugin']['repository'] != 'Skretzo/shortest-path':
         raise ValueError('unsupported routing manifest')
     for name, digest in manifest['files'].items():
-        if not re.fullmatch(r'(components\.json|crossings\.json|p[0-3]/\d+/\d+\.(bin|crossings\.json)'
+        if not re.fullmatch(r'(components\.json|crossings\.json|unreachable\.json|p[0-3]/\d+/\d+\.(bin|crossings\.json)'
                             r'|(components|blocked)/(p[1-3]/)?[3-8]/\d+/\d+\.png)', name):
             raise ValueError(f'invalid routing path: {name}')
         if hashlib.sha256((candidate / name).read_bytes()).hexdigest() != digest:
