@@ -42,11 +42,11 @@ class RoutingPublicationTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'content address'):
                 verify(root)
 
-    def test_component_tiles_are_listed_paths(self):
+    def test_component_tiles_and_unreached_areas_are_listed_paths(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = b'png'
-            files = {'components/8/35/31.png': payload, 'components/p1/3/1/0.png': payload}
+            files = {'components/8/35/31.png': payload, 'components/p1/3/1/0.png': payload, 'unreachable.json': b'[]'}
             for name, data in files.items():
                 (root / name).parent.mkdir(parents=True, exist_ok=True)
                 (root / name).write_bytes(data)
