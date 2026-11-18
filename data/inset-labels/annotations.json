@@ -641,6 +641,21 @@
             "reason": "The vault door north-east of Nardah is its only entrance (wiki: Ancient Vault); the transport data has only the Ring of shadows teleport.",
             "entrance": true
           }
+        },
+        {
+          "componentId": "p1-3926-9624-169c71ecfe",
+          "seed": [
+            3929,
+            9631,
+            1
+          ],
+          "evidence": [
+            "s-64b5fd187aad2b90",
+            "s-1961fc5b69c1a253",
+            "c-0e8da4093b8a701b",
+            "c-647781c0191737c2"
+          ],
+          "reason": "The closed vault interior, behind the vault door north-east of Nardah."
         }
       ]
     },
@@ -661,7 +676,7 @@
             "s-07adb44a3b9b0486",
             "s-70f8534f63181345",
             "s-0f9d21c3cc0db395",
-            "c-2fdf5b391a09ade3"
+            "c-116a087f9b7e4250"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -6377,6 +6392,69 @@
             "reason": "Lies beneath the Crypt of Tonali (wiki: Tonali Cavern); the transport data has only league teleports.",
             "entrance": true
           }
+        },
+        {
+          "componentId": "p2-1300-9345-66864844b6",
+          "seed": [
+            1311,
+            9346,
+            2
+          ],
+          "evidence": [
+            "s-d486a77fb5d0cf50",
+            "c-185c75aad1586a38",
+            "c-785eef24778f451d",
+            "c-933ad992396740b1",
+            "c-d354efc98be27f3a"
+          ],
+          "reason": "The upper level by the passageway entrance."
+        },
+        {
+          "componentId": "p1-1329-9344-340f2a65f5",
+          "seed": [
+            1334,
+            9367,
+            1
+          ],
+          "evidence": [
+            "c-25540b6b68ef6b11",
+            "c-785eef24778f451d",
+            "c-ad9bff157ebd5eaf",
+            "c-d354efc98be27f3a"
+          ],
+          "reason": "The middle level between the passageway stairs."
+        },
+        {
+          "componentId": "p2-1279-9399-8c864e5e39",
+          "seed": [
+            1309,
+            9420,
+            2
+          ],
+          "evidence": [
+            "c-22d3674ef7343770",
+            "c-424f71883e68877d",
+            "c-467ed1e5506031c7",
+            "c-597a87d42ab43d67",
+            "c-c93df4accf4a26c6",
+            "c-dc50abd199dc0f45"
+          ],
+          "reason": "The upper level by the lift platform."
+        },
+        {
+          "componentId": "p1-1282-9399-7ff28f5d6f",
+          "seed": [
+            1307,
+            9420,
+            1
+          ],
+          "evidence": [
+            "c-467ed1e5506031c7",
+            "c-597a87d42ab43d67",
+            "c-5c01d8c07a0a671a",
+            "c-8e86caa33d4719ed"
+          ],
+          "reason": "The middle level between the lift ropes."
         }
       ]
     },
@@ -7945,7 +8023,7 @@
             "s-502927f9ab6ce8ab",
             "s-8bc5035d928703f7",
             "s-7197d2aebe9df057",
-            "c-a1eb78b717633fd4"
+            "c-fcb25d4c7a8352d9"
           ],
           "reason": "Reviewed source place coordinates and/or the recorded physical entrance chain identify this component or room within the named area. Source text positions are not assumed to be walkable tiles."
         }
@@ -8229,6 +8307,1083 @@
             "s-64dda650e4220cfb",
             "c-3181a9146b2888a6",
             "c-89c004cbee9877bc"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "stranglewood-kasonde-defence",
+      "name": "Stranglewood – Protecting Kasonde",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1165-9741-cdd57b7a84",
+          "seed": [
+            1187,
+            9760,
+            0
+          ],
+          "evidence": [
+            "s-711c68ef42787d02",
+            "c-b93c3ce9de1a01d6",
+            "c-cb03d2b1233f8cfd"
+          ],
+          "reason": "The Kasonde defence room under the Stranglewood, entered during Desert Treasure II."
+        }
+      ]
+    },
+    {
+      "key": "stranglewood-kasonde-pyramid",
+      "name": "Stranglewood – Killing Kasonde",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1177-9808-f267c4bead",
+          "seed": [
+            1183,
+            9812,
+            0
+          ],
+          "evidence": [
+            "s-ce56726a00e96928",
+            "c-128bcac6bb09bf45",
+            "c-7230019e9e48449e"
+          ],
+          "reason": "The Kasonde pyramid under the Stranglewood, entered during Desert Treasure II."
+        }
+      ]
+    },
+    {
+      "key": "dragon-nest",
+      "name": "Dragon Nest",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1225-9473-35edfdce0d",
+          "seed": [
+            1247,
+            9503,
+            0
+          ],
+          "evidence": [
+            "s-4e5c8823919de33b",
+            "s-802749d457184eb9",
+            "c-cf0ee1df4c3b7e9c",
+            "c-d7a8c20e5a54d64f"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "neypotzli",
+      "name": "Neypotzli",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p1-1421-9613-5608e813dd",
+          "seed": [
+            1440,
+            9632,
+            1
+          ],
+          "evidence": [
+            "s-6d55aff79fcee3b6",
+            "s-0896ca12e58ed190",
+            "c-091d57a64c3c1439",
+            "c-0c56ac7f2ba9688a",
+            "c-15acf1ce8283b4ce",
+            "c-184e189e45b04674",
+            "c-2442e09ac3daafbe",
+            "c-24ca3a95403a80df",
+            "c-29c2fd7267328695",
+            "c-34ed6f907d88ecda",
+            "c-532d613fe53155cb",
+            "c-560f583998c4cf7c",
+            "c-56872e2125b6a522",
+            "c-623317e0e6390a87",
+            "c-6561ed7f83cff932",
+            "c-7e598b3bdf3c4eb1",
+            "c-80d676fde56fe13e",
+            "c-95c634af057135fe",
+            "c-98e9020bfb96124a",
+            "c-9bbbd51fadcfd68e",
+            "c-9d33f29b0dc4083d",
+            "c-a23715a9959719b7",
+            "c-a8b14e20b5abb244",
+            "c-aca7343d7a6711ae",
+            "c-ba76d813348ec356",
+            "c-bffbd18e799c5d98",
+            "c-c47d3ae65eb9c39f",
+            "c-ccd27299ba01a64a",
+            "c-db5f9ff09b0afcde",
+            "c-dcaf238f45f21c6c",
+            "c-dd6ca930b62e27b9",
+            "c-e2325aa5b660e3f1",
+            "c-e84e074dcdbbf3c3",
+            "c-ef1dcbcdc47a1783",
+            "c-ef5b5b0dbf5dd6d9",
+            "c-fa6fc509c198e63d"
+          ],
+          "reason": "The antechamber off Cam Torum that links the Perilous Moons caverns."
+        }
+      ]
+    },
+    {
+      "key": "neypotzli-ancient-prison",
+      "name": "Neypotzli – Ancient Prison",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1344-9536-b6f6bfa3df",
+          "seed": [
+            1368,
+            9568,
+            0
+          ],
+          "evidence": [
+            "s-f33c1782472d9fc7",
+            "c-0426b9c3ca09877c",
+            "c-0da1acbf451201cf",
+            "c-17244523f194d99c",
+            "c-184e189e45b04674",
+            "c-1a38f93b78d23103",
+            "c-2c5c94bd44dcaecd",
+            "c-34ed6f907d88ecda",
+            "c-363822da13ccdc14",
+            "c-370560af7353f3b4",
+            "c-39eb9a1d4e248259",
+            "c-506d7964f1b9a04a",
+            "c-532d613fe53155cb",
+            "c-5342e0fe0aac5647",
+            "c-56872e2125b6a522",
+            "c-65140518a41664e2",
+            "c-759667bb47adbb45",
+            "c-927513c300f99b30",
+            "c-a23715a9959719b7",
+            "c-aca7343d7a6711ae",
+            "c-afe87cd601d43882",
+            "c-b0a7de2e96e97d45",
+            "c-c6475fcddae41b62",
+            "c-c76c39ba47c64411",
+            "c-c817c094eab8a53e",
+            "c-d3588dabcbbc9d4b",
+            "c-e66fa61a95526515",
+            "c-e84e074dcdbbf3c3",
+            "c-ea6b2ebcefca5d75"
+          ],
+          "reason": "Reached through the Neypotzli entrances; the source label Ancient Prison lies inside it."
+        }
+      ]
+    },
+    {
+      "key": "neypotzli-earthbound-cavern",
+      "name": "Neypotzli – Earthbound Cavern",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1346-9666-979f0532f8",
+          "seed": [
+            1377,
+            9700,
+            0
+          ],
+          "evidence": [
+            "s-8537eaae8d99aa65",
+            "c-17244523f194d99c",
+            "c-370560af7353f3b4",
+            "c-39eb9a1d4e248259",
+            "c-3c57e78695104176",
+            "c-4219ecce4da90f5f",
+            "c-5342e0fe0aac5647",
+            "c-57cfe20bf3fdbb8d",
+            "c-5e38f791974989f0",
+            "c-6396f91a65265647",
+            "c-80abdd28fb7b9ffb",
+            "c-9f5540c657fb15d3",
+            "c-b466392a1c2d8916",
+            "c-c76c39ba47c64411",
+            "c-c7e73262ae9266bc",
+            "c-de7dc3b6ccbae22f",
+            "c-e1838a0fddb616d4",
+            "c-e9b3d9656e2edc24"
+          ],
+          "reason": "Reached through the Neypotzli entrances; the source label Earthbound Cavern lies inside it."
+        }
+      ]
+    },
+    {
+      "key": "neypotzli-blood-moon",
+      "name": "Neypotzli – Blood Moon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1374-9614-80a0bc4529",
+          "seed": [
+            1393,
+            9635,
+            0
+          ],
+          "evidence": [
+            "s-5a8376c9f64ffca6",
+            "s-94b4e490d00fb36c",
+            "c-0426b9c3ca09877c",
+            "c-2c5c94bd44dcaecd",
+            "c-363822da13ccdc14",
+            "c-560f583998c4cf7c",
+            "c-7e598b3bdf3c4eb1",
+            "c-80d676fde56fe13e",
+            "c-927513c300f99b30",
+            "c-c817c094eab8a53e",
+            "c-d3588dabcbbc9d4b",
+            "c-e66fa61a95526515"
+          ],
+          "reason": "The Blood Moon's chamber; its quick-escape stairs lead to the antechamber."
+        }
+      ]
+    },
+    {
+      "key": "neypotzli-blue-moon",
+      "name": "Neypotzli – Blue Moon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1423-9650-ccf73cb9b7",
+          "seed": [
+            1441,
+            9683,
+            0
+          ],
+          "evidence": [
+            "s-0f57be55f306da0b",
+            "s-e77e37fd705d3dab",
+            "c-3c57e78695104176",
+            "c-4219ecce4da90f5f",
+            "c-5e38f791974989f0",
+            "c-80abdd28fb7b9ffb",
+            "c-9bbbd51fadcfd68e",
+            "c-9f5540c657fb15d3",
+            "c-a8b14e20b5abb244",
+            "c-ccd27299ba01a64a",
+            "c-db5f9ff09b0afcde",
+            "c-dd6ca930b62e27b9",
+            "c-e1838a0fddb616d4"
+          ],
+          "reason": "The Blue Moon's chamber; its quick-escape stairs lead to the antechamber."
+        }
+      ]
+    },
+    {
+      "key": "neypotzli-streambound-cavern",
+      "name": "Neypotzli – Streambound Cavern",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1477-9666-4d24352245",
+          "seed": [
+            1505,
+            9700,
+            0
+          ],
+          "evidence": [
+            "s-11f83ff80bc2b8a4",
+            "s-199a5f8344159d2f",
+            "c-57cfe20bf3fdbb8d",
+            "c-623317e0e6390a87",
+            "c-6396f91a65265647",
+            "c-98e9020bfb96124a",
+            "c-b466392a1c2d8916",
+            "c-ba76d813348ec356",
+            "c-c47d3ae65eb9c39f",
+            "c-c7e73262ae9266bc",
+            "c-de7dc3b6ccbae22f",
+            "c-e9b3d9656e2edc24",
+            "c-ef5b5b0dbf5dd6d9"
+          ],
+          "reason": "Reached through the Neypotzli entrances; the source label Streambound Cavern lies inside it."
+        }
+      ]
+    },
+    {
+      "key": "neypotzli-ancient-shrine",
+      "name": "Neypotzli – Ancient Shrine",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1495-9563-3d532a554c",
+          "seed": [
+            1513,
+            9580,
+            0
+          ],
+          "evidence": [
+            "s-33e9b0a078a8e88a",
+            "s-a588d7b26de27a96",
+            "c-03d81d6d0484ccc5",
+            "c-0b45ae426f63eb63",
+            "c-0da1acbf451201cf",
+            "c-1a38f93b78d23103",
+            "c-506d7964f1b9a04a",
+            "c-5e4115806a233c70",
+            "c-5f02d13d600353e6",
+            "c-60b22ae1489145c6",
+            "c-65140518a41664e2",
+            "c-6c387aca0e643355",
+            "c-759667bb47adbb45",
+            "c-a3219adecd25dec4",
+            "c-afe87cd601d43882",
+            "c-b0a7de2e96e97d45",
+            "c-c6475fcddae41b62",
+            "c-ce908c2e8ac8990a",
+            "c-ea6b2ebcefca5d75"
+          ],
+          "reason": "Reached through the Neypotzli entrances; the source label Ancient Shrine lies inside it."
+        }
+      ]
+    },
+    {
+      "key": "the-pandemonium-ship-basement",
+      "name": "The Pandemonium – ship basement",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1501-4632-f5f8a9e143",
+          "seed": [
+            1503,
+            4640,
+            0
+          ],
+          "evidence": [
+            "s-a32d71ba0f829aeb",
+            "c-7fc70b138ec69161",
+            "c-c78fac0127567e29"
+          ],
+          "reason": "Below deck on The Pandemonium, by the ladder in Parleying Preston's cabin."
+        }
+      ]
+    },
+    {
+      "key": "ruins-of-tapoyauik",
+      "name": "Ruins of Tapoyauik",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1568-9601-156b9f521b",
+          "seed": [
+            1631,
+            9632,
+            0
+          ],
+          "evidence": [
+            "s-84a311c3eacce886",
+            "s-0e61237ee20f3af4",
+            "c-8339dc1190b62d72",
+            "c-aa742bee5ad79e84"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "the-scar-first-puzzle",
+      "name": "The Scar – first puzzle",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1728-6400-c5574825cf",
+          "seed": [
+            1789,
+            6405,
+            0
+          ],
+          "evidence": [
+            "c-5b1d19625ee79b2d",
+            "c-8f07b39c0517ad00"
+          ],
+          "reason": "The first maze off The Scar (Enter Passage 49526, Desert Treasure II); the transport file's blue and green neural teleporter sections lie inside it."
+        }
+      ]
+    },
+    {
+      "key": "the-scar-second-puzzle",
+      "name": "The Scar – second puzzle",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2177-6401-5b7498b625",
+          "seed": [
+            2179,
+            6459,
+            0
+          ],
+          "evidence": [
+            "c-2037ad14d16e3608",
+            "c-5b3d6e021721605e"
+          ],
+          "reason": "The second maze off The Scar (Enter Passage 49527); the \"second puzzle\" neural teleporters lie inside it."
+        }
+      ]
+    },
+    {
+      "key": "the-scar-third-puzzle",
+      "name": "The Scar – third puzzle",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1856-6400-b07b3ac6b0",
+          "seed": [
+            1880,
+            6437,
+            0
+          ],
+          "evidence": [
+            "c-550c9b7e4a0fdeea",
+            "c-847d49cd3bf6037c"
+          ],
+          "reason": "The third maze off The Scar (Enter Passage 49528, Exit Fleshy Strand); the \"third puzzle\" neural teleporters lie inside it."
+        }
+      ]
+    },
+    {
+      "key": "deepfin-mine",
+      "name": "Deepfin Mine",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1926-9163-303d04a38f",
+          "seed": [
+            2016,
+            9194,
+            0
+          ],
+          "evidence": [
+            "s-7a1d337838eb7c33",
+            "c-b7324e74261578ae",
+            "c-d0cef313711b45e0"
+          ],
+          "reason": "The cave entered from Deepfin Point; the Deepfin Mine place lies inside it."
+        }
+      ]
+    },
+    {
+      "key": "minotaurs-rest-cave",
+      "name": "Minotaurs' Rest – cave",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-1927-9488-0449740909",
+          "seed": [
+            1950,
+            9505,
+            0
+          ],
+          "evidence": [
+            "s-1a7959346f247f28",
+            "s-f4d22fd103f3045d",
+            "c-0148df7c3fdf447d",
+            "c-64c1a4ef291a17f5"
+          ],
+          "reason": "The cave on Minotaurs' Rest; the map label \"Here be minotaurs (Minotaurs' Rest)\" lies inside it."
+        }
+      ]
+    },
+    {
+      "key": "lassar-undercity-shadow-realm",
+      "name": "Lassar Undercity – Shadow Realm",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2272-6277-2b8cdfa236",
+          "seed": [
+            2400,
+            6360,
+            0
+          ],
+          "evidence": [
+            "s-427025eb4e70e8a7",
+            "c-1a3461d33b4a7add",
+            "c-33c37137b509d352",
+            "c-3f6b58605a1478cb",
+            "c-5deca1a8a1427210",
+            "c-d12f1711bdfeccba",
+            "c-d40f716ac611331c",
+            "c-ec68420b87234bde",
+            "c-f1d2a1ceb43bac69"
+          ],
+          "reason": "Entered through the Shadow Realm puddle in the Lassar Undercity."
+        }
+      ]
+    },
+    {
+      "key": "lassar-undercity-drains",
+      "name": "Lassar Undercity – drains",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p1-2759-6278-35cf33a2b6",
+          "seed": [
+            2784,
+            6283,
+            1
+          ],
+          "evidence": [
+            "c-4a248c92097b73db",
+            "c-d6dacfefa0cd17cc",
+            "c-de94797f0af1609e",
+            "c-e361bcb842c8b58f"
+          ],
+          "reason": "Entered through the central drain of the Lassar Undercity; the rope climbs back up."
+        },
+        {
+          "componentId": "p0-2752-6272-f8ac386686",
+          "seed": [
+            2804,
+            6303,
+            0
+          ],
+          "evidence": [
+            "c-d6dacfefa0cd17cc",
+            "c-de94797f0af1609e"
+          ],
+          "reason": "The lower level of the drains, by the drain dungeon ladder."
+        }
+      ]
+    },
+    {
+      "key": "smoke-devil-dungeon",
+      "name": "Smoke Devil Dungeon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2376-9415-8a821b037f",
+          "seed": [
+            2390,
+            9441,
+            0
+          ],
+          "evidence": [
+            "s-c0869e15e1e811ba",
+            "s-19d4f0338e5b970e",
+            "s-d25002e5e1c7fb09",
+            "c-2aaf8c277fb8cf30",
+            "c-6bc3c3155d734df5",
+            "c-f2da6e6065a90ffb",
+            "c-f3ec75caef55e215"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "smoke-devil-dungeon-thermonuclear",
+      "name": "Smoke Devil Dungeon – Thermonuclear Smoke Devil",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2347-9438-e793ea1ffe",
+          "seed": [
+            2362,
+            9456,
+            0
+          ],
+          "evidence": [
+            "s-ab6ef97efc25b8d8",
+            "c-6bc3c3155d734df5",
+            "c-f3ec75caef55e215"
+          ],
+          "reason": "The boss's lair, through the crevice in the Smoke Devil Dungeon."
+        }
+      ]
+    },
+    {
+      "key": "vampyrium",
+      "name": "Vampyrium",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2368-7680-5f43fa25e7",
+          "seed": [
+            2435,
+            7775,
+            0
+          ],
+          "evidence": [
+            "s-e2472d937d95cbbe",
+            "c-075197e0677bf439",
+            "c-115689e8dc6550c1",
+            "c-30f119d0e2082a08",
+            "c-31dbaa2a8405a3d8",
+            "c-363a3c939de66bab",
+            "c-6c7927c1a05a4fdf",
+            "c-74347060b6105343",
+            "c-74cd8cc00db391b8",
+            "c-9418c3cfe8c920eb",
+            "c-9a8012652fd9cef8",
+            "c-9b39f7a75112b7b8",
+            "c-9b9beceec9d9bc5a",
+            "c-a3b259cf53f6eb42",
+            "c-b2c87cc55245dbde",
+            "c-d000e26bdc2670f6",
+            "c-dc72600cd5d758a9"
+          ],
+          "reason": "Reached by the portal in Castle Drakan (The Blood Moon Rises).",
+          "anchor": {
+            "point": [
+              3162,
+              7711,
+              0
+            ],
+            "reason": "The only way in is the portal in Castle Drakan, so it hangs off Castle Drakan.",
+            "entrance": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "castle-drakan",
+      "name": "Castle Drakan",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3149-7701-b0c7942f28",
+          "seed": [
+            3162,
+            7711,
+            0
+          ],
+          "evidence": [
+            "c-075197e0677bf439",
+            "c-115689e8dc6550c1",
+            "c-30f119d0e2082a08",
+            "c-31dbaa2a8405a3d8",
+            "c-363a3c939de66bab",
+            "c-6c7927c1a05a4fdf",
+            "c-73fd4f6577a76b7d",
+            "c-74347060b6105343",
+            "c-74cd8cc00db391b8",
+            "c-9418c3cfe8c920eb",
+            "c-9a8012652fd9cef8",
+            "c-9b39f7a75112b7b8",
+            "c-9b9beceec9d9bc5a",
+            "c-a3b259cf53f6eb42",
+            "c-b2c87cc55245dbde",
+            "c-d000e26bdc2670f6",
+            "c-dc72600cd5d758a9",
+            "s-5000d2d01878726e"
+          ],
+          "reason": "Where Drakan's medallion and the Vampyrium portal land (The Blood Moon Rises).",
+          "anchor": {
+            "point": [
+              3553,
+              3360,
+              0
+            ],
+            "reason": "Castle Drakan stands in northern Morytania (GPS: Castle Drakan); the transport data reaches this copy only by Drakan's medallion and the Vampyrium portal.",
+            "entrance": false
+          }
+        }
+      ]
+    },
+    {
+      "key": "wyrmscraig-cavern",
+      "name": "Wyrmscraig Cavern",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2562-8577-e76de82cdf",
+          "seed": [
+            2581,
+            8633,
+            0
+          ],
+          "evidence": [
+            "c-5e75327d5e4e17c9",
+            "s-6df0c04d5a0039f2"
+          ],
+          "reason": "Where the slayer ring's \"Wyrmscraig Cavern\" teleport lands.",
+          "anchor": {
+            "point": [
+              2585,
+              2292,
+              0
+            ],
+            "reason": "Under Wyrmscraig (GPS: Wyrmscraig); the transport data reaches it only by the slayer ring.",
+            "entrance": false
+          }
+        }
+      ]
+    },
+    {
+      "key": "charred-dungeon",
+      "name": "Charred Dungeon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2624-8832-935dce158c",
+          "seed": [
+            2683,
+            8877,
+            0
+          ],
+          "evidence": [
+            "s-973013a7d0dddc45",
+            "c-1980ad7f359ea0a0",
+            "c-59edcd3ab0193850"
+          ],
+          "reason": "Entered through the dark hole on Charred Island."
+        }
+      ]
+    },
+    {
+      "key": "digsite-dungeon-desert-treasure-ii",
+      "name": "Digsite Dungeon – Desert Treasure II",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3402-9801-403c4f16bb",
+          "seed": [
+            3405,
+            9803,
+            0
+          ],
+          "evidence": [
+            "c-1d3573ec9c572038",
+            "c-38622e605e5a003a",
+            "c-580134540730425b",
+            "c-70036177aba0c3d3",
+            "c-dd99908d5c9361db"
+          ],
+          "reason": "Lowered into by the winch at the Digsite during Desert Treasure II."
+        }
+      ]
+    },
+    {
+      "key": "digsite-dungeon-golem",
+      "name": "Digsite Dungeon – golem chamber",
+      "status": "descriptive",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2768-6424-473580c4b9",
+          "seed": [
+            2783,
+            6442,
+            0
+          ],
+          "evidence": [
+            "s-f577824d9feaecfc",
+            "c-1d3573ec9c572038",
+            "c-580134540730425b",
+            "c-70036177aba0c3d3"
+          ],
+          "reason": "Through the crevice in the Desert Treasure II Digsite cave."
+        }
+      ]
+    },
+    {
+      "key": "pothole-dungeon",
+      "name": "Pothole Dungeon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2822-9476-abdb787a78",
+          "seed": [
+            2830,
+            9520,
+            0
+          ],
+          "evidence": [
+            "s-5191f6ea711143f0",
+            "s-fe52f2c0986c8caf",
+            "c-47cfc385a81fd6af",
+            "c-cbe398d40e510655"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "sorceress-s-garden",
+      "name": "Sorceress's Garden",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-2880-5440-50aec5fc66",
+          "seed": [
+            2912,
+            5470,
+            0
+          ],
+          "evidence": [
+            "s-81837d3f3b4d5564",
+            "c-05a6307d75f19221",
+            "c-a283609a5c0bb129"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "ourania-cave",
+      "name": "Ourania Cave",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3008-5568-c159540233",
+          "seed": [
+            3039,
+            5599,
+            0
+          ],
+          "evidence": [
+            "s-47ac35dd553f896d",
+            "s-10091c3e0c37e3d0",
+            "c-006643e503507b6b",
+            "c-43f45451bcac92fa",
+            "c-4adec65fcf496ac7",
+            "c-8edee32e559c7d6e"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "pandemonium-cave",
+      "name": "Pandemonium Cave",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3023-9361-42da50cff3",
+          "seed": [
+            3044,
+            9383,
+            0
+          ],
+          "evidence": [
+            "s-64d1e54e5cfb1dee",
+            "s-3b68a5536bbb38b5",
+            "c-3cff8146a1e6d100",
+            "c-ba2595852376c362"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "tombs-of-amascut-lobby",
+      "name": "Tombs of Amascut – lobby",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3349-9106-13350e7b7e",
+          "seed": [
+            3363,
+            9118,
+            0
+          ],
+          "evidence": [
+            "s-cb005dfe3a9e2fcd",
+            "c-95eb6c63da319306",
+            "c-ea40dd3d8f15dc9b"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "scabaras-dungeon",
+      "name": "Scabaras Dungeon",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p2-3405-9241-e76b26f4cf",
+          "seed": [
+            3445,
+            9248,
+            2
+          ],
+          "evidence": [
+            "c-03522b2d74a39ebd",
+            "c-2eb2cf897415cbd2",
+            "c-3f7dd9bde58b9611",
+            "c-65b58642b2de8143",
+            "c-96fedaf2b3c9f3ba",
+            "c-a8cc459c26521f3b"
+          ],
+          "reason": "The entry level, reached from the desert (Enter Entry 6643)."
+        },
+        {
+          "componentId": "p0-3366-9219-85a08c1937",
+          "seed": [
+            3412,
+            9249,
+            0
+          ],
+          "evidence": [
+            "s-1d7568d5fa4b3200",
+            "c-2eb2cf897415cbd2",
+            "c-3f7dd9bde58b9611",
+            "c-65b58642b2de8143",
+            "c-96fedaf2b3c9f3ba"
+          ],
+          "reason": "Down the stairs from the entry level."
+        }
+      ]
+    },
+    {
+      "key": "morytania-spider-cave",
+      "name": "Morytania Spider Cave",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3654-9795-c691982f9d",
+          "seed": [
+            3688,
+            9835,
+            0
+          ],
+          "evidence": [
+            "s-3787bef4b7b1abf2",
+            "s-235561b523e0ea0d",
+            "c-042b510cf0686f84",
+            "c-80017a82dca01da9",
+            "c-aa6e148373cd0a4f",
+            "c-bf28ab76176fbb43"
+          ],
+          "reason": "Transport rows landing here and source places inside it."
+        }
+      ]
+    },
+    {
+      "key": "araxxor-s-cavern",
+      "name": "Araxxor's Cavern",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p0-3612-9797-83472b6a21",
+          "seed": [
+            3632,
+            9816,
+            0
+          ],
+          "evidence": [
+            "s-3605d068de4520cc",
+            "s-20aa9f9c094a55fc",
+            "c-042b510cf0686f84",
+            "c-80017a82dca01da9"
+          ],
+          "reason": "Through the web tunnel in the Morytania Spider Cave."
+        }
+      ]
+    },
+    {
+      "key": "ruins-of-mokhaiotl",
+      "name": "Ruins of Mokhaiotl",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p1-1281-9473-d9673fa9ff",
+          "seed": [
+            1311,
+            9497,
+            1
+          ],
+          "evidence": [
+            "s-e08cfbf68bc59a09",
+            "s-e8ec96ed28f89c20",
+            "c-0324b5acae917700"
+          ],
+          "reason": "Where the Mokhaiotl waystone lands.",
+          "anchor": {
+            "point": [
+              1309,
+              3104,
+              0
+            ],
+            "reason": "Under the Doom of Mokhaiotl entrance in Varlamore, where the Evil Eye teleport lands; the transport data reaches the ruins only by the waystone.",
+            "entrance": false
+          }
+        }
+      ]
+    },
+    {
+      "key": "ancient-forge",
+      "name": "Ancient Forge",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p1-1735-5279-cc036a4b22",
+          "seed": [
+            1751,
+            5290,
+            1
+          ],
+          "evidence": [
+            "s-bc1c17755c1ff7f4",
+            "c-9d2c4d79c213f28a",
+            "c-a13edd1c11655453",
+            "c-bb983386710e1483"
+          ],
+          "reason": "Up the rough hewn steps from the Ancient Cavern (Barbarian Training)."
+        }
+      ]
+    },
+    {
+      "key": "coral-nurseries",
+      "name": "Coral Nurseries",
+      "status": "named",
+      "reason": "Named from the transport rows that land in this component and the source places inside it; static agent review of the data, not in-game verification.",
+      "components": [
+        {
+          "componentId": "p1-3278-8842-0c7e1b960c",
+          "seed": [
+            3298,
+            8864,
+            1
+          ],
+          "evidence": [
+            "s-beae7264a056c599",
+            "c-8bcc0feaeb6aab74",
+            "c-b2b7cb4a4903269f",
+            "c-c36cc594936c4baf",
+            "c-d41165e7a21a2d85"
           ],
           "reason": "Transport rows landing here and source places inside it."
         }
